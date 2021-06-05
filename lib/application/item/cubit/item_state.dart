@@ -2,11 +2,9 @@ part of 'item_cubit.dart';
 
 @immutable
 class ItemState extends Equatable {
-  final int index;
   final Item item;
 
   ItemState({
-    required this.index,
     required this.item,
   });
 
@@ -15,11 +13,10 @@ class ItemState extends Equatable {
     Item? item,
   }) {
     return ItemState(
-      index: index ?? this.index,
       item: item ?? this.item,
     );
   }
 
   @override
-  List<Object> get props => [index, item];
+  List<Object> get props => [item];
 }

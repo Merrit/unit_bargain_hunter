@@ -15,8 +15,8 @@ class CalculatorState extends Equatable {
   factory CalculatorState.initial() {
     return CalculatorState(
       items: [
-        Item(index: 0, price: 0.00, quantity: 0.00, unit: Unit.gram),
-        Item(index: 1, price: 0.00, quantity: 0.00, unit: Unit.gram),
+        Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
+        Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
       ],
       comareBy: UnitType.weight,
       result: null,
@@ -36,5 +36,5 @@ class CalculatorState extends Equatable {
   }
 
   @override
-  List<Object> get props => [items];
+  List<Object?> get props => [items, result, comareBy];
 }

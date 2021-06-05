@@ -1,3 +1,8 @@
+import 'calculator/cubit/calculator_cubit.dart';
+
+late CalculatorCubit calcCubit;
+
+
 // import 'item/cubit/item_cubit.dart';
 
 // late ItemCubit itemCubit;

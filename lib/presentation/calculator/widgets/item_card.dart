@@ -1,47 +1,77 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverbloc/riverbloc.dart';
 
+import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/application/providers.dart';
 import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
 
+late BlocProvider<CalculatorCubit, CalculatorState> _calcProvider;
+
+late Provider<Item> _itemProvider;
+late Provider<int> _indexProvider;
+// late Provider<TextEditingController> _priceControllerProvider;
+// late Provider<TextEditingController> _quantityControllerProvider;
+
 class ItemCard extends StatelessWidget {
-  // final int index;
-  final Item item;
+  // final Item item;
+  final int index;
 
   const ItemCard({
     Key? key,
-    required this.item,
+    // required this.item,
+    required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ItemCubit(calcCubit, index: index),
-      child: Stack(
-        alignment: AlignmentDirectional.topEnd,
-        children: [
-          _ItemContents(),
-          Focus(
-            skipTraversal: true,
-            child: _CloseButton(),
-          ),
-        ],
-      ),
+    print('ItemCard building');
+    _calcProvider = BlocProvider<CalculatorCubit, CalculatorState>(
+      (ref) => calcCubit,
+    );
+    _itemProvider = Provider<Item>(
+      (ref) => ref.watch(_calcProvider).items[index],
+    );
+    _indexProvider = Provider<int>((ref) => index);
+    // _priceControllerProvider = Provider<TextEditingController>((ref) {
+    //   return TextEditingController(
+    //     text: context.read(_itemProvider).price.toStringAsFixed(2),
+    //   );
+    // });
+    // _quantityControllerProvider = Provider<TextEditingController>((ref) {
+    //   return TextEditingController(
+    //     text: context.read(_itemProvider).quantity.toStringAsFixed(2),
+    //   );
+    // });
+    // _priceControllerProvider = Provider<TextEditingController>((ref) {
+    //   return TextEditingController(text: item.price.toStringAsFixed(2));
+    // });
+    // _quantityControllerProvider = Provider<TextEditingController>((ref) {
+    //   return TextEditingController(text: item.quantity.toStringAsFixed(2));
+    // });
+
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: [
+        _ItemContents(),
+        _CloseButton(),
+      ],
     );
   }
 }
 
-late ItemCubit _itemCubit;
-
-class _ItemContents extends StatelessWidget {
+class _ItemContents extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    // itemCubit = context.read<ItemCubit>();
-    _itemCubit = context.watch<ItemCubit>();
-    final quantityController = _itemCubit.quantityController;
-    final itemState = context.watch<ItemCubit>().state;
+  Widget build(BuildContext context, ScopedReader watch) {
+    print('_ItemContents building');
+    // final item = watch(_itemProvider);
+    // final index = watch(_indexProvider);
+    // final priceController = context.read(_priceControllerProvider);
+    // final quantityController = context.read(_quantityControllerProvider);
+    // final priceController = watch(_priceControllerProvider);
+    // final quantityController = watch(_quantityControllerProvider);
+    // priceController.text = item.price.toStringAsFixed(2);
+    // quantityController.text = item.quantity.toStringAsFixed(2);
 
     return ConstrainedBox(
       constraints: const BoxConstraints(
@@ -61,78 +91,37 @@ class _ItemContents extends StatelessWidget {
           child: FocusTraversalGroup(
             child: Focus(
               skipTraversal: true,
-              onFocusChange: (focused) {
-                if (!focused) {
-                  calcCubit.updateItem(
-                    index: _itemCubit.state.index,
-                    price: _itemCubit.priceController.text,
-                    quantity: _itemCubit.quantityController.text,
-                  );
-                  // calculatorNotifier.updateItem(
-                  //   index: itemState.index,
-                  //   price: context
-                  //       .read(itemProvider.notifier)
-                  //       .priceController
-                  //       .text,
-                  //   quantity: context
-                  //       .read(itemProvider.notifier)
-                  //       .quantityController
-                  //       .text,
-                  // );
-                }
-              },
+              // onFocusChange: (focused) {
+              //   if (!focused) {
+              //     calcCubit.updateItem(
+              //       key: item.key,
+              //       index: index,
+              //       price: priceController.text,
+              //       quantity: quantityController.text,
+              //     );
+              //   }
+              // },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Item ${itemState.index + 1}'),
+                  Text('Item ${watch(_indexProvider) + 1}'),
                   SizedBox(height: 10),
+
                   _PriceWidget(),
+
                   const SizedBox(height: 20),
-                  // Quantity
-                  Focus(
-                    skipTraversal: true,
-                    onFocusChange: (focused) {
-                      if (focused) {
-                        quantityController.selection = TextSelection(
-                          baseOffset: 0,
-                          extentOffset:
-                              itemState.item.quantity.toStringAsFixed(2).length,
-                        );
-                      } else {
-                        // calculatorNotifier.updateItem(
-                        //   index: itemState.index,
-                        //   quantity: quantityController.text,
-                        // );
-                      }
-                    },
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Quantity',
-                      ),
-                      controller: quantityController,
-                      textAlign: TextAlign.center,
-                      // onEditingComplete: () {
-                      //   calculatorNotifier.updateItem(
-                      //     index: itemState.index,
-                      //     quantity: quantityController.text,
-                      //   );
-                      // },
-                      // onChanged: (value) {
-                      //   calculatorNotifier.updateItem(
-                      //     index: _itemState.index,
-                      //     quantity: value,
-                      //   );
-                      // },
-                    ),
-                  ),
+
+                  _QuantityWidget(),
+
                   const SizedBox(height: 15),
                   Text('Unit'),
                   _UnitChooser(),
-                  Text(
-                    (context.watch<CalculatorCubit>().state.result != null)
-                        ? '\$${itemState.item.costPerUnit?.costPer} per ${itemState.item.unit.baseUnit}'
-                        : '',
-                  ),
+                  _PerUnitCalculation(),
+                  // Text(
+                  //   (context.watch<CalculatorCubit>().state.result != null)
+                  //       ? '\$${itemState.item.costPerUnit?.costPer} per ${itemState.item.unit.baseUnit}'
+                  //       : '',
+                  // ),
                 ],
               ),
             ),
@@ -143,58 +132,104 @@ class _ItemContents extends StatelessWidget {
   }
 }
 
-class _PriceWidget extends StatelessWidget {
+class _PriceWidget extends ConsumerWidget {
+  final _controller = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    final priceController = _itemCubit.priceController;
-    final price =
-        context.watch<ItemCubit>().state.item.price.toStringAsFixed(2);
+  Widget build(BuildContext context, ScopedReader watch) {
+    print('_PriceWidget building');
+    _controller.text = context.read(_itemProvider).price.toStringAsFixed(2);
+    final item = context.read(_itemProvider);
+    // final item = watch(_itemProvider);
+    // final priceController = context.read(_priceControllerProvider);
+    // final priceController = watch(_priceControllerProvider);
 
     return Focus(
       skipTraversal: true,
+      // autofocus: true,
+      // autofocus: (FocusScope.of(context).nearestScope.hasFocus) ? true : false,
       onFocusChange: (focused) {
         if (focused) {
-          priceController.selection = TextSelection(
+          print(_controller.selection);
+          _controller.selection = TextSelection(
             baseOffset: 0,
-            extentOffset: price.length,
+            extentOffset:
+                context.read(_itemProvider).price.toStringAsFixed(2).length,
           );
         } else {
-          // calculatorNotifier.updateItem(
-          //   index: _itemState.index,
-          //   price: priceController.text,
-          // );
+          print(
+            'Unfocused, updating item:\n'
+            'item:\n'
+            '$item \n'
+            '_controller.text: ${_controller.text}\n',
+          );
+          calcCubit.updateItem(
+            key: item.key,
+            index: context.read(_indexProvider),
+            price: _controller.text,
+          );
         }
       },
       child: TextField(
         decoration: InputDecoration(
           labelText: 'Price',
         ),
-        controller: priceController,
+        controller: _controller,
         textAlign: TextAlign.center,
-        // onChanged: (value) {
-        //   priceController.text = value;
-        //   // calculatorNotifier.updateItem(
-        //   //   index: index,
-        //   //   price: value,
-        //   // );
-        // },
       ),
     );
   }
 }
 
-class _UnitChooser extends StatelessWidget {
+class _QuantityWidget extends ConsumerWidget {
+  final _controller = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    _controller.text = context.read(_itemProvider).quantity.toStringAsFixed(2);
+    final item = context.read(_itemProvider);
+
+    return Focus(
+      skipTraversal: true,
+      onFocusChange: (focused) {
+        if (focused) {
+          _controller.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset:
+                context.read(_itemProvider).quantity.toStringAsFixed(2).length,
+          );
+        } else {
+          calcCubit.updateItem(
+            key: item.key,
+            index: context.read(_indexProvider),
+            quantity: _controller.text,
+          );
+        }
+      },
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: 'Quantity',
+        ),
+        controller: _controller,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class _UnitChooser extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final item = watch(_itemProvider);
+
     return DropdownButton<Unit>(
-      value: context.watch<ItemCubit>().state.item.unit,
+      value: item.unit,
       onChanged: (value) => calcCubit.updateItem(
-        index: _itemCubit.state.index,
+        key: item.key,
+        index: watch(_indexProvider),
         unit: value,
       ),
-      items: context
-          .watch<CalculatorCubit>()
-          .state
+      items: watch(_calcProvider)
           .comareBy
           .subTypes
           .map((value) => DropdownMenuItem<Unit>(
@@ -206,22 +241,39 @@ class _UnitChooser extends StatelessWidget {
   }
 }
 
-class _CloseButton extends StatelessWidget {
+class _PerUnitCalculation extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        final shouldShowCloseButton = state.items.length >= 3;
-        return (shouldShowCloseButton)
-            ? IconButton(
-                onPressed: () => calcCubit.removeItem(_itemCubit.state.index),
-                icon: Icon(
-                  Icons.close,
-                  color: Colors.red[800],
-                ),
-              )
-            : const SizedBox();
-      },
+  Widget build(BuildContext context, ScopedReader watch) {
+    final item = watch(_itemProvider);
+    final calcState = watch(_calcProvider);
+    final resultExists = calcState.result != null;
+    if (resultExists) {
+      final costPer = item.costPerUnit!.costPer.toStringAsFixed(3);
+      final baseUnit = item.unit.baseUnit;
+      return Text('\$$costPer per $baseUnit');
+    } else {
+      return Container();
+    }
+  }
+}
+
+class _CloseButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final itemKey = watch(_itemProvider).key;
+    final calcState = watch(_calcProvider);
+    final showCloseButton = calcState.items.length >= 3;
+    return FocusTraversalGroup(
+      descendantsAreFocusable: false,
+      child: (showCloseButton)
+          ? IconButton(
+              onPressed: () => calcCubit.removeItem(itemKey),
+              icon: Icon(
+                Icons.close,
+                color: Colors.red[800],
+              ),
+            )
+          : const SizedBox(),
     );
   }
 }

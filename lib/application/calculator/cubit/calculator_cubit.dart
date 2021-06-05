@@ -1,11 +1,15 @@
+import 'package:collection/collection.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+
+import '../../providers.dart';
 
 part 'calculator_state.dart';
 
-late CalculatorCubit calcCubit;
+// late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
   CalculatorCubit() : super(CalculatorState.initial()) {
@@ -25,7 +29,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     final items = List<Item>.from(state.items);
     items.add(
       Item(
-        index: state.items.length,
         price: 0.00,
         quantity: 0.00,
         unit: Gram(),
@@ -34,13 +37,14 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(items: items));
   }
 
-  void removeItem(int index) {
+  void removeItem(UniqueKey key) {
     final items = List<Item>.from(state.items);
-    items.removeAt(index);
+    items.removeWhere((element) => element.key == key);
     emit(state.copyWith(items: items));
   }
 
   void updateItem({
+    required UniqueKey key,
     required int index,
     String? price,
     String? quantity,
@@ -51,15 +55,25 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     if (price != null) validatedPrice = double.tryParse(price);
     if (quantity != null) validatedQuantity = double.tryParse(quantity);
     // if (validatedPrice == null && validatedQuantity == null) // Emit error.
-
-    final updatedItem = state.items[index].copyWith(
+    final item = state.items.singleWhereOrNull((element) => element.key == key);
+    if (item == null) return;
+    final updatedItem = item.copyWith(
       price: validatedPrice,
       quantity: validatedQuantity,
       unit: unit,
     );
     final items = List<Item>.from(state.items);
-    items.removeAt(index);
-    items.insert(index, updatedItem);
+    final oldIndex = items.indexWhere((element) => element.key == key);
+    // items.removeWhere((element) => element.key == key);
+    items.removeAt(oldIndex);
+    items.insert(oldIndex, updatedItem);
+    // items.insert(index, updatedItem);
+    // items.add(updatedItem);
     emit(state.copyWith(items: items));
+  }
+
+  void reset() {
+    emit(state.copyWith(items: []));
+    emit(CalculatorState.initial());
   }
 }

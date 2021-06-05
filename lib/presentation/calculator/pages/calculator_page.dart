@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/application/providers.dart';
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
 import '../calculator.dart';
@@ -90,16 +91,20 @@ class ScrollingItemsList extends StatelessWidget {
         child: SingleChildScrollView(
           controller: scrollController,
           child: BlocBuilder<CalculatorCubit, CalculatorState>(
+            buildWhen: (previous, current) =>
+                previous.items.length != current.items.length,
             builder: (context, state) {
               final itemCount = state.items.length;
               return Wrap(
                 alignment: WrapAlignment.center,
                 children: [
                   SizedBox(width: double.infinity),
-                  for (var i = 0; i < itemCount; i++)
+                  // ...state.items.map((item) => ItemCard(item: item)).toList(),
+                  for (var index = 0; index < itemCount; index++)
                     ItemCard(
-                      key: ValueKey(i),
-                      index: i,
+                      key: ValueKey(index),
+                      // item: state.items[index],
+                      index: index,
                     ),
                 ],
               );
@@ -124,7 +129,7 @@ class _BottomAppBar extends StatelessWidget {
               alignment: Alignment.center,
               transform: Matrix4.rotationY(math.pi),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () => calcCubit.reset(),
                 icon: Icon(
                   Icons.refresh,
                 ),
