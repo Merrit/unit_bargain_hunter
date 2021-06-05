@@ -5,11 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
-import '../../providers.dart';
-
 part 'calculator_state.dart';
 
-// late CalculatorCubit calcCubit;
+late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
   CalculatorCubit() : super(CalculatorState.initial()) {
@@ -34,18 +32,17 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         unit: Gram(),
       ),
     );
-    emit(state.copyWith(items: items));
+    emit(state.copyWith(items: items, result: null));
   }
 
   void removeItem(UniqueKey key) {
     final items = List<Item>.from(state.items);
     items.removeWhere((element) => element.key == key);
-    emit(state.copyWith(items: items));
+    emit(state.copyWith(items: items, result: null));
   }
 
   void updateItem({
     required UniqueKey key,
-    required int index,
     String? price,
     String? quantity,
     Unit? unit,
@@ -63,12 +60,9 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       unit: unit,
     );
     final items = List<Item>.from(state.items);
-    final oldIndex = items.indexWhere((element) => element.key == key);
-    // items.removeWhere((element) => element.key == key);
-    items.removeAt(oldIndex);
-    items.insert(oldIndex, updatedItem);
-    // items.insert(index, updatedItem);
-    // items.add(updatedItem);
+    final index = items.indexWhere((element) => element.key == key);
+    items.removeAt(index);
+    items.insert(index, updatedItem);
     emit(state.copyWith(items: items));
   }
 

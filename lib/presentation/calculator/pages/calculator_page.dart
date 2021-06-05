@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/application/providers.dart';
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
 import '../calculator.dart';
@@ -99,7 +98,6 @@ class ScrollingItemsList extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: [
                   SizedBox(width: double.infinity),
-                  // ...state.items.map((item) => ItemCard(item: item)).toList(),
                   for (var index = 0; index < itemCount; index++)
                     ItemCard(
                       key: ValueKey(index),
