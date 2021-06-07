@@ -25,7 +25,7 @@ class CostValidator {
     }
     return Cost(
       unit: baseUnit,
-      costPer: costPerUnit,
+      value: costPerUnit,
     );
   }
 }

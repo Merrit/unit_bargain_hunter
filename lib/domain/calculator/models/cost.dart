@@ -4,15 +4,17 @@ import 'models.dart';
 
 class Cost extends Equatable {
   final Unit unit;
-  final double costPer;
+
+  /// The calculated cost per [Unit].
+  final double value;
 
   const Cost({
     required this.unit,
-    required this.costPer,
+    required this.value,
   });
 
   @override
-  List<Object> get props => [unit, costPer];
+  List<Object> get props => [unit, value];
 
   @override
   bool get stringify => true;
