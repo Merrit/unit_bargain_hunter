@@ -37,36 +37,43 @@ class _ItemContents extends StatelessWidget {
         maxHeight: 300,
         maxWidth: 160,
       ),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 14,
-            horizontal: 14,
-          ),
-          child: FocusTraversalGroup(
-            child: Focus(
-              skipTraversal: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Item ${context.read<ItemCubit>().state.index + 1}'),
-                  SizedBox(height: 10),
-                  _PriceWidget(),
-                  const SizedBox(height: 20),
-                  _QuantityWidget(),
-                  const SizedBox(height: 15),
-                  Text('Unit'),
-                  _UnitChooser(),
-                  _PerUnitCalculation(),
-                ],
+      child: BlocBuilder<ItemCubit, ItemState>(
+        buildWhen: (previous, current) =>
+            previous.isCheapest != current.isCheapest,
+        builder: (context, state) {
+          return Card(
+            elevation: 2,
+            color: (state.isCheapest) ? Colors.green[700] : null,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 14,
+                horizontal: 14,
+              ),
+              child: FocusTraversalGroup(
+                child: Focus(
+                  skipTraversal: true,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Item ${context.read<ItemCubit>().state.index + 1}'),
+                      SizedBox(height: 10),
+                      _PriceWidget(),
+                      const SizedBox(height: 20),
+                      _QuantityWidget(),
+                      const SizedBox(height: 15),
+                      Text('Unit'),
+                      _UnitChooser(),
+                      _PerUnitCalculation(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

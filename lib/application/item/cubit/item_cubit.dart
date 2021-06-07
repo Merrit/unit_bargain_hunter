@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
@@ -18,16 +19,21 @@ class ItemCubit extends Cubit<ItemState> {
           item: _calculatorCubit.state.items[_itemIndex],
           costPer: '',
           shouldShowCloseButton: (_calculatorCubit.state.items.length >= 3),
+          isCheapest: false,
         )) {
     _listenForItemUpdates();
   }
 
   void _listenForItemUpdates() {
     _calculatorCubit.stream.listen((event) {
-      final item = event.items[_itemIndex];
+      final item = event.items.singleWhereIndexedOrNull(
+        (index, _) => index == _itemIndex,
+      );
+      if (item == null) return;
       final shouldShowCloseButton = (event.items.length >= 3);
-      final resultExists = event.result != null;
+      final resultExists = event.result.length > 0;
       final costPer = _checkCostPer(resultExists: resultExists, item: item);
+      final isCheapest = event.result.contains(item);
       final costPerChanged = (state.costPer != costPer);
       final itemChanged = (item != state.item) || costPerChanged;
       final calcStateChanged =
@@ -37,6 +43,7 @@ class ItemCubit extends Cubit<ItemState> {
           item: item,
           costPer: costPer,
           shouldShowCloseButton: shouldShowCloseButton,
+          isCheapest: isCheapest,
         ));
       }
     });

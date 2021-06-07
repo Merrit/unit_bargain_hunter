@@ -3,7 +3,11 @@ part of 'calculator_cubit.dart';
 @immutable
 class CalculatorState extends Equatable {
   final List<Item> items;
-  final String? result;
+
+  /// Contains the cheapest items.
+  /// Will only include multiple items if there was a tie.
+  final List<Item> result;
+
   final Unit comareBy;
 
   const CalculatorState({
@@ -19,13 +23,13 @@ class CalculatorState extends Equatable {
         Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
       ],
       comareBy: UnitType.weight,
-      result: null,
+      result: const <Item>[],
     );
   }
 
   CalculatorState copyWith({
     List<Item>? items,
-    String? result,
+    List<Item>? result,
     Unit? comareBy,
   }) {
     return CalculatorState(
@@ -36,5 +40,5 @@ class CalculatorState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [items, result, comareBy];
+  List<Object> get props => [items, result, comareBy];
 }

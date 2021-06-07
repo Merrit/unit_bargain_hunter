@@ -16,11 +16,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   void compare() {
     final result = Calculator().compare(items: state.items);
-    emit(
-      state.copyWith(
-        result: 'Cheapest: Item ${state.items.indexOf(result.cheapest) + 1}',
-      ),
-    );
+    emit(state.copyWith(result: result));
   }
 
   void addItem() {
