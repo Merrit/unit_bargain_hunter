@@ -10,10 +10,6 @@ class AppWidget extends StatelessWidget {
       title: 'Unit Bargain Hunter',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      // theme: ThemeData(
-      //   brightness: Brightness.dark,
-      //   primarySwatch: Colors.blue,
-      // ),
       home: CalculatorPage(),
     );
   }
