@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
 import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
 
 class ItemCard extends StatelessWidget {
@@ -15,8 +16,8 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<int>(
-      create: (context) => index,
+    return BlocProvider(
+      create: (context) => ItemCubit(calcCubit, index),
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
         children: [
@@ -52,7 +53,7 @@ class _ItemContents extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Item ${context.read<int>() + 1}'),
+                  Text('Item ${context.read<ItemCubit>().state.index + 1}'),
                   SizedBox(height: 10),
                   _PriceWidget(),
                   const SizedBox(height: 20),
@@ -76,14 +77,13 @@ class _PriceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = context.read<int>();
-
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
+    return BlocBuilder<ItemCubit, ItemState>(
       buildWhen: (previous, current) =>
-          previous.items[index].price != current.items[index].price,
+          previous.item.price != current.item.price,
       builder: (context, state) {
-        final item = state.items[index];
-        _controller.text = item.price.toStringAsFixed(2);
+        final item = state.item;
+        final priceAsString = item.price.toStringAsFixed(2);
+        _controller.text = priceAsString;
 
         return Focus(
           skipTraversal: true,
@@ -91,7 +91,7 @@ class _PriceWidget extends StatelessWidget {
             if (focused) {
               _controller.selection = TextSelection(
                 baseOffset: 0,
-                extentOffset: item.price.toStringAsFixed(2).length,
+                extentOffset: priceAsString.length,
               );
             } else {
               calcCubit.updateItem(
@@ -118,21 +118,20 @@ class _QuantityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = context.read<int>();
-
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
+    return BlocBuilder<ItemCubit, ItemState>(
       buildWhen: (previous, current) =>
-          previous.items[index].quantity != current.items[index].quantity,
+          previous.item.quantity != current.item.quantity,
       builder: (context, state) {
-        final item = state.items[index];
-        _controller.text = state.items[index].quantity.toStringAsFixed(2);
+        final item = state.item;
+        final quantityAsString = item.quantity.toStringAsFixed(2);
+        _controller.text = quantityAsString;
         return Focus(
           skipTraversal: true,
           onFocusChange: (focused) {
             if (focused) {
               _controller.selection = TextSelection(
                 baseOffset: 0,
-                extentOffset: item.quantity.toStringAsFixed(2).length,
+                extentOffset: quantityAsString.length,
               );
             } else {
               calcCubit.updateItem(
@@ -157,11 +156,9 @@ class _QuantityWidget extends StatelessWidget {
 class _UnitChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final index = context.read<int>();
-
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
+    return BlocBuilder<ItemCubit, ItemState>(
       builder: (context, state) {
-        final item = state.items[index];
+        final item = state.item;
 
         return DropdownButton<Unit>(
           value: item.unit,
@@ -169,7 +166,11 @@ class _UnitChooser extends StatelessWidget {
             key: item.key,
             unit: value,
           ),
-          items: state.comareBy.subTypes
+          items: context
+              .watch<CalculatorCubit>()
+              .state
+              .comareBy
+              .subTypes
               .map((value) => DropdownMenuItem<Unit>(
                     value: value,
                     child: Text('$value'),
@@ -184,19 +185,9 @@ class _UnitChooser extends StatelessWidget {
 class _PerUnitCalculation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final index = context.read<int>();
-
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
+    return BlocBuilder<ItemCubit, ItemState>(
       builder: (context, state) {
-        final item = state.items[index];
-        final resultExists = state.result != null;
-        if (resultExists) {
-          if (item.costPerUnit == null) return Container();
-          final costPer = item.costPerUnit!.costPer.toStringAsFixed(3);
-          final baseUnit = item.unit.baseUnit;
-          return Text('\$$costPer per $baseUnit');
-        }
-        return Container();
+        return Text(state.costPer);
       },
     );
   }
@@ -205,18 +196,13 @@ class _PerUnitCalculation extends StatelessWidget {
 class _CloseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final index = context.read<int>();
-
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
+    return BlocBuilder<ItemCubit, ItemState>(
       builder: (context, state) {
-        final item = state.items[index];
-        final showCloseButton = state.items.length >= 3;
-
         return FocusTraversalGroup(
           descendantsAreFocusable: false,
-          child: (showCloseButton)
+          child: (state.shouldShowCloseButton)
               ? IconButton(
-                  onPressed: () => calcCubit.removeItem(item.key),
+                  onPressed: () => calcCubit.removeItem(state.item.key),
                   icon: Icon(
                     Icons.close,
                     color: Colors.red[800],
