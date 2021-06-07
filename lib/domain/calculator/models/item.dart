@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../calculator.dart';
 
 @immutable
-class Item {
+class Item extends Equatable {
   final UniqueKey key;
   final double price;
   final double quantity;
@@ -43,4 +44,15 @@ class Item {
       'price: $price \n'
       'quantity: $quantity \n'
       'unit: $unit \n';
+
+  @override
+  List<Object?> get props {
+    return [
+      key,
+      price,
+      quantity,
+      unit,
+      costPerUnit,
+    ];
+  }
 }
