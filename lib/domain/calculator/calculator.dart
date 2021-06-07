@@ -6,13 +6,14 @@ import 'models/models.dart';
 class Calculator {
   const Calculator();
 
-  Result compare({required List<Item> items}) {
-    Item cheapest = items.first;
-    items.forEach((item) {
-      final previous = cheapest.price;
-      final current = item.price;
-      if (current < previous) cheapest = item;
-    });
-    return Result(cheapest: cheapest);
+  /// Returns the item that is cheapest per unit.
+  ///
+  /// If more than one item ties, returns all tied items.
+  List<Item> compare({required List<Item> items}) {
+    if (items.length <= 1) return items;
+    final cheapestPrice = items
+        .reduce((a, b) => (a.costPerUnit!.value < b.costPerUnit!.value) ? a : b)
+        .costPerUnit;
+    return items.where((item) => item.costPerUnit == cheapestPrice).toList();
   }
 }
