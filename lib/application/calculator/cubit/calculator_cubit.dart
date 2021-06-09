@@ -48,10 +48,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     double? validatedQuantity;
     if (price != null) validatedPrice = double.tryParse(price);
     if (quantity != null) validatedQuantity = double.tryParse(quantity);
-    if (validatedPrice == null && validatedQuantity == null) {
-      print('Unable to update item, issue parsing price or quantity');
-      return;
-    }
     final item = state.items.singleWhereOrNull((element) => element.key == key);
     if (item == null) return;
     final updatedItem = item.copyWith(
