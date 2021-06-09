@@ -27,6 +27,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: Text('Unit Bargain Hunter'),
       actions: [
         IconButton(
           onPressed: () {},
