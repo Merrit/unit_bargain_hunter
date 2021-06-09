@@ -17,7 +17,7 @@ class ItemCubit extends Cubit<ItemState> {
   ) : super(ItemState(
           index: _itemIndex,
           item: _calculatorCubit.state.items[_itemIndex],
-          costPer: '',
+          costPerUnits: [],
           shouldShowCloseButton: (_calculatorCubit.state.items.length >= 3),
           isCheapest: false,
         )) {
@@ -34,7 +34,7 @@ class ItemCubit extends Cubit<ItemState> {
       final resultExists = event.result.length > 0;
       final costPer = _checkCostPer(resultExists: resultExists, item: item);
       final isCheapest = event.result.contains(item);
-      final costPerChanged = (state.costPer != costPer);
+      final costPerChanged = (state.costPerUnits.length != costPer.length);
       final itemChanged = (item != state.item) || costPerChanged;
       final calcStateChanged =
           (shouldShowCloseButton != state.shouldShowCloseButton);
@@ -49,11 +49,15 @@ class ItemCubit extends Cubit<ItemState> {
     });
   }
 
-  String _checkCostPer({
+  List<String> _checkCostPer({
     required bool resultExists,
     required Item item,
   }) {
-    if ((item.costPerUnit == null) || !resultExists) return '';
-    return '${item.costPerUnit?.value.toStringAsFixed(3)} per ${item.unit.baseUnit}';
+    if ((item.costPerUnit.isEmpty) || !resultExists) return [];
+    final results = <String>[];
+    item.costPerUnit.forEach((Cost cost) {
+      results.add('\$${cost.value} per ${cost.unit}');
+    });
+    return results;
   }
 }

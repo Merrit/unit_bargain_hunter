@@ -12,7 +12,8 @@ class Calculator {
   List<Item> compare({required List<Item> items}) {
     if (items.length <= 1) return items;
     final cheapestPrice = items
-        .reduce((a, b) => (a.costPerUnit!.value < b.costPerUnit!.value) ? a : b)
+        .reduce(
+            (a, b) => (a.costPerUnit[0].value < b.costPerUnit[0].value) ? a : b)
         .costPerUnit;
     return items.where((item) => item.costPerUnit == cheapestPrice).toList();
   }

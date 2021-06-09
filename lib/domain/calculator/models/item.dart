@@ -10,7 +10,7 @@ class Item extends Equatable {
   final double price;
   final double quantity;
   final Unit unit;
-  final Cost? costPerUnit;
+  final List<Cost> costPerUnit;
 
   Item({
     UniqueKey? key,

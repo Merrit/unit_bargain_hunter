@@ -3,40 +3,60 @@ import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
 void main() {
   group('Weight-based costs', () {
-    test('Price per gram calculated correctly', () {
-      final result = CostValidator.validate(
+    test('Input of grams calculated correctly', () {
+      final costs = CostValidator.validate(
         price: 14.97,
         quantity: 879,
-        unit: Gram(),
+        unit: Unit.gram,
       );
-      expect(result, Cost(unit: Gram(), value: 0.017));
+      expect(costs, [
+        Cost(unit: Unit.gram, value: 0.017),
+        Cost(unit: Unit.kilogram, value: 17.031),
+        Cost(unit: Unit.ounce, value: 0.483),
+        Cost(unit: Unit.pound, value: 7.732),
+      ]);
     });
 
-    test('Price per kilogram calculated correctly', () {
-      final result = CostValidator.validate(
+    test('Input of kilograms calculated correctly', () {
+      final costs = CostValidator.validate(
         price: 14.97,
         quantity: 5,
-        unit: Kilogram(),
+        unit: Unit.kilogram,
       );
-      expect(result, Cost(unit: Gram(), value: 0.003));
+      expect(costs, [
+        Cost(unit: Unit.gram, value: 0.003),
+        Cost(unit: Unit.kilogram, value: 2.994),
+        Cost(unit: Unit.ounce, value: 0.085),
+        Cost(unit: Unit.pound, value: 1.359),
+      ]);
     });
 
-    test('Price per ounce calculated correctly', () {
-      final result = CostValidator.validate(
+    test('Input of ounces calculated correctly', () {
+      final costs = CostValidator.validate(
         price: 14.97,
         quantity: 10,
-        unit: Ounce(),
+        unit: Unit.ounce,
       );
-      expect(result, Cost(unit: Gram(), value: 0.053));
+      expect(costs, [
+        Cost(unit: Unit.gram, value: 0.053),
+        Cost(unit: Unit.kilogram, value: 52.804),
+        Cost(unit: Unit.ounce, value: 1.497),
+        Cost(unit: Unit.pound, value: 23.973),
+      ]);
     });
 
-    test('Price per pound calculated correctly', () {
-      final result = CostValidator.validate(
+    test('Input of pounds calculated correctly', () {
+      final costs = CostValidator.validate(
         price: 14.97,
-        quantity: 10,
-        unit: Pound(),
+        quantity: 20,
+        unit: Unit.pound,
       );
-      expect(result, Cost(unit: Gram(), value: 0.003));
+      expect(costs, [
+        Cost(unit: Unit.gram, value: 0.002),
+        Cost(unit: Unit.kilogram, value: 1.649),
+        Cost(unit: Unit.ounce, value: 0.047),
+        Cost(unit: Unit.pound, value: 0.749),
+      ]);
     });
   });
 }

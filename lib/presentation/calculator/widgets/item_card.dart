@@ -34,8 +34,7 @@ class _ItemContents extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxHeight: 300,
-        maxWidth: 160,
+        maxWidth: 200,
       ),
       child: BlocBuilder<ItemCubit, ItemState>(
         buildWhen: (previous, current) =>
@@ -194,7 +193,16 @@ class _PerUnitCalculation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ItemCubit, ItemState>(
       builder: (context, state) {
-        return Text(state.costPer);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var unit in state.costPerUnits)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Text(unit),
+              ),
+          ],
+        );
       },
     );
   }

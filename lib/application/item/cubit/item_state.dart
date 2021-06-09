@@ -3,14 +3,14 @@ part of 'item_cubit.dart';
 class ItemState extends Equatable {
   final int index;
   final Item item;
-  final String costPer;
+  final List<String> costPerUnits;
   final bool shouldShowCloseButton;
   final bool isCheapest;
 
   const ItemState({
     required this.index,
     required this.item,
-    required this.costPer,
+    required this.costPerUnits,
     required this.shouldShowCloseButton,
     required this.isCheapest,
   });
@@ -20,7 +20,7 @@ class ItemState extends Equatable {
     return [
       index,
       item,
-      costPer,
+      costPerUnits,
       shouldShowCloseButton,
       isCheapest,
     ];
@@ -29,14 +29,14 @@ class ItemState extends Equatable {
   ItemState copyWith({
     int? index,
     Item? item,
-    String? costPer,
+    List<String>? costPer,
     bool? shouldShowCloseButton,
     bool? isCheapest,
   }) {
     return ItemState(
       index: index ?? this.index,
       item: item ?? this.item,
-      costPer: costPer ?? this.costPer,
+      costPerUnits: costPer ?? this.costPerUnits,
       shouldShowCloseButton:
           shouldShowCloseButton ?? this.shouldShowCloseButton,
       isCheapest: isCheapest ?? this.isCheapest,

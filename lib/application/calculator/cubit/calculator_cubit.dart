@@ -15,6 +15,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   void compare() {
+    emit(state.copyWith(result: [])); // Reset result.
     final result = Calculator().compare(items: state.items);
     emit(state.copyWith(result: result));
   }
