@@ -49,6 +49,8 @@ class ItemCubit extends Cubit<ItemState> {
     });
   }
 
+  /// Return blank strings if result hasn't yet been calculated,
+  /// otherwise return strings with each unit's calculation.
   List<String> _checkCostPer({
     required bool resultExists,
     required Item item,
