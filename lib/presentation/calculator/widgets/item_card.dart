@@ -115,6 +115,7 @@ class _PriceWidget extends StatelessWidget {
             ),
             controller: _controller,
             textAlign: TextAlign.center,
+            inputFormatters: [BetterTextInputFormatter.doubleOnly],
           ),
         );
       },
@@ -157,6 +158,7 @@ class _QuantityWidget extends StatelessWidget {
             ),
             controller: _controller,
             textAlign: TextAlign.center,
+            inputFormatters: [BetterTextInputFormatter.doubleOnly],
           ),
         );
       },
