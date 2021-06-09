@@ -41,9 +41,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 class CalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final state = context.read<CalculatorCubit>();
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(
@@ -59,7 +57,6 @@ class CalculatorView extends StatelessWidget {
                 value: UnitType.weight,
                 items: <Unit>[
                   UnitType.weight,
-                  // Volume(),
                 ]
                     .map(
                       (unitType) => DropdownMenuItem(
