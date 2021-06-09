@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
 import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
+import 'package:unit_bargain_hunter/domain/calculator/validators/text_input_formatter.dart';
 
 class ItemCard extends StatelessWidget {
   final int index;
@@ -93,12 +94,14 @@ class _PriceWidget extends StatelessWidget {
 
         return Focus(
           skipTraversal: true,
-          onFocusChange: (focused) {
+          onFocusChange: (focused) async {
             if (focused) {
-              _controller.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: priceAsString.length,
-              );
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                _controller.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: priceAsString.length,
+                );
+              });
             } else {
               calcCubit.updateItem(
                 key: item.key,
@@ -133,12 +136,14 @@ class _QuantityWidget extends StatelessWidget {
         _controller.text = quantityAsString;
         return Focus(
           skipTraversal: true,
-          onFocusChange: (focused) {
+          onFocusChange: (focused) async {
             if (focused) {
-              _controller.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: quantityAsString.length,
-              );
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                _controller.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: quantityAsString.length,
+                );
+              });
             } else {
               calcCubit.updateItem(
                 key: item.key,
