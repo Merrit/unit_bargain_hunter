@@ -12,18 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Hidden IconButton to maintain row's spacing.
-          Focus(
-            descendantsAreFocusable: false,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.hot_tub,
-                color: Colors.black.withOpacity(0),
-              ),
-            ),
-          ),
-          Spacer(),
+          // Transform flips the icon to give us a restart icon.
           Transform(
             alignment: Alignment.center,
             transform: Matrix4.rotationY(math.pi),
@@ -44,21 +33,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: () => calcCubit.addItem(),
             icon: Icon(Icons.add),
-          ),
-          Spacer(),
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text('This is dialog, \n'
-                        'for to be showing help informations.'),
-                  );
-                },
-              );
-            },
-            icon: Icon(Icons.help_outline),
           ),
         ],
       ),
