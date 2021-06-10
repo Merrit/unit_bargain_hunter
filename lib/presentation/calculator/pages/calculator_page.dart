@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
@@ -7,71 +7,78 @@ import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 import '../calculator.dart';
 
 class CalculatorPage extends StatelessWidget {
-  const CalculatorPage();
+  CalculatorPage();
+
+  final focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: _AppBar(),
-        body: CalculatorView(),
-        bottomNavigationBar: _BottomAppBar(),
+      // GestureDetector & FocusNode allow clicking outside input areas in
+      // order to deselect them as expected on web & desktop platforms.
+      child: GestureDetector(
+        onTap: () => focusNode.requestFocus(),
+        child: FocusableActionDetector(
+          focusNode: focusNode,
+          child: Scaffold(
+            appBar: CustomAppBar(),
+            body: CalculatorView(),
+            bottomNavigationBar: _BottomAppBar(),
+          ),
+        ),
       ),
     );
   }
 }
 
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  final preferredSize = Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Text('Unit Bargain Hunter'),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.help_outline),
-        ),
-      ],
-    );
-  }
-}
-
 class CalculatorView extends StatelessWidget {
+  final focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 12,
-            bottom: 8,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
+    // GestureDetector & FocusNode allow clicking outside input areas in
+    // order to deselect them as expected on web & desktop platforms.
+    return GestureDetector(
+      onTap: () => focusNode.requestFocus(),
+      child: Focus(
+        focusNode: focusNode,
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Compare by:'),
-              const SizedBox(width: 10),
-              DropdownButton<Unit>(
-                value: UnitType.weight,
-                items: <Unit>[
-                  UnitType.weight,
-                ]
-                    .map(
-                      (unitType) => DropdownMenuItem(
-                        value: unitType,
-                        child: Text('$unitType'),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {},
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 12,
+                  bottom: 8,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Compare by:'),
+                    const SizedBox(width: 10),
+                    DropdownButton<Unit>(
+                      value: UnitType.weight,
+                      items: <Unit>[
+                        UnitType.weight,
+                      ]
+                          .map(
+                            (unitType) => DropdownMenuItem(
+                              value: unitType,
+                              child: Text('$unitType'),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
               ),
+              ScrollingItemsList(),
             ],
           ),
         ),
-        ScrollingItemsList(),
-      ],
+      ),
     );
   }
 }
@@ -117,27 +124,30 @@ class _BottomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(math.pi),
-              child: IconButton(
-                onPressed: () => calcCubit.reset(),
-                icon: Icon(
-                  Icons.refresh,
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(text: 'Made with ❤ by '),
+                TextSpan(
+                  text: 'Kristen McWilliam',
+                  style: TextStyle(color: Colors.lightBlueAccent),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text('This is dialog'),
+                          );
+                        },
+                      );
+                    },
                 ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => calcCubit.compare(),
-              child: Text('Compare'),
-            ),
-            IconButton(
-              onPressed: () => calcCubit.addItem(),
-              icon: Icon(Icons.add),
+                TextSpan(text: '.'),
+              ]),
             ),
           ],
         ),
