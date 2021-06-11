@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'calculator_state.dart';
 
@@ -65,5 +66,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void reset() {
     emit(state.copyWith(items: []));
     emit(CalculatorState.initial());
+  }
+
+  Future<void> launchDonateURL(String url) async {
+    await canLaunch(url)
+        ? await launch(url)
+        : throw 'Could not launch url: $url';
   }
 }

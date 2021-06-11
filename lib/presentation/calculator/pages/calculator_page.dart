@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
@@ -23,7 +22,7 @@ class CalculatorPage extends StatelessWidget {
           child: Scaffold(
             appBar: CustomAppBar(),
             body: CalculatorView(),
-            bottomNavigationBar: _BottomAppBar(),
+            bottomNavigationBar: CustomBottomAppBar(),
           ),
         ),
       ),
@@ -113,43 +112,6 @@ class ScrollingItemsList extends StatelessWidget {
               );
             },
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomAppBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RichText(
-              text: TextSpan(children: [
-                TextSpan(text: 'Made with ❤ by '),
-                TextSpan(
-                  text: 'Kristen McWilliam',
-                  style: TextStyle(color: Colors.lightBlueAccent),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text('This is dialog'),
-                          );
-                        },
-                      );
-                    },
-                ),
-                TextSpan(text: '.'),
-              ]),
-            ),
-          ],
         ),
       ),
     );
