@@ -102,7 +102,7 @@ class InfoDialog extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Text('Find your bargains on these platforms:\n'),
+                  Text('Find bargains on these platforms:\n'),
                   // TODO: Add IconButtons for other platform links.
                   Placeholder(
                     fallbackHeight: 30,
