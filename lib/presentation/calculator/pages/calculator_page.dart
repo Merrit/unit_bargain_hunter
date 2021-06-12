@@ -35,46 +35,53 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // GestureDetector & FocusNode allow clicking outside input areas in
-    // order to deselect them as expected on web & desktop platforms.
-    return GestureDetector(
-      onTap: () => focusNode.requestFocus(),
-      child: Focus(
-        focusNode: focusNode,
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 12,
-                  bottom: 8,
+    return BlocListener<CalculatorCubit, CalculatorState>(
+      listener: (context, state) {
+        // When user initiates compare we remove focus from any
+        // input fields to have a clean look for the compared items.
+        if (state.resultExists) focusNode.requestFocus();
+      },
+      // GestureDetector & FocusNode allow clicking outside input areas in
+      // order to deselect them as expected on web & desktop platforms.
+      child: GestureDetector(
+        onTap: () => focusNode.requestFocus(),
+        child: Focus(
+          focusNode: focusNode,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    bottom: 8,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Compare by:'),
+                      const SizedBox(width: 10),
+                      DropdownButton<Unit>(
+                        value: UnitType.weight,
+                        items: <Unit>[
+                          UnitType.weight,
+                        ]
+                            .map(
+                              (unitType) => DropdownMenuItem(
+                                value: unitType,
+                                child: Text('$unitType'),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {},
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Compare by:'),
-                    const SizedBox(width: 10),
-                    DropdownButton<Unit>(
-                      value: UnitType.weight,
-                      items: <Unit>[
-                        UnitType.weight,
-                      ]
-                          .map(
-                            (unitType) => DropdownMenuItem(
-                              value: unitType,
-                              child: Text('$unitType'),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {},
-                    ),
-                  ],
-                ),
-              ),
-              ScrollingItemsList(),
-            ],
+                ScrollingItemsList(),
+              ],
+            ),
           ),
         ),
       ),
@@ -105,7 +112,6 @@ class ScrollingItemsList extends StatelessWidget {
                   for (var index = 0; index < itemCount; index++)
                     ItemCard(
                       key: ValueKey(index),
-                      // item: state.items[index],
                       index: index,
                     ),
                 ],

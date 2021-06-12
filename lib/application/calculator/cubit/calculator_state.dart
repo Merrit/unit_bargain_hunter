@@ -8,6 +8,8 @@ class CalculatorState extends Equatable {
   /// Will only include multiple items if there was a tie.
   final List<Item> result;
 
+  bool get resultExists => result.isNotEmpty;
+
   final Unit comareBy;
 
   const CalculatorState({

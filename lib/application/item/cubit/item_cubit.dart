@@ -20,6 +20,7 @@ class ItemCubit extends Cubit<ItemState> {
           costPerUnits: [],
           shouldShowCloseButton: (_calculatorCubit.state.items.length >= 3),
           isCheapest: false,
+          resultExists: false,
         )) {
     _listenForItemUpdates();
   }
@@ -44,6 +45,7 @@ class ItemCubit extends Cubit<ItemState> {
           costPer: costPer,
           shouldShowCloseButton: shouldShowCloseButton,
           isCheapest: isCheapest,
+          resultExists: resultExists,
         ));
       }
     });

@@ -6,6 +6,8 @@ import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubi
 import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
 import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
 import 'package:unit_bargain_hunter/domain/calculator/validators/text_input_formatter.dart';
+import 'package:unit_bargain_hunter/presentation/calculator/widgets/compare_items_shortcut.dart';
+import 'package:unit_bargain_hunter/presentation/styles.dart';
 
 class ItemCard extends StatelessWidget {
   final int index;
@@ -61,9 +63,9 @@ class _ItemContents extends StatelessWidget {
                       Text('Item ${context.read<ItemCubit>().state.index + 1}'),
                       SizedBox(height: 10),
                       _PriceWidget(),
-                      const SizedBox(height: 20),
+                      Spacers.verticalSmall,
                       _QuantityWidget(),
-                      const SizedBox(height: 15),
+                      Spacers.verticalSmall,
                       Text('Unit'),
                       _UnitChooser(),
                       _PerUnitCalculation(),
@@ -81,41 +83,46 @@ class _ItemContents extends StatelessWidget {
 
 class _PriceWidget extends StatelessWidget {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    bool isFocused = false;
     return BlocBuilder<ItemCubit, ItemState>(
       buildWhen: (previous, current) =>
-          previous.item.price != current.item.price,
+          !isFocused || (previous.resultExists != current.resultExists),
       builder: (context, state) {
-        final item = state.item;
-        final priceAsString = item.price.toStringAsFixed(2);
-        _controller.text = priceAsString;
+        _controller.text = state.priceAsString;
 
-        return Focus(
-          skipTraversal: true,
-          onFocusChange: (focused) async {
-            if (focused) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
-                _controller.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: priceAsString.length,
-                );
-              });
-            } else {
-              calcCubit.updateItem(
-                key: item.key,
-                price: _controller.text,
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _focusNode.addListener(() {
+            if (_focusNode.hasFocus) {
+              isFocused = true;
+              _controller.selection = TextSelection(
+                baseOffset: 0,
+                extentOffset: _controller.text.length,
               );
+            } else {
+              isFocused = false;
             }
-          },
+          });
+        });
+
+        return CompareItemsShortcut(
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Price',
             ),
+            focusNode: _focusNode,
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
+            onChanged: (value) {
+              calcCubit.updateItem(
+                key: state.item.key,
+                price: _controller.text,
+              );
+            },
           ),
         );
       },
@@ -125,40 +132,47 @@ class _PriceWidget extends StatelessWidget {
 
 class _QuantityWidget extends StatelessWidget {
   final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    bool isFocused = false;
+
     return BlocBuilder<ItemCubit, ItemState>(
       buildWhen: (previous, current) =>
-          previous.item.quantity != current.item.quantity,
+          !isFocused || (previous.resultExists != current.resultExists),
       builder: (context, state) {
-        final item = state.item;
-        final quantityAsString = item.quantity.toStringAsFixed(2);
-        _controller.text = quantityAsString;
-        return Focus(
-          skipTraversal: true,
-          onFocusChange: (focused) async {
-            if (focused) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
-                _controller.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: quantityAsString.length,
-                );
-              });
-            } else {
-              calcCubit.updateItem(
-                key: item.key,
-                quantity: _controller.text,
+        _controller.text = state.quantityAsString;
+
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _focusNode.addListener(() {
+            if (_focusNode.hasFocus) {
+              isFocused = true;
+              _controller.selection = TextSelection(
+                baseOffset: 0,
+                extentOffset: _controller.text.length,
               );
+            } else {
+              isFocused = false;
             }
-          },
+          });
+        });
+
+        return CompareItemsShortcut(
           child: TextField(
             decoration: InputDecoration(
               labelText: 'Quantity',
             ),
+            focusNode: _focusNode,
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
+            onChanged: (value) {
+              calcCubit.updateItem(
+                key: state.item.key,
+                quantity: _controller.text,
+              );
+            },
           ),
         );
       },

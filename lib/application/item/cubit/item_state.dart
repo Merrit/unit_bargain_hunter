@@ -6,6 +6,7 @@ class ItemState extends Equatable {
   final List<String> costPerUnits;
   final bool shouldShowCloseButton;
   final bool isCheapest;
+  final bool resultExists;
 
   const ItemState({
     required this.index,
@@ -13,7 +14,12 @@ class ItemState extends Equatable {
     required this.costPerUnits,
     required this.shouldShowCloseButton,
     required this.isCheapest,
+    required this.resultExists,
   });
+
+  String get priceAsString => item.price.toStringAsFixed(2);
+
+  String get quantityAsString => item.quantity.toStringAsFixed(2);
 
   @override
   List<Object> get props {
@@ -23,6 +29,7 @@ class ItemState extends Equatable {
       costPerUnits,
       shouldShowCloseButton,
       isCheapest,
+      resultExists,
     ];
   }
 
@@ -32,6 +39,7 @@ class ItemState extends Equatable {
     List<String>? costPer,
     bool? shouldShowCloseButton,
     bool? isCheapest,
+    bool? resultExists,
   }) {
     return ItemState(
       index: index ?? this.index,
@@ -40,6 +48,7 @@ class ItemState extends Equatable {
       shouldShowCloseButton:
           shouldShowCloseButton ?? this.shouldShowCloseButton,
       isCheapest: isCheapest ?? this.isCheapest,
+      resultExists: resultExists ?? this.resultExists,
     );
   }
 }
