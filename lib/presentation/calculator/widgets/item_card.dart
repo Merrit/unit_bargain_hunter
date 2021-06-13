@@ -19,6 +19,7 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('ItemCard is building');
     return BlocProvider(
       create: (context) => ItemCubit(calcCubit, index),
       child: Stack(
@@ -39,17 +40,23 @@ class _ItemContents extends StatelessWidget {
       constraints: const BoxConstraints(
         maxWidth: 200,
       ),
-      child: BlocBuilder<ItemCubit, ItemState>(
-        buildWhen: (previous, current) =>
-            previous.isCheapest != current.isCheapest,
-        builder: (context, state) {
-          return Card(
-            elevation: 2,
-            color: (state.isCheapest) ? Colors.green[700] : null,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      child: Card(
+        elevation: 2,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: BlocBuilder<ItemCubit, ItemState>(
+                builder: (context, state) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: (state.isCheapest) ? Colors.green[700] : null,
+                      borderRadius: BorderRadii.gentlyRounded,
+                    ),
+                  );
+                },
+              ),
             ),
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 14,
                 horizontal: 14,
@@ -61,21 +68,22 @@ class _ItemContents extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text('Item ${context.read<ItemCubit>().state.index + 1}'),
-                      SizedBox(height: 10),
+                      Spacers.verticalSmall,
                       _PriceWidget(),
-                      Spacers.verticalSmall,
+                      Spacers.verticalXtraSmall,
                       _QuantityWidget(),
-                      Spacers.verticalSmall,
+                      Spacers.verticalXtraSmall,
                       Text('Unit'),
                       _UnitChooser(),
+                      Spacers.verticalSmall,
                       _PerUnitCalculation(),
                     ],
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -89,8 +97,7 @@ class _PriceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isFocused = false;
     return BlocBuilder<ItemCubit, ItemState>(
-      buildWhen: (previous, current) =>
-          !isFocused || (previous.resultExists != current.resultExists),
+      buildWhen: (previous, current) => !isFocused || current.resultExists,
       builder: (context, state) {
         _controller.text = state.priceAsString;
 
@@ -139,8 +146,7 @@ class _QuantityWidget extends StatelessWidget {
     bool isFocused = false;
 
     return BlocBuilder<ItemCubit, ItemState>(
-      buildWhen: (previous, current) =>
-          !isFocused || (previous.resultExists != current.resultExists),
+      buildWhen: (previous, current) => !isFocused || current.resultExists,
       builder: (context, state) {
         _controller.text = state.quantityAsString;
 

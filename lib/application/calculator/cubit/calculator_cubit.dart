@@ -45,6 +45,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     String? quantity,
     Unit? unit,
   }) {
+    if (state.resultExists) resetResult();
     double? validatedPrice;
     double? validatedQuantity;
     if (price != null) validatedPrice = double.tryParse(price);
@@ -63,9 +64,15 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(items: items));
   }
 
+  /// Reset the calculator to initial values.
   void reset() {
     emit(state.copyWith(items: []));
     emit(CalculatorState.initial());
+  }
+
+  /// Reset the results if user changes values.
+  void resetResult() {
+    emit(state.copyWith(result: []));
   }
 
   Future<void> launchDonateURL(String url) async {

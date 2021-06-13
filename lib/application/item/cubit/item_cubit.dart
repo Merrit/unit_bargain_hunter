@@ -60,7 +60,18 @@ class ItemCubit extends Cubit<ItemState> {
     if ((item.costPerUnit.isEmpty) || !resultExists) return [];
     final results = <String>[];
     item.costPerUnit.forEach((Cost cost) {
-      results.add('\$${cost.value} per ${cost.unit}');
+      String stringValue = cost.value.toStringAsFixed(3);
+      if (cost.value == 0.0) {
+        // Calculated value too small to show within 3 decimal points.
+        stringValue = '--.--';
+      }
+      if (stringValue.endsWith('0')) {
+        // Only show 2 decimal places when ending with a 0, for example:
+        // 77.50 instead of 77.500
+        final lastIndex = stringValue.length - 1;
+        stringValue = stringValue.substring(0, lastIndex);
+      }
+      results.add('\$$stringValue per ${cost.unit}');
     });
     return results;
   }

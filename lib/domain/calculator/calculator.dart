@@ -11,10 +11,16 @@ class Calculator {
   /// If more than one item ties, returns all tied items.
   List<Item> compare({required List<Item> items}) {
     if (items.length <= 1) return items;
-    final cheapestPrice = items
-        .reduce(
-            (a, b) => (a.costPerUnit[0].value < b.costPerUnit[0].value) ? a : b)
-        .costPerUnit;
+    List<Cost> cheapestPrice;
+    try {
+      cheapestPrice = items
+          .reduce((a, b) =>
+              (a.costPerUnit[0].value < b.costPerUnit[0].value) ? a : b)
+          .costPerUnit;
+    } on RangeError {
+      print('Issue doing compare. Was costPerUnit calculated?');
+      return [];
+    }
     return items.where((item) => item.costPerUnit == cheapestPrice).toList();
   }
 }
