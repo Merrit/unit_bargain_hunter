@@ -80,19 +80,30 @@ class ScrollingItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Scrollbar is always shown when moved from the top,
+    // but hides when at the top or the screen doesn't need to scroll.
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollController.addListener(() {
+        final offset = scrollController.offset;
+        final showScrollbar = (offset > 0) ? true : false;
+        calcCubit.updateShowScrollbar(showScrollbar);
+      });
+    });
+
     return Expanded(
-      child: Scrollbar(
-        controller: scrollController,
-        isAlwaysShown: true,
-        child: SingleChildScrollView(
-          controller: scrollController,
-          child: BlocBuilder<CalculatorCubit, CalculatorState>(
-            buildWhen: (previous, current) =>
-                (previous.items.length != current.items.length) ||
-                (previous.comareBy != current.comareBy),
-            builder: (context, state) {
-              final itemCount = state.items.length;
-              return Wrap(
+      child: BlocBuilder<CalculatorCubit, CalculatorState>(
+        buildWhen: (previous, current) =>
+            (previous.items.length != current.items.length) ||
+            (previous.comareBy != current.comareBy) ||
+            (previous.alwaysShowScrollbar != current.alwaysShowScrollbar),
+        builder: (context, state) {
+          final itemCount = state.items.length;
+          return Scrollbar(
+            controller: scrollController,
+            isAlwaysShown: state.alwaysShowScrollbar,
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Wrap(
                 alignment: WrapAlignment.center,
                 children: [
                   SizedBox(width: double.infinity),
@@ -102,10 +113,10 @@ class ScrollingItemsList extends StatelessWidget {
                       index: index,
                     ),
                 ],
-              );
-            },
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

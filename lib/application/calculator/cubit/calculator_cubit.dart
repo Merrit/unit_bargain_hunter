@@ -8,6 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 part 'calculator_state.dart';
 
+/// Globally accessible variable for the [CalculatorCubit].
+///
+/// There is only ever one cubit, so this eases access.
 late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
@@ -91,5 +94,9 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     await canLaunch(url)
         ? await launch(url)
         : throw 'Could not launch url: $url';
+  }
+
+  void updateShowScrollbar(bool showScrollbar) {
+    emit(state.copyWith(alwaysShowScrollbar: showScrollbar));
   }
 }

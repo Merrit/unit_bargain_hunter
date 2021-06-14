@@ -2,6 +2,8 @@ part of 'calculator_cubit.dart';
 
 @immutable
 class CalculatorState extends Equatable {
+  final bool alwaysShowScrollbar;
+  final Unit comareBy;
   final List<Item> items;
 
   /// Contains the cheapest items.
@@ -10,37 +12,39 @@ class CalculatorState extends Equatable {
 
   bool get resultExists => result.isNotEmpty;
 
-  final Unit comareBy;
-
   const CalculatorState({
+    required this.alwaysShowScrollbar,
+    required this.comareBy,
     required this.items,
     required this.result,
-    required this.comareBy,
   });
 
   factory CalculatorState.initial() {
     return CalculatorState(
+      alwaysShowScrollbar: false,
+      comareBy: UnitType.weight,
       items: [
         Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
         Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
       ],
-      comareBy: UnitType.weight,
       result: const <Item>[],
     );
   }
 
   CalculatorState copyWith({
+    bool? alwaysShowScrollbar,
+    Unit? comareBy,
     List<Item>? items,
     List<Item>? result,
-    Unit? comareBy,
   }) {
     return CalculatorState(
+      alwaysShowScrollbar: alwaysShowScrollbar ?? this.alwaysShowScrollbar,
+      comareBy: comareBy ?? this.comareBy,
       items: items ?? this.items,
       result: result ?? this.result,
-      comareBy: comareBy ?? this.comareBy,
     );
   }
 
   @override
-  List<Object> get props => [items, result, comareBy];
+  List<Object> get props => [alwaysShowScrollbar, comareBy, items, result];
 }
