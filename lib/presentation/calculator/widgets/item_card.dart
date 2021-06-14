@@ -242,11 +242,16 @@ class _CloseButton extends StatelessWidget {
         return FocusTraversalGroup(
           descendantsAreFocusable: false,
           child: (state.shouldShowCloseButton)
-              ? IconButton(
-                  onPressed: () => calcCubit.removeItem(state.item.key),
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.red[800],
+              ? Material(
+                  color: Colors.transparent,
+                  type: MaterialType.circle,
+                  clipBehavior: Clip.antiAlias,
+                  child: IconButton(
+                    onPressed: () => calcCubit.removeItem(state.item.key),
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white38,
+                    ),
                   ),
                 )
               : const SizedBox(),
