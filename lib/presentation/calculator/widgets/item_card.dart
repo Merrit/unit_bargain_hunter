@@ -19,7 +19,6 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('ItemCard is building');
     return BlocProvider(
       create: (context) => ItemCubit(calcCubit, index),
       child: Stack(

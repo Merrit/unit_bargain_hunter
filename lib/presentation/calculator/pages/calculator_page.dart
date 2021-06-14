@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
 import '../calculator.dart';
 
@@ -62,20 +61,7 @@ class CalculatorView extends StatelessWidget {
                     children: [
                       Text('Compare by:'),
                       const SizedBox(width: 10),
-                      DropdownButton<Unit>(
-                        value: UnitType.weight,
-                        items: <Unit>[
-                          UnitType.weight,
-                        ]
-                            .map(
-                              (unitType) => DropdownMenuItem(
-                                value: unitType,
-                                child: Text('$unitType'),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {},
-                      ),
+                      CompareByDropdownButton(),
                     ],
                   ),
                 ),
@@ -102,7 +88,8 @@ class ScrollingItemsList extends StatelessWidget {
           controller: scrollController,
           child: BlocBuilder<CalculatorCubit, CalculatorState>(
             buildWhen: (previous, current) =>
-                previous.items.length != current.items.length,
+                (previous.items.length != current.items.length) ||
+                (previous.comareBy != current.comareBy),
             builder: (context, state) {
               final itemCount = state.items.length;
               return Wrap(

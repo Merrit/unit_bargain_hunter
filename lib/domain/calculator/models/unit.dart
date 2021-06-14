@@ -4,14 +4,22 @@ abstract class Unit extends Equatable {
   const Unit();
 
   Unit get baseUnit;
-  List<Unit> get subTypes;
   Unit get unitType;
 
+  List<Unit> get subTypes => [Weight(), Volume()];
+
   // Weight-based units.
+  static Unit get milligram => Milligram();
   static Unit get gram => Gram();
   static Unit get kilogram => Kilogram();
   static Unit get ounce => Ounce();
   static Unit get pound => Pound();
+
+  // Volume-based units.
+  static Unit get millilitre => Millilitre();
+  static Unit get litre => Litre();
+  static Unit get fluidOunce => FluidOunce();
+  static Unit get quart => Quart();
 
   @override
   List<Object> get props => [];
@@ -20,8 +28,9 @@ abstract class Unit extends Equatable {
 abstract class UnitType {
   const UnitType();
 
-  static List<Unit> get all => [Weight()];
+  static List<Unit> get all => [Weight(), Volume()];
   static Unit get weight => Weight();
+  static Unit get volume => Volume();
 }
 
 /* --------------------------- Weight-based units --------------------------- */
@@ -38,6 +47,11 @@ class Weight extends Unit {
 
   @override
   String toString() => 'weight';
+}
+
+class Milligram extends Weight {
+  @override
+  String toString() => 'milligram';
 }
 
 class Gram extends Weight {
@@ -58,4 +72,40 @@ class Ounce extends Weight {
 class Pound extends Weight {
   @override
   String toString() => 'pound';
+}
+
+/* --------------------------- Volume-based units --------------------------- */
+
+class Volume extends Unit {
+  const Volume();
+
+  /// Other volumes are converted to millilitre for comparisons.
+  Unit get baseUnit => Millilitre();
+
+  Unit get unitType => Volume();
+
+  List<Unit> get subTypes => [Millilitre(), Litre(), FluidOunce(), Quart()];
+
+  @override
+  String toString() => 'volume';
+}
+
+class Millilitre extends Volume {
+  @override
+  String toString() => 'millilitre';
+}
+
+class Litre extends Volume {
+  @override
+  String toString() => 'litre';
+}
+
+class FluidOunce extends Volume {
+  @override
+  String toString() => 'fluid ounce';
+}
+
+class Quart extends Volume {
+  @override
+  String toString() => 'quart';
 }

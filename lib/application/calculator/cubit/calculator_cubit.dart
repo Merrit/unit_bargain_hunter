@@ -21,6 +21,18 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(result: result));
   }
 
+  void updateCompareBy(Unit unit) {
+    emit(
+      state.copyWith(
+        comareBy: unit,
+        items: [
+          Item(price: 0.00, quantity: 0.00, unit: unit.baseUnit),
+          Item(price: 0.00, quantity: 0.00, unit: unit.baseUnit),
+        ],
+      ),
+    );
+  }
+
   void addItem() {
     final items = List<Item>.from(state.items);
     items.add(

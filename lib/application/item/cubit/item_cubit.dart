@@ -61,10 +61,8 @@ class ItemCubit extends Cubit<ItemState> {
     final results = <String>[];
     item.costPerUnit.forEach((Cost cost) {
       String stringValue = cost.value.toStringAsFixed(3);
-      if (cost.value == 0.0) {
-        // Calculated value too small to show within 3 decimal points.
-        stringValue = '--.--';
-      }
+      // Calculated value too small to show within 3 decimal points.
+      if (stringValue == '0.000') stringValue = '--.--';
       if (stringValue.endsWith('0')) {
         // Only show 2 decimal places when ending with a 0, for example:
         // 77.50 instead of 77.500
