@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/infrastructure/platform_repository/platform_repository.dart';
-import 'package:window_size/window_size.dart' as window;
+import 'package:unit_bargain_hunter/infrastructure/platform_repository/src/window.dart';
 
 import 'presentation/app_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (PlatformRepository.isDesktop) {
-    window.setWindowTitle('Unit Bargain Hunter');
-    window.setWindowFrame(const Offset(1.0, 2.0) & const Size(635, 650));
-  }
+  init();
 
   runApp(
     MultiBlocProvider(
@@ -24,4 +21,12 @@ void main() {
       child: AppWidget(),
     ),
   );
+}
+
+void init() async {
+  if (PlatformRepository.isDesktop) {
+    final window = Window();
+    window.setWindowTitle('Unit Bargain Hunter');
+    window.setWindowFrame(width: 635, height: 650);
+  }
 }
