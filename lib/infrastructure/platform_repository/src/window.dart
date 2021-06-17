@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:window_size/window_size.dart' as _window;
 
 class Window {
@@ -23,6 +24,7 @@ class Window {
     required double width,
     required double height,
   }) async {
+    if (kDebugMode) return;
     final position = await _getScreenCenter();
     _window.setWindowFrame(
       Rect.fromCenter(center: position, width: 635, height: 650),
