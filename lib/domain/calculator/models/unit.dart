@@ -6,7 +6,7 @@ abstract class Unit extends Equatable {
   Unit get baseUnit;
   Unit get unitType;
 
-  List<Unit> get subTypes => [Weight(), Volume()];
+  List<Unit> get subTypes => [Weight(), Volume(), ItemUnit()];
 
   // Weight-based units.
   static Unit get milligram => Milligram();
@@ -21,6 +21,9 @@ abstract class Unit extends Equatable {
   static Unit get fluidOunce => FluidOunce();
   static Unit get quart => Quart();
 
+  // Item-based unit.
+  static Unit get item => ItemUnit();
+
   @override
   List<Object> get props => [];
 }
@@ -28,9 +31,10 @@ abstract class Unit extends Equatable {
 abstract class UnitType {
   const UnitType();
 
-  static List<Unit> get all => [Weight(), Volume()];
+  static List<Unit> get all => [Weight(), Volume(), ItemUnit()];
   static Unit get weight => Weight();
   static Unit get volume => Volume();
+  static Unit get item => ItemUnit();
 }
 
 /* --------------------------- Weight-based units --------------------------- */
@@ -108,4 +112,19 @@ class FluidOunce extends Volume {
 class Quart extends Volume {
   @override
   String toString() => 'quart';
+}
+
+/* ----------------------------- Item-based unit ---------------------------- */
+
+class ItemUnit extends Unit {
+  const ItemUnit();
+
+  Unit get baseUnit => ItemUnit();
+
+  Unit get unitType => ItemUnit();
+
+  List<Unit> get subTypes => [ItemUnit()];
+
+  @override
+  String toString() => 'item';
 }

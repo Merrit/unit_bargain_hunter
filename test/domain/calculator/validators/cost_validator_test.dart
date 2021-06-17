@@ -135,4 +135,17 @@ void main() {
       ]);
     });
   });
+
+  group('Item-based costs', () {
+    test('Input of items calculated correctly', () {
+      final costs = CostValidator.validate(
+        price: 14.97,
+        quantity: 20,
+        unit: Unit.item,
+      );
+      expect(costs, [
+        Cost(unit: Unit.item, value: 0.7485),
+      ]);
+    });
+  });
 }

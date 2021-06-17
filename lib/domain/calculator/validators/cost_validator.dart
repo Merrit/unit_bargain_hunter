@@ -24,6 +24,11 @@ class CostValidator {
         quantity: quantity,
         unit: unit,
       ).calculateCosts();
+    } else if (unit is ItemUnit) {
+      results = _CostByItemValidator(
+        price: price,
+        quantity: quantity,
+      ).calculateCosts();
     } else {
       throw Exception('Unknown unit type');
     }
@@ -161,6 +166,27 @@ class _CostByVolumeValidator {
     final volumeInQuarts = _volumeInMillilitres / 946;
     final cost = _calculateUnitCost(price, volumeInQuarts);
     return Cost(unit: Unit.quart, value: cost);
+  }
+}
+
+class _CostByItemValidator {
+  final double price;
+  final double quantity;
+
+  _CostByItemValidator({
+    required this.price,
+    required this.quantity,
+  });
+
+  List<Cost> calculateCosts() {
+    final List<Cost> results = [];
+    results.add(_costByItem);
+    return results;
+  }
+
+  Cost get _costByItem {
+    final cost = _calculateUnitCost(price, quantity);
+    return Cost(unit: Unit.item, value: cost);
   }
 }
 
