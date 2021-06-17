@@ -17,6 +17,8 @@ class Window {
     _window.setWindowTitle(title);
   }
 
+  /// Defaults to centering the window, however a check
+  /// could be added to customize the initial window position.
   Future<void> setWindowFrame({
     required double width,
     required double height,
