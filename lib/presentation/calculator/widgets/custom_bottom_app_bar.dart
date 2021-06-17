@@ -13,17 +13,19 @@ class CustomBottomAppBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            RichText(
-              text: TextSpan(children: [
-                TextSpan(text: 'Made with ❤ by '),
-                TextSpan(
-                  text: 'Kristen McWilliam',
-                  style: TextStyle(color: Colors.lightBlueAccent),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => _showInfoDialog(context),
-                ),
-                TextSpan(text: '.'),
-              ]),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: 'Made with 💙 by '),
+                  TextSpan(
+                    text: 'Kristen McWilliam',
+                    style: TextStyle(color: Colors.lightBlueAccent),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _showInfoDialog(context),
+                  ),
+                  TextSpan(text: '.'),
+                ],
+              ),
             ),
           ],
         ),
@@ -81,13 +83,12 @@ class InfoDialog extends StatelessWidget {
                     ],
                   ),
                   Spacers.verticalSmall,
-                  RichText(
-                    text: TextSpan(
+                  Text.rich(
+                    TextSpan(
                       children: [
                         TextSpan(
                           text: 'If you find Unit Bargain Hunter useful and '
                               'would like to show appreciation you can ',
-                          style: TextStyles.body1,
                         ),
                         TextSpan(
                           text: 'buy me a coffee',
