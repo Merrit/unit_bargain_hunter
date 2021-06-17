@@ -42,7 +42,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       Item(
         price: 0.00,
         quantity: 0.00,
-        unit: Gram(),
+        unit: state.comareBy.baseUnit,
       ),
     );
     emit(state.copyWith(items: items, result: null));
