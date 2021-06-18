@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.unit_bargain_hunter">
+    package="codes.merritt.bargain">
    <application
-        android:label="unit_bargain_hunter"
+        android:label="Unit Bargain Hunter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

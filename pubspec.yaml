@@ -1,7 +1,7 @@
 name: unit_bargain_hunter
 description: "~~"
 publish_to: "none"
-version: 1.0.0+1
+version: 0.1.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -23,6 +23,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.0
   pedantic: ^1.11.1
 
 flutter:
@@ -30,3 +31,9 @@ flutter:
   assets:
     - assets/
     - assets/images/
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/icon.png"

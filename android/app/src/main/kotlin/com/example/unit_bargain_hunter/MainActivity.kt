@@ -1,4 +1,4 @@
-package com.example.unit_bargain_hunter
+package codes.merritt.bargain
 
 import io.flutter.embedding.android.FlutterActivity
 

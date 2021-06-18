@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "unit_bargain_hunter")
-set(APPLICATION_ID "com.example.unit_bargain_hunter")
+set(APPLICATION_ID "codes.merritt.bargain")
 
 cmake_policy(SET CMP0063 NEW)
 
