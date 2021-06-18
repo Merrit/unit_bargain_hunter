@@ -1,6 +1,6 @@
 name: unit_bargain_hunter
-description: '~~'
-publish_to: 'none'
+description: "~~"
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -9,20 +9,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.2
-  flutter_bloc: ^7.0.1
-  font_awesome_flutter: ^9.1.0
-  provider: ^5.0.0
-  url_launcher: ^6.0.6
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: e48abe7c3e9ebfe0b81622167c5201d4e783bb81
+  equatable: ^2.0.2
+  flutter_bloc: ^7.0.1
+  font_awesome_flutter: ^9.1.0
+  provider: ^5.0.0
+  url_launcher: ^6.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pedantic: ^1.11.1
 
 flutter:
   uses-material-design: true
