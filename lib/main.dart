@@ -22,7 +22,7 @@ void main() {
   );
 }
 
-void init() async {
+void init() {
   if (PlatformRepository.isDesktop) {
     final window = Window();
     window.setWindowTitle('Unit Bargain Hunter');

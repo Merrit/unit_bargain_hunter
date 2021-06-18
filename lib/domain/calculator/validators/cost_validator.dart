@@ -47,7 +47,7 @@ class _CostByWeightValidator {
     required this.unit,
   }) : _weightInGrams = _getUnitAsGrams(unit, quantity);
 
-  double _weightInGrams;
+  final double _weightInGrams;
 
   // Convert to grams as the base unit for comparisons.
   static double _getUnitAsGrams(Unit unit, double quantity) {
@@ -118,7 +118,7 @@ class _CostByVolumeValidator {
     required this.unit,
   }) : _volumeInMillilitres = _getUnitAsMilliletres(unit, quantity);
 
-  double _volumeInMillilitres;
+  final double _volumeInMillilitres;
 
   // Convert to Millilitres as the base unit for comparisons.
   static double _getUnitAsMilliletres(Unit unit, double quantity) {

@@ -43,10 +43,13 @@ class Weight extends Unit {
   const Weight();
 
   /// Other weights are converted to grams for comparisons.
+  @override
   Unit get baseUnit => Gram();
 
+  @override
   Unit get unitType => Weight();
 
+  @override
   List<Unit> get subTypes => [Gram(), Kilogram(), Ounce(), Pound()];
 
   @override
@@ -84,10 +87,13 @@ class Volume extends Unit {
   const Volume();
 
   /// Other volumes are converted to millilitre for comparisons.
+  @override
   Unit get baseUnit => Millilitre();
 
+  @override
   Unit get unitType => Volume();
 
+  @override
   List<Unit> get subTypes => [Millilitre(), Litre(), FluidOunce(), Quart()];
 
   @override
@@ -119,10 +125,13 @@ class Quart extends Volume {
 class ItemUnit extends Unit {
   const ItemUnit();
 
+  @override
   Unit get baseUnit => ItemUnit();
 
+  @override
   Unit get unitType => ItemUnit();
 
+  @override
   List<Unit> get subTypes => [ItemUnit()];
 
   @override

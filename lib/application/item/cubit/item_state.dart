@@ -36,7 +36,7 @@ class ItemState extends Equatable {
   ItemState copyWith({
     int? index,
     Item? item,
-    List<String>? costPer,
+    List<String>? costPerUnits,
     bool? shouldShowCloseButton,
     bool? isCheapest,
     bool? resultExists,
@@ -44,7 +44,7 @@ class ItemState extends Equatable {
     return ItemState(
       index: index ?? this.index,
       item: item ?? this.item,
-      costPerUnits: costPer ?? this.costPerUnits,
+      costPerUnits: costPerUnits ?? this.costPerUnits,
       shouldShowCloseButton:
           shouldShowCloseButton ?? this.shouldShowCloseButton,
       isCheapest: isCheapest ?? this.isCheapest,

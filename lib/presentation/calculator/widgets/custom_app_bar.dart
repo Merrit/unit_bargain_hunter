@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
   final preferredSize = Size.fromHeight(kToolbarHeight);
 
   @override

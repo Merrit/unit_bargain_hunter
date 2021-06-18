@@ -32,7 +32,7 @@ class ItemCubit extends Cubit<ItemState> {
       );
       if (item == null) return;
       final shouldShowCloseButton = (event.items.length >= 3);
-      final resultExists = event.result.length > 0;
+      final resultExists = event.result.isNotEmpty;
       final costPer = _checkCostPer(resultExists: resultExists, item: item);
       final isCheapest = event.result.contains(item);
       final costPerChanged = (state.costPerUnits.length != costPer.length);
@@ -42,7 +42,7 @@ class ItemCubit extends Cubit<ItemState> {
       if (itemChanged || calcStateChanged) {
         emit(state.copyWith(
           item: item,
-          costPer: costPer,
+          costPerUnits: costPer,
           shouldShowCloseButton: shouldShowCloseButton,
           isCheapest: isCheapest,
           resultExists: resultExists,
