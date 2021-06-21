@@ -37,7 +37,7 @@ jobs:
       #     iscc packaging\win32\inno_setup_script.iss
       - uses: actions/upload-artifact@v2
         with:
-          name: windows-portable
+          name: unit_bargain_hunter-win32_portable
           path: build\unit_bargain_hunter
       # - uses: actions/upload-artifact@v2
       #   with:
