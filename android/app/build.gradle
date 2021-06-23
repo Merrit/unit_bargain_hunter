@@ -60,6 +60,8 @@ android {
        }
    }
 
+   ndkVersion "22.1.7171670"
+
    buildTypes {
        release {
            signingConfig signingConfigs.release
