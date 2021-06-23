@@ -1,4 +1,4 @@
-name: Build Android apk & bundle
+name: Build Android version
 on:
   workflow_dispatch:
   release:
