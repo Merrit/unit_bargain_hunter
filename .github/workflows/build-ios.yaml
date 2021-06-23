@@ -19,8 +19,8 @@ jobs:
           flutter pub get
           flutter test
           flutter build ios --release --no-codesign
-          find *
       - uses: actions/upload-artifact@v2
         with:
           name: unit_bargain_hunter-ios
           path: build/ios/archive/unit_bargain_hunter.xcarchive
+          # Archive not found?
