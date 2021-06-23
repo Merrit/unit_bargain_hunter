@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Unit Bargain Hunter
+Comment=Find the best price
+Exec=unit_bargain_hunter
+Icon=unit_bargain_hunter
+Terminal=false
+StartupNotify=false
+Categories=Utility;
+StartupWMClass=Unit Bargain Hunter
