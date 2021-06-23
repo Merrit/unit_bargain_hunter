@@ -20,7 +20,7 @@ jobs:
           flutter pub get
           flutter build linux
 
-          cp build/linux/x64/release/bundle unit_bargain_hunter
+          cp -r build/linux/x64/release/bundle unit_bargain_hunter
       - uses: actions/upload-artifact@v2
         with:
           name: linux-portable
