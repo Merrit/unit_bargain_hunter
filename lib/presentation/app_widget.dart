@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
 
 import 'calculator/calculator.dart';
-import 'theme.dart';
 
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Unit Bargain Hunter',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
-      home: CalculatorPage(),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          title: 'Unit Bargain Hunter',
+          debugShowCheckedModeBanner: false,
+          theme: state.themeData,
+          home: CalculatorPage(),
+        );
+      },
     );
   }
 }
