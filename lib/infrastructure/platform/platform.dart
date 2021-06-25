@@ -2,8 +2,8 @@ import 'src/platform.dart';
 
 export 'src/window.dart';
 
-abstract class PlatformRepository {
-  const PlatformRepository();
+abstract class Platform {
+  const Platform();
 
   static final PlatformType _platformType = platform;
 
