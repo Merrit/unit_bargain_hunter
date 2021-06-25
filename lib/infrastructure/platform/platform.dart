@@ -5,6 +5,9 @@ export 'src/window.dart';
 abstract class Platform {
   const Platform();
 
+  /// Populated with which platform is currently running.
+  ///
+  /// Will be one of: linux, macos, windows, android, ios, web.
   static final PlatformType _platformType = platform;
 
   static bool get isLinux => _platformType == PlatformType.linux;
