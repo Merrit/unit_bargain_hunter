@@ -37,7 +37,7 @@ class _ItemContents extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxWidth: 200,
+        maxWidth: 190,
       ),
       child: Card(
         elevation: 2,
