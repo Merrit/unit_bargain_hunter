@@ -21,7 +21,7 @@ class CalculatorPage extends StatelessWidget {
           child: Scaffold(
             appBar: CustomAppBar(),
             body: CalculatorView(),
-            bottomNavigationBar: CustomBottomAppBar(),
+            bottomNavigationBar: const CustomBottomAppBar(),
           ),
         ),
       ),
@@ -59,9 +59,9 @@ class CalculatorView extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Compare by:'),
+                      const Text('Compare by:'),
                       const SizedBox(width: 10),
-                      CompareByDropdownButton(),
+                      const CompareByDropdownButton(),
                     ],
                   ),
                 ),
@@ -106,7 +106,7 @@ class ScrollingItemsList extends StatelessWidget {
               child: Wrap(
                 alignment: WrapAlignment.center,
                 children: [
-                  SizedBox(width: double.infinity),
+                  const SizedBox(width: double.infinity),
                   for (var index = 0; index < itemCount; index++)
                     ItemCard(
                       key: ValueKey(index),
