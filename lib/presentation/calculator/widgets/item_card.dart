@@ -75,9 +75,20 @@ class __ItemContentsState extends State<_ItemContents>
                 Positioned.fill(
                   child: BlocBuilder<ItemCubit, ItemState>(
                     builder: (context, state) {
-                      return Container(
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
                         decoration: BoxDecoration(
-                          color: (state.isCheapest) ? Colors.green[700] : null,
+                          gradient: (state.isCheapest)
+                              ? LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.greenAccent,
+                                    Colors.lightBlue,
+                                  ],
+                                )
+                              : null,
                           borderRadius: BorderRadii.gentlyRounded,
                         ),
                       );
