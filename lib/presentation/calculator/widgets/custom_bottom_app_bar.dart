@@ -5,6 +5,8 @@ import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubi
 import 'package:unit_bargain_hunter/presentation/styles.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
+  const CustomBottomAppBar();
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -16,14 +18,14 @@ class CustomBottomAppBar extends StatelessWidget {
             Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: 'Made with 💙 by '),
+                  const TextSpan(text: 'Made with 💙 by '),
                   TextSpan(
                     text: 'Kristen McWilliam',
                     style: TextStyle(color: Colors.lightBlueAccent),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => _showInfoDialog(context),
                   ),
-                  TextSpan(text: '.'),
+                  const TextSpan(text: '.'),
                 ],
               ),
             ),
@@ -36,7 +38,7 @@ class CustomBottomAppBar extends StatelessWidget {
   void _showInfoDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => InfoDialog(),
+      builder: (context) => const InfoDialog(),
     );
   }
 }
@@ -56,7 +58,7 @@ class InfoDialog extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         foregroundImage:
                             AssetImage('assets/images/bio-photo.jpg'),
                         radius: 50,
@@ -66,7 +68,7 @@ class InfoDialog extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Hello! My name is Kristen.\n'
+                            const Text('Hello! My name is Kristen.\n'
                                 'I am the developer of this app.'),
                             TextButton(
                               onPressed: () => calcCubit.launchDonateURL(
@@ -86,7 +88,7 @@ class InfoDialog extends StatelessWidget {
                   Text.rich(
                     TextSpan(
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'If you find Unit Bargain Hunter useful and '
                               'would like to show appreciation you can ',
                         ),
@@ -98,24 +100,25 @@ class InfoDialog extends StatelessWidget {
                                   'https://merritt.codes/support',
                                 ),
                         ),
-                        TextSpan(text: '.'),
+                        const TextSpan(text: '.'),
                       ],
                     ),
                   ),
                   const SizedBox(height: 30),
-                  Text('Find bargains on these platforms:\n'),
+                  const Text('Find bargains on these platforms:\n'),
                   // TODO: Add IconButtons for other platform links.
-                  Placeholder(
+                  const Placeholder(
                     fallbackHeight: 30,
                   ),
                   Spacers.verticalSmall,
-                  Text('This app is free and libre / open source software.'),
-                  Text('The source code is available on GitHub.'),
+                  const Text(
+                      'This app is free and libre / open source software.'),
+                  const Text('The source code is available on GitHub.'),
                   IconButton(
                     onPressed: () => calcCubit.launchDonateURL(
                       'https://github.com/Merrit/unit_bargain_hunter',
                     ),
-                    icon: FaIcon(FontAwesomeIcons.github),
+                    icon: const FaIcon(FontAwesomeIcons.github),
                   ),
                 ],
               ),
