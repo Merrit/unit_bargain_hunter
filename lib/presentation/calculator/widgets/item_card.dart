@@ -32,56 +32,88 @@ class ItemCard extends StatelessWidget {
   }
 }
 
-class _ItemContents extends StatelessWidget {
+class _ItemContents extends StatefulWidget {
+  @override
+  __ItemContentsState createState() => __ItemContentsState();
+}
+
+class __ItemContentsState extends State<_ItemContents>
+    with TickerProviderStateMixin {
+  double _opacity = 0;
+
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 800),
+    vsync: this,
+  )..forward();
+
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOutCirc,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() => _opacity = 1);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 190,
-      ),
-      child: Card(
-        elevation: 2,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: BlocBuilder<ItemCubit, ItemState>(
-                builder: (context, state) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: (state.isCheapest) ? Colors.green[700] : null,
-                      borderRadius: BorderRadii.gentlyRounded,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 14,
-                horizontal: 14,
-              ),
-              child: FocusTraversalGroup(
-                child: Focus(
-                  skipTraversal: true,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('Item ${context.read<ItemCubit>().state.index + 1}'),
-                      Spacers.verticalSmall,
-                      _PriceWidget(),
-                      Spacers.verticalXtraSmall,
-                      _QuantityWidget(),
-                      Spacers.verticalXtraSmall,
-                      Text('Unit'),
-                      _UnitChooser(),
-                      Spacers.verticalSmall,
-                      _PerUnitCalculation(),
-                    ],
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 800),
+      opacity: _opacity,
+      child: ScaleTransition(
+        scale: _animation,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 190,
+          ),
+          child: Card(
+            elevation: 2,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: BlocBuilder<ItemCubit, ItemState>(
+                    builder: (context, state) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: (state.isCheapest) ? Colors.green[700] : null,
+                          borderRadius: BorderRadii.gentlyRounded,
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
-            )
-          ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 14,
+                  ),
+                  child: FocusTraversalGroup(
+                    child: Focus(
+                      skipTraversal: true,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                              'Item ${context.read<ItemCubit>().state.index + 1}'),
+                          Spacers.verticalSmall,
+                          _PriceWidget(),
+                          Spacers.verticalXtraSmall,
+                          _QuantityWidget(),
+                          Spacers.verticalXtraSmall,
+                          Text('Unit'),
+                          _UnitChooser(),
+                          Spacers.verticalSmall,
+                          _PerUnitCalculation(),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
