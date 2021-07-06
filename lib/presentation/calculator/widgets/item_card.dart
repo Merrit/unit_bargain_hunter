@@ -6,9 +6,11 @@ import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubi
 import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
 import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
 import 'package:unit_bargain_hunter/domain/calculator/validators/text_input_formatter.dart';
-import 'package:unit_bargain_hunter/presentation/calculator/widgets/compare_items_shortcut.dart';
-import 'package:unit_bargain_hunter/presentation/styles.dart';
 
+import '../../styles.dart';
+import '../calculator.dart';
+
+/// The widget representing each item.
 class ItemCard extends StatelessWidget {
   final int index;
 
@@ -21,6 +23,7 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ItemCubit(calcCubit, index),
+      // Stack is used so the close button doesn't push down the contents.
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
         children: [
@@ -37,8 +40,11 @@ class _ItemContents extends StatefulWidget {
   __ItemContentsState createState() => __ItemContentsState();
 }
 
+// Contents uses a StatefulWidget in order to get the
+// Ticker & setState for the animations.
 class __ItemContentsState extends State<_ItemContents>
     with TickerProviderStateMixin {
+  // Start with no opacity.
   double _opacity = 0;
 
   late final AnimationController _controller = AnimationController(
@@ -54,6 +60,7 @@ class __ItemContentsState extends State<_ItemContents>
   @override
   void initState() {
     super.initState();
+    // Opacity fades in when widget is created.
     setState(() => _opacity = 1);
   }
 
@@ -66,17 +73,20 @@ class __ItemContentsState extends State<_ItemContents>
         scale: _animation,
         child: ConstrainedBox(
           constraints: const BoxConstraints(
+            // Prevent the card from taking all available width.
             maxWidth: 190,
           ),
           child: Card(
             elevation: 2,
+            // Stack is used to layer the 'winner' color underneath
+            // the actual widgets that make up the card.
             child: Stack(
               children: [
                 Positioned.fill(
                   child: BlocBuilder<ItemCubit, ItemState>(
                     builder: (context, state) {
                       return AnimatedContainer(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeIn,
                         decoration: BoxDecoration(
                           gradient: (state.isCheapest)
@@ -100,6 +110,8 @@ class __ItemContentsState extends State<_ItemContents>
                     vertical: 14,
                     horizontal: 14,
                   ),
+                  // FocusTraversalGroup ensures that using `Tab` to
+                  // navigate with a keyboard moves in the correct direction.
                   child: FocusTraversalGroup(
                     child: Focus(
                       skipTraversal: true,
@@ -143,6 +155,9 @@ class _PriceWidget extends StatelessWidget {
       builder: (context, state) {
         _controller.text = state.priceAsString;
 
+        // Listen to the FocusNode & update [isFocused],
+        // this ensures the widget doesn't rebuild when the user is
+        // still actually editing it.
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           _focusNode.addListener(() {
             if (_focusNode.hasFocus) {
@@ -159,7 +174,7 @@ class _PriceWidget extends StatelessWidget {
 
         return CompareItemsShortcut(
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Price',
             ),
             focusNode: _focusNode,
@@ -192,6 +207,9 @@ class _QuantityWidget extends StatelessWidget {
       builder: (context, state) {
         _controller.text = state.quantityAsString;
 
+        // Listen to the FocusNode & update [isFocused],
+        // this ensures the widget doesn't rebuild when the user is
+        // still actually editing it.
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           _focusNode.addListener(() {
             if (_focusNode.hasFocus) {
@@ -208,7 +226,7 @@ class _QuantityWidget extends StatelessWidget {
 
         return CompareItemsShortcut(
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Quantity',
             ),
             focusNode: _focusNode,
@@ -228,6 +246,7 @@ class _QuantityWidget extends StatelessWidget {
   }
 }
 
+/// Allow choosing between eg `grams`, `millilitres`, etc.
 class _UnitChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -257,6 +276,8 @@ class _UnitChooser extends StatelessWidget {
   }
 }
 
+/// Only shown when a comparison has been completed, lists the
+/// item's cost per gram, millilitre, etc.
 class _PerUnitCalculation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -277,6 +298,7 @@ class _PerUnitCalculation extends StatelessWidget {
   }
 }
 
+/// Only shown when there are more than 2 item cards.
 class _CloseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -291,7 +313,7 @@ class _CloseButton extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   child: IconButton(
                     onPressed: () => calcCubit.removeItem(state.item.key),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       color: Colors.white38,
                     ),
