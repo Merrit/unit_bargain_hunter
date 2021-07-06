@@ -6,6 +6,8 @@ class CompareItemsIntent extends Intent {
   const CompareItemsIntent();
 }
 
+/// Trigger the callback to compare items when the user
+/// presses `Enter` on the keyboard.
 class CompareItemsShortcut extends StatelessWidget {
   final Widget child;
 
