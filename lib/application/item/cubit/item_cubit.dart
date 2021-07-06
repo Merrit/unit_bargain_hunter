@@ -8,17 +8,15 @@ import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 part 'item_state.dart';
 
 class ItemCubit extends Cubit<ItemState> {
-  final CalculatorCubit _calculatorCubit;
   final int _itemIndex;
 
   ItemCubit(
-    this._calculatorCubit,
     this._itemIndex,
   ) : super(ItemState(
           index: _itemIndex,
-          item: _calculatorCubit.state.items[_itemIndex],
+          item: calcCubit.state.items[_itemIndex],
           costPerUnits: [],
-          shouldShowCloseButton: (_calculatorCubit.state.items.length >= 3),
+          shouldShowCloseButton: (calcCubit.state.items.length >= 3),
           isCheapest: false,
           resultExists: false,
         )) {
@@ -26,7 +24,7 @@ class ItemCubit extends Cubit<ItemState> {
   }
 
   void _listenForItemUpdates() {
-    _calculatorCubit.stream.listen((event) {
+    calcCubit.stream.listen((event) {
       final item = event.items.singleWhereIndexedOrNull(
         (index, _) => index == _itemIndex,
       );
@@ -61,8 +59,10 @@ class ItemCubit extends Cubit<ItemState> {
     final results = <String>[];
     item.costPerUnit.forEach((Cost cost) {
       String stringValue = cost.value.toStringAsFixed(3);
-      // Calculated value too small to show within 3 decimal points.
-      if (stringValue == '0.000') stringValue = '--.--';
+      if (stringValue == '0.000') {
+        // Calculated value too small to show within 3 decimal points.
+        stringValue = '--.--';
+      }
       if (stringValue.endsWith('0')) {
         // Only show 2 decimal places when ending with a 0, for example:
         // 77.50 instead of 77.500

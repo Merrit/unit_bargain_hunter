@@ -22,7 +22,7 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ItemCubit(calcCubit, index),
+      create: (context) => ItemCubit(index),
       // Stack is used so the close button doesn't push down the contents.
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
