@@ -3,8 +3,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
 part 'calculator_state.dart';
 
@@ -18,17 +19,20 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     calcCubit = this;
   }
 
+  /// Compare all items to find the best value.
   void compare() {
     emit(state.copyWith(result: [])); // Reset result.
     final result = Calculator().compare(items: state.items);
     emit(state.copyWith(result: result));
   }
 
+  /// The user has chosen a new compare unit; weight, volume, or item.
   void updateCompareBy(Unit unit) {
     emit(
       state.copyWith(
         comareBy: unit,
         items: [
+          // Populate with 2 default items.
           Item(price: 0.00, quantity: 0.00, unit: unit.baseUnit),
           Item(price: 0.00, quantity: 0.00, unit: unit.baseUnit),
         ],
@@ -86,9 +90,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   /// Reset the results if user changes values.
-  void resetResult() {
-    emit(state.copyWith(result: []));
-  }
+  void resetResult() => emit(state.copyWith(result: []));
 
   Future<void> launchDonateURL(String url) async {
     await canLaunch(url)
