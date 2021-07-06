@@ -16,6 +16,7 @@ class ThemeCubit extends Cubit<ThemeState> {
           ),
         );
 
+  /// Toggle between light theme and dark theme.
   void toggleTheme({required bool isDark}) {
     final brightness = (isDark) ? Brightness.dark : Brightness.light;
     Preferences.instance.isDarkTheme = isDark;
