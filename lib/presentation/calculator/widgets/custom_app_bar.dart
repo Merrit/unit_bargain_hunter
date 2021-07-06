@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 transform: Matrix4.rotationY(math.pi),
                 child: IconButton(
                   onPressed: () => calcCubit.reset(),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.refresh,
                   ),
                 ),
@@ -32,22 +32,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   onPressed: () => calcCubit.compare(),
-                  child: Text('Compare'),
+                  child: const Text('Compare'),
                 ),
               ),
               IconButton(
                 onPressed: () => calcCubit.addItem(),
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
               ),
             ],
           ),
-          ThemeSwitch(),
+          const ThemeSwitch(),
         ],
       ),
     );
   }
 }
 
+/// A switch or toggle between light and dark themes.
 class ThemeSwitch extends StatelessWidget {
   const ThemeSwitch({
     Key? key,
