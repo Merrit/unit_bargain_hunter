@@ -38,7 +38,7 @@ jobs:
           path: build\unit_bargain_hunter
       - name: Package with Inno Setup
         run: |
-          xcopy .\packaging\win32\inno_setup_script.iss .
+          xcopy packaging\win32\inno_setup_script.iss .
           iscc .\inno_setup_script.iss
       - uses: actions/upload-artifact@v2
         with:
