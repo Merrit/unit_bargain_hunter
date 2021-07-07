@@ -6,10 +6,12 @@ import '../calculator.dart';
 
 @immutable
 class Item extends Equatable {
-  final UniqueKey key;
+  final UniqueKey key; // Helps keep track of the item in the widget tree.
   final double price;
   final double quantity;
   final Unit unit;
+
+  /// Cost per gram, milligram, kilogram, etc.
   final List<Cost> costPerUnit;
 
   Item({
