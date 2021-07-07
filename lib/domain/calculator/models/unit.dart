@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+// All of the unit types the app supports comparisons of.
+
 abstract class Unit extends Equatable {
   const Unit();
 
