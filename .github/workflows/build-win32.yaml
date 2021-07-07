@@ -36,11 +36,11 @@ jobs:
         with:
           name: unit_bargain_hunter-win32_portable
           path: build\unit_bargain_hunter
-      - name: Package with Inno Setup
-        run: |
-          move ..\packaging\win32\inno_setup_script.iss .
-          iscc inno_setup_script.iss
-      - uses: actions/upload-artifact@v2
-        with:
-          name: unit_bargain_hunter-windows-installer
-          path: build\unit_bargain_hunter-installer.exe
+      # - name: Package with Inno Setup
+      #   run: |
+      #     move ..\packaging\win32\inno_setup_script.iss .
+      #     iscc inno_setup_script.iss
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: unit_bargain_hunter-windows-installer
+      #     path: build\unit_bargain_hunter-installer.exe
