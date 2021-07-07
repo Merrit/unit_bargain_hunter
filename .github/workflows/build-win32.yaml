@@ -32,14 +32,15 @@ jobs:
           xcopy C:\Windows\System32\msvcp140.dll build\unit_bargain_hunter
           xcopy C:\Windows\System32\vcruntime140.dll build\unit_bargain_hunter
           xcopy C:\Windows\System32\vcruntime140_1.dll build\unit_bargain_hunter
-      # - name: Package with Inno Setup
-      #   run: |
-      #     iscc packaging\win32\inno_setup_script.iss
       - uses: actions/upload-artifact@v2
         with:
           name: unit_bargain_hunter-win32_portable
           path: build\unit_bargain_hunter
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: windows-installer
-      #     path: build\windows-installer.exe
+      - name: Package with Inno Setup
+        run: |
+          cp .\packaging\win32\inno_setup_script.iss .
+          iscc .\inno_setup_script.iss
+      - uses: actions/upload-artifact@v2
+        with:
+          name: unit_bargain_hunter-windows-installer
+          path: build\unit_bargain_hunter-installer.exe
