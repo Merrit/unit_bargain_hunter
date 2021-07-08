@@ -22,5 +22,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: unit_bargain_hunter-ios
-          path: build/ios/archive/unit_bargain_hunter.xcarchive
-          # Archive not found?
+          path: /Users/runner/work/unit_bargain_hunter/unit_bargain_hunter/build/ios/iphoneos/Runner.app
