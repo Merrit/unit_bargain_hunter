@@ -1,9 +1,5 @@
 name: Build Win32 version
-on:
-  workflow_dispatch:
-  release:
-    types:
-      - created
+on: [release, workflow_dispatch]
 jobs:
   build_and_preview:
     runs-on: windows-latest
