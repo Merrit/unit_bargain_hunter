@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
 import 'package:unit_bargain_hunter/presentation/styles.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
@@ -69,9 +71,11 @@ class InfoDialog extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('Hello! My name is Kristen.\n'
-                                'I am the developer of this app.'),
+                                'I am the developer of this app. \n'
+                                '\n'
+                                'My website:'),
                             TextButton(
-                              onPressed: () => calcCubit.launchDonateURL(
+                              onPressed: () => calcCubit.launchURL(
                                 'https://merritt.codes',
                               ),
                               child: Text(
@@ -96,26 +100,65 @@ class InfoDialog extends StatelessWidget {
                           text: 'buy me a coffee',
                           style: TextStyles.link1,
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => calcCubit.launchDonateURL(
+                            ..onTap = () => calcCubit.launchURL(
                                   'https://merritt.codes/support',
                                 ),
                         ),
-                        const TextSpan(text: '.'),
+                        const TextSpan(text: '. ☕'),
                       ],
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Text('Find bargains on these platforms:\n'),
-                  // TODO: Add IconButtons for other platform links.
-                  const Placeholder(
-                    fallbackHeight: 30,
+                  InkWell(
+                    onTap: () => calcCubit.launchURL(
+                      'https://merritt.codes/bargain.html',
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[
+                            context.read<ThemeCubit>().state.isDarkTheme
+                                ? 850
+                                : 300],
+                        borderRadius: BorderRadii.gentlyRounded,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          'Find bargains on these platforms: ',
+                                    ),
+                                    WidgetSpan(
+                                      child: Icon(
+                                        Icons.launch,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // const Text('Find bargains on these platforms:\n'),
+                              // Icon(Icons.launch),
+                            ],
+                          ),
+                          const Text('Windows, Linux, Android & web.'),
+                        ],
+                      ),
+                    ),
                   ),
                   Spacers.verticalSmall,
                   const Text(
                       'This app is free and libre / open source software.'),
                   const Text('The source code is available on GitHub.'),
                   IconButton(
-                    onPressed: () => calcCubit.launchDonateURL(
+                    onPressed: () => calcCubit.launchURL(
                       'https://github.com/Merrit/unit_bargain_hunter',
                     ),
                     icon: const FaIcon(FontAwesomeIcons.github),

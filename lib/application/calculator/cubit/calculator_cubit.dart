@@ -92,7 +92,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   /// Reset the results if user changes values.
   void resetResult() => emit(state.copyWith(result: []));
 
-  Future<void> launchDonateURL(String url) async {
+  Future<void> launchURL(String url) async {
     await canLaunch(url)
         ? await launch(url)
         : throw 'Could not launch url: $url';
