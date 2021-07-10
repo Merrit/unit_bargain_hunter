@@ -23,7 +23,7 @@ jobs:
           cp -r build/linux/x64/release/bundle unit_bargain_hunter
       - uses: actions/upload-artifact@v2
         with:
-          name: linux-portable
+          name: UnitBargainHunter-linux-portable
           path: unit_bargain_hunter/
       - name: Build AppImage
         uses: docker://appimagecrafters/appimage-builder:0.9.0
@@ -32,7 +32,7 @@ jobs:
           args: --recipe packaging/linux/appimage/AppImageBuilder.yml --skip-test
       - uses: actions/upload-artifact@v2
         with:
-          name: UnitBargainHunter-AppImage
+          name: UnitBargainHunter-linux-AppImage
           path: |
             *.AppImage
             *.zsync

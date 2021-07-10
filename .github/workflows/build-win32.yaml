@@ -30,7 +30,7 @@ jobs:
           xcopy C:\Windows\System32\vcruntime140_1.dll build\unit_bargain_hunter
       - uses: actions/upload-artifact@v2
         with:
-          name: unit_bargain_hunter-win32_portable
+          name: UnitBargainHunter-windows-portable
           path: build\unit_bargain_hunter
       # - name: Package with Inno Setup
       #   run: |

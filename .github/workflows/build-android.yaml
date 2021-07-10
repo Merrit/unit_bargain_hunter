@@ -23,6 +23,7 @@ jobs:
           flutter test
           flutter build apk
           flutter build appbundle
+          mv build/app/outputs/flutter-apk/app-release.apk build/UnitBargainHunter-android.apk
         env:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -34,5 +35,5 @@ jobs:
           path: build/app/outputs/bundle/release/
       - uses: actions/upload-artifact@v2
         with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/
+          name: UnitBargainHunter-android.apk
+          path: build/UnitBargainHunter-android.apk
