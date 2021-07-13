@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/application/app/cubit/app_cubit.dart';
 import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
 import 'package:unit_bargain_hunter/presentation/styles.dart';
 
@@ -75,7 +75,7 @@ class InfoDialog extends StatelessWidget {
                                 '\n'
                                 'My website:'),
                             TextButton(
-                              onPressed: () => calcCubit.launchURL(
+                              onPressed: () => appCubit.launchURL(
                                 'https://merritt.codes',
                               ),
                               child: Text(
@@ -100,7 +100,7 @@ class InfoDialog extends StatelessWidget {
                           text: 'buy me a coffee',
                           style: TextStyles.link1,
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => calcCubit.launchURL(
+                            ..onTap = () => appCubit.launchURL(
                                   'https://merritt.codes/support',
                                 ),
                         ),
@@ -110,7 +110,7 @@ class InfoDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   InkWell(
-                    onTap: () => calcCubit.launchURL(
+                    onTap: () => appCubit.launchURL(
                       'https://merritt.codes/bargain.html',
                     ),
                     child: Container(
@@ -158,11 +158,17 @@ class InfoDialog extends StatelessWidget {
                       'This app is free and libre / open source software.'),
                   const Text('The source code is available on GitHub.'),
                   IconButton(
-                    onPressed: () => calcCubit.launchURL(
+                    onPressed: () => appCubit.launchURL(
                       'https://github.com/Merrit/unit_bargain_hunter',
                     ),
                     icon: const FaIcon(FontAwesomeIcons.github),
                   ),
+                  Spacers.verticalMedium,
+                  BlocBuilder<AppCubit, AppState>(
+                    builder: (context, state) {
+                      return Text('Version: ${state.runningVersion}');
+                    },
+                  )
                 ],
               ),
             ),

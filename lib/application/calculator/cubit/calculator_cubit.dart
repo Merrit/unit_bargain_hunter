@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
 
@@ -91,12 +90,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   /// Reset the results if user changes values.
   void resetResult() => emit(state.copyWith(result: []));
-
-  Future<void> launchURL(String url) async {
-    await canLaunch(url)
-        ? await launch(url)
-        : throw 'Could not launch url: $url';
-  }
 
   void updateShowScrollbar(bool showScrollbar) {
     emit(state.copyWith(alwaysShowScrollbar: showScrollbar));

@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 
+import 'application/app/cubit/app_cubit.dart';
 import 'application/calculator/cubit/calculator_cubit.dart';
 import 'application/theme/cubit/theme_cubit.dart';
 import 'infrastructure/platform/platform.dart';
@@ -15,6 +16,9 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => AppCubit(),
+        ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),

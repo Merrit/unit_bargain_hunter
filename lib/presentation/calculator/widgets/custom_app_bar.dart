@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:unit_bargain_hunter/application/app/cubit/app_cubit.dart';
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
 
@@ -14,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Stack(
         children: [
+          const UpdateButton(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,6 +47,58 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const ThemeSwitch(),
         ],
       ),
+    );
+  }
+}
+
+class UpdateButton extends StatelessWidget {
+  const UpdateButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return (state.showUpdateButton)
+            ? IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('An update is available'),
+                        content: Text(
+                          'Current version: ${state.runningVersion}\n'
+                          'Update version: ${state.updateVersion}\n'
+                          '\n'
+                          'Would you like to open the downloads page?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('Close'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              appCubit.launchURL(
+                                'https://merritt.codes/bargain.html',
+                              );
+                            },
+                            child: const Text('Open'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const FaIcon(
+                  FontAwesomeIcons.arrowCircleUp,
+                  color: Colors.greenAccent,
+                ),
+              )
+            : const SizedBox();
+      },
     );
   }
 }
