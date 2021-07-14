@@ -181,6 +181,8 @@ class _PriceWidget extends StatelessWidget {
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+            textInputAction: TextInputAction.next,
             onChanged: (value) {
               calcCubit.updateItem(
                 key: state.item.key,
@@ -233,6 +235,8 @@ class _QuantityWidget extends StatelessWidget {
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+            textInputAction: TextInputAction.next,
             onChanged: (value) {
               calcCubit.updateItem(
                 key: state.item.key,
