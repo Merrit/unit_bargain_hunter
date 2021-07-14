@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unit_bargain_hunter/application/app/cubit/app_cubit.dart';
+import 'package:unit_bargain_hunter/application/helpers/form_factor.dart';
 import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
+import 'package:unit_bargain_hunter/infrastructure/platform/platform.dart';
 import 'package:unit_bargain_hunter/presentation/styles.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
@@ -50,13 +53,24 @@ class InfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formFactor = getFormFactor(context);
+    final isHandset = (formFactor == FormFactor.handset);
+    final isMobile = (isHandset && !Platform.isDesktop && !kIsWeb);
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 10.0 : 40.0,
+            vertical: isMobile ? 50.0 : 24.0,
+          ),
           content: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: constraints.maxWidth / 1.6),
+            constraints: isMobile
+                ? BoxConstraints.expand()
+                : BoxConstraints(maxWidth: constraints.maxWidth / 1.6),
             child: SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
@@ -68,6 +82,7 @@ class InfoDialog extends StatelessWidget {
                       Spacers.horizontalSmall,
                       Flexible(
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text('Hello! My name is Kristen.\n'
@@ -123,6 +138,7 @@ class InfoDialog extends StatelessWidget {
                         borderRadius: BorderRadii.gentlyRounded,
                       ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -155,7 +171,9 @@ class InfoDialog extends StatelessWidget {
                   ),
                   Spacers.verticalSmall,
                   const Text(
-                      'This app is free and libre / open source software.'),
+                    'This app is free and libre / open source software.',
+                  ),
+                  Spacers.verticalSmall,
                   const Text('The source code is available on GitHub.'),
                   IconButton(
                     onPressed: () => appCubit.launchURL(
