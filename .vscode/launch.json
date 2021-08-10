@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Debug",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+        },
+        {
+            "name": "Web Server",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "-d",
+                "web-server",
+                "--web-port",
+                "8000",
+                "--web-hostname",
+                "0.0.0.0",
+            ],
+        },
+    ]
+}
