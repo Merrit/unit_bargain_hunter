@@ -11,18 +11,22 @@
 
     For more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-  -->
 
-  <!-- <base href="/"> -->
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
-  <title>Unit Bargain Hunter</title>
-  <meta name="description" content="Best Price Calculator">
-  <meta name="keywords" content="Flutter, price, calculator, bargain">
-  <meta name="author" content="Kristen McWilliam">
-  <meta name="theme-color" content="#6200EA" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Best Value Calculator">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Unit Bargain Hunter">
+  <meta name="msapplication-TileColor" content="#6200EA">
+  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
   <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
@@ -40,19 +44,8 @@
   <!-- Main Favicon -->
   <link rel="icon" type="image/pg" href="favicon/png" />
 
-  <!-- ALTERNATIVE <link rel="icon" type="image/x-icon" href="favicon.ico" /> -->
-
-  <link rel="manifest" href="icons/manifest.json">
-  <meta name="msapplication-TileColor" content="#6200EA">
-  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('flutter-first-frame', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
-      });
-    }
-  </script>
-  <script defer src="main.dart.js" type="application/javascript"></script>
+  <title>Unit Bargain Hunter</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -93,7 +86,7 @@
             if (!reg.active && (reg.installing || reg.waiting)) {
               // No active web worker and we have installed or are installing
               // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing ?? reg.waiting);
+              waitForActivation(reg.installing || reg.waiting);
             } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
               // When the app updates the serviceWorkerVersion changes, so we
               // need to ask the service worker to update.
