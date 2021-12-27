@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Unit Bargain Hunter"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "Kristen McWilliam"
 #define MyAppURL "https://bargain.merritt.codes/"
 #define MyAppSimpleName "unit_bargain_hunter"
@@ -24,9 +24,9 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline
-OutputDir=build
+OutputDir=..\..\build
 OutputBaseFilename=UnitBargainHunter-windows-installer
-SetupIconFile=assets\icon\icon.ico
+SetupIconFile=..\..\assets\icon\icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -38,12 +38,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "build\{#MyAppSimpleName}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#MyAppSimpleName}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\build\{#MyAppSimpleName}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\build\{#MyAppSimpleName}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autoprograms}\{#MyAppName}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
