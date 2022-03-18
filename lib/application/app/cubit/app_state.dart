@@ -14,7 +14,7 @@ class AppState extends Equatable {
   });
 
   factory AppState.initial() {
-    return AppState(
+    return const AppState(
       runningVersion: '',
       updateVersion: '',
       updateAvailable: false,

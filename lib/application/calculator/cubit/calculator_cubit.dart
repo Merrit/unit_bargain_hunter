@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
@@ -21,7 +20,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   /// Compare all items to find the best value.
   void compare() {
     emit(state.copyWith(result: [])); // Reset result.
-    final result = Calculator().compare(items: state.items);
+    final result = const Calculator().compare(items: state.items);
     emit(state.copyWith(result: result));
   }
 

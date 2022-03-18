@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
@@ -67,7 +66,7 @@ class __ItemContentsState extends State<_ItemContents>
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 800),
       opacity: _opacity,
       child: ScaleTransition(
         scale: _animation,
@@ -90,7 +89,7 @@ class __ItemContentsState extends State<_ItemContents>
                         curve: Curves.easeIn,
                         decoration: BoxDecoration(
                           gradient: (state.isCheapest)
-                              ? LinearGradient(
+                              ? const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
@@ -125,7 +124,7 @@ class __ItemContentsState extends State<_ItemContents>
                           Spacers.verticalXtraSmall,
                           _QuantityWidget(),
                           Spacers.verticalXtraSmall,
-                          Text('Unit'),
+                          const Text('Unit'),
                           _UnitChooser(),
                           Spacers.verticalSmall,
                           _PerUnitCalculation(),
@@ -181,7 +180,7 @@ class _PriceWidget extends StatelessWidget {
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
-            keyboardType: TextInputType.numberWithOptions(),
+            keyboardType: const TextInputType.numberWithOptions(),
             textInputAction: TextInputAction.next,
             onChanged: (value) {
               calcCubit.updateItem(
@@ -235,7 +234,7 @@ class _QuantityWidget extends StatelessWidget {
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
-            keyboardType: TextInputType.numberWithOptions(),
+            keyboardType: const TextInputType.numberWithOptions(),
             textInputAction: TextInputAction.next,
             onChanged: (value) {
               calcCubit.updateItem(
