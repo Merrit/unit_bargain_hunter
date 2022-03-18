@@ -14,7 +14,7 @@ class ThemeState extends Equatable {
     ),
   );
 
-  final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+  final InputDecorationTheme inputDecorationTheme = const InputDecorationTheme(
     border: OutlineInputBorder(),
     isDense: true,
   );

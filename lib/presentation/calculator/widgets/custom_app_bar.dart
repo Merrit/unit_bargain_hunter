@@ -9,7 +9,9 @@ import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  final preferredSize = Size.fromHeight(kToolbarHeight);
+  final preferredSize = const Size.fromHeight(kToolbarHeight);
+
+  const CustomAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class UpdateButton extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: Text('Close'),
+                            child: const Text('Close'),
                           ),
                           TextButton(
                             onPressed: () {
@@ -118,11 +120,11 @@ class ThemeSwitch extends StatelessWidget {
           return Switch(
             value: state.isDarkTheme,
             activeColor: Colors.grey[700],
-            activeThumbImage: AssetImage(
+            activeThumbImage: const AssetImage(
               'assets/images/theme_switch/moon.png',
             ),
             inactiveThumbColor: Colors.yellow,
-            inactiveThumbImage: AssetImage(
+            inactiveThumbImage: const AssetImage(
               'assets/images/theme_switch/sun.png',
             ),
             onChanged: (value) {

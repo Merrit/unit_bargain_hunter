@@ -26,7 +26,7 @@ Future<void> main() async {
           create: (context) => CalculatorCubit(),
         ),
       ],
-      child: AppWidget(),
+      child: const AppWidget(),
     ),
   );
 }
@@ -34,7 +34,7 @@ Future<void> main() async {
 Future<void> init() async {
   await Preferences.instance.initialize();
   if (Platform.isDesktop) {
-    final window = Window();
+    const window = Window();
     window.setWindowTitle('Unit Bargain Hunter');
     await window.setWindowFrame(width: 635, height: 650);
   }

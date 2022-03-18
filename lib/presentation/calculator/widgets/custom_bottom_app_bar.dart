@@ -10,7 +10,7 @@ import 'package:unit_bargain_hunter/infrastructure/platform/platform.dart';
 import 'package:unit_bargain_hunter/presentation/styles.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
-  const CustomBottomAppBar();
+  const CustomBottomAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CustomBottomAppBar extends StatelessWidget {
                   const TextSpan(text: 'Made with 💙 by '),
                   TextSpan(
                     text: 'Kristen McWilliam',
-                    style: TextStyle(color: Colors.lightBlueAccent),
+                    style: const TextStyle(color: Colors.lightBlueAccent),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => _showInfoDialog(context),
                   ),
@@ -66,7 +66,7 @@ class InfoDialog extends StatelessWidget {
           ),
           content: ConstrainedBox(
             constraints: isMobile
-                ? BoxConstraints.expand()
+                ? const BoxConstraints.expand()
                 : BoxConstraints(maxWidth: constraints.maxWidth / 1.6),
             child: SingleChildScrollView(
               child: Column(
@@ -143,8 +143,8 @@ class InfoDialog extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Text.rich(
+                            children: const [
+                              Text.rich(
                                 TextSpan(
                                   children: [
                                     TextSpan(

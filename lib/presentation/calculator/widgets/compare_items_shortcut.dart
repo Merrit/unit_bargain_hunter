@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
 
 class CompareItemsIntent extends Intent {
@@ -11,7 +12,10 @@ class CompareItemsIntent extends Intent {
 class CompareItemsShortcut extends StatelessWidget {
   final Widget child;
 
-  const CompareItemsShortcut({required this.child});
+  const CompareItemsShortcut({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

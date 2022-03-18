@@ -5,7 +5,7 @@ import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubi
 import '../calculator.dart';
 
 class CalculatorPage extends StatelessWidget {
-  CalculatorPage();
+  CalculatorPage({Key? key}) : super(key: key);
 
   final focusNode = FocusNode();
 
@@ -19,7 +19,7 @@ class CalculatorPage extends StatelessWidget {
         child: FocusableActionDetector(
           focusNode: focusNode,
           child: Scaffold(
-            appBar: CustomAppBar(),
+            appBar: const CustomAppBar(),
             body: CalculatorView(),
             bottomNavigationBar: const CustomBottomAppBar(),
           ),
@@ -31,6 +31,8 @@ class CalculatorPage extends StatelessWidget {
 
 class CalculatorView extends StatelessWidget {
   final focusNode = FocusNode();
+
+  CalculatorView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +60,10 @@ class CalculatorView extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('Compare by:'),
-                      const SizedBox(width: 10),
-                      const CompareByDropdownButton(),
+                    children: const [
+                      Text('Compare by:'),
+                      SizedBox(width: 10),
+                      CompareByDropdownButton(),
                     ],
                   ),
                 ),
@@ -77,6 +79,8 @@ class CalculatorView extends StatelessWidget {
 
 class ScrollingItemsList extends StatelessWidget {
   final scrollController = ScrollController();
+
+  ScrollingItemsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +104,7 @@ class ScrollingItemsList extends StatelessWidget {
           final itemCount = state.items.length;
           return Scrollbar(
             controller: scrollController,
-            isAlwaysShown: state.alwaysShowScrollbar,
+            thumbVisibility: state.alwaysShowScrollbar,
             child: SingleChildScrollView(
               controller: scrollController,
               child: Wrap(

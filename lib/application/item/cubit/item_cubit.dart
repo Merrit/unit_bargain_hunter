@@ -15,7 +15,7 @@ class ItemCubit extends Cubit<ItemState> {
   ) : super(ItemState(
           index: _itemIndex,
           item: calcCubit.state.items[_itemIndex],
-          costPerUnits: [],
+          costPerUnits: const [],
           shouldShowCloseButton: (calcCubit.state.items.length >= 3),
           isCheapest: false,
           resultExists: false,
@@ -57,7 +57,8 @@ class ItemCubit extends Cubit<ItemState> {
   }) {
     if ((item.costPerUnit.isEmpty) || !resultExists) return [];
     final results = <String>[];
-    item.costPerUnit.forEach((Cost cost) {
+
+    for (var cost in item.costPerUnit) {
       String stringValue = cost.value.toStringAsFixed(3);
       if (stringValue == '0.000') {
         // Calculated value too small to show within 3 decimal points.
@@ -70,7 +71,8 @@ class ItemCubit extends Cubit<ItemState> {
         stringValue = stringValue.substring(0, lastIndex);
       }
       results.add('\$$stringValue per ${cost.unit}');
-    });
+    }
+
     return results;
   }
 }

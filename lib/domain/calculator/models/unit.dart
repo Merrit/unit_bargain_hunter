@@ -8,7 +8,7 @@ abstract class Unit extends Equatable {
   Unit get baseUnit;
   Unit get unitType;
 
-  List<Unit> get subTypes => [Weight(), Volume(), ItemUnit()];
+  List<Unit> get subTypes => [const Weight(), const Volume(), const ItemUnit()];
 
   // Weight-based units.
   static Unit get milligram => Milligram();
@@ -24,7 +24,7 @@ abstract class Unit extends Equatable {
   static Unit get quart => Quart();
 
   // Item-based unit.
-  static Unit get item => ItemUnit();
+  static Unit get item => const ItemUnit();
 
   @override
   List<Object> get props => [];
@@ -33,10 +33,11 @@ abstract class Unit extends Equatable {
 abstract class UnitType {
   const UnitType();
 
-  static List<Unit> get all => [Weight(), Volume(), ItemUnit()];
-  static Unit get weight => Weight();
-  static Unit get volume => Volume();
-  static Unit get item => ItemUnit();
+  static List<Unit> get all =>
+      [const Weight(), const Volume(), const ItemUnit()];
+  static Unit get weight => const Weight();
+  static Unit get volume => const Volume();
+  static Unit get item => const ItemUnit();
 }
 
 /* --------------------------- Weight-based units --------------------------- */
@@ -49,7 +50,7 @@ class Weight extends Unit {
   Unit get baseUnit => Gram();
 
   @override
-  Unit get unitType => Weight();
+  Unit get unitType => const Weight();
 
   @override
   List<Unit> get subTypes => [Gram(), Kilogram(), Ounce(), Pound()];
@@ -93,7 +94,7 @@ class Volume extends Unit {
   Unit get baseUnit => Millilitre();
 
   @override
-  Unit get unitType => Volume();
+  Unit get unitType => const Volume();
 
   @override
   List<Unit> get subTypes => [Millilitre(), Litre(), FluidOunce(), Quart()];
@@ -128,13 +129,13 @@ class ItemUnit extends Unit {
   const ItemUnit();
 
   @override
-  Unit get baseUnit => ItemUnit();
+  Unit get baseUnit => const ItemUnit();
 
   @override
-  Unit get unitType => ItemUnit();
+  Unit get unitType => const ItemUnit();
 
   @override
-  List<Unit> get subTypes => [ItemUnit()];
+  List<Unit> get subTypes => [const ItemUnit()];
 
   @override
   String toString() => 'item';
