@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
 import 'application/app/cubit/app_cubit.dart';
 import 'application/calculator/cubit/calculator_cubit.dart';
@@ -10,6 +12,15 @@ import 'presentation/app_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the logger.
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    final time = DateFormat('hh:mm:ss a').format(record.time);
+    debugPrint(
+      '${record.level.name}: ${record.loggerName}: $time: ${record.message}',
+    );
+  });
 
   await init();
 

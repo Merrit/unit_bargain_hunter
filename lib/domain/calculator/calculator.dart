@@ -1,7 +1,11 @@
 export 'models/models.dart';
 export 'validators/validators.dart';
 
+import 'package:logging/logging.dart';
+
 import 'models/models.dart';
+
+final _log = Logger('Calculator');
 
 class Calculator {
   const Calculator();
@@ -19,7 +23,7 @@ class Calculator {
               (a.costPerUnit[0].value < b.costPerUnit[0].value) ? a : b)
           .costPerUnit;
     } on RangeError {
-      print('Issue doing compare. Was costPerUnit calculated?');
+      _log.warning('Issue doing compare. Was costPerUnit calculated?');
       return [];
     }
     final cheapestBaseUnit = cheapestPrice.singleWhere(

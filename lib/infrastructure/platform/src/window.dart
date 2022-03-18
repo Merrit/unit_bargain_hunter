@@ -1,7 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:window_size/window_size.dart' as _window;
+
+final _log = Logger('Window');
 
 /// Use `window_size` from `flutter-desktop-embedding` to manage the
 /// application window on desktop platforms.
@@ -15,7 +18,7 @@ class Window {
     final screen = await _window.getCurrentScreen();
     final screenRect = screen?.visibleFrame;
     final position = screenRect?.center ?? Offset.zero;
-    if (position == Offset.zero) print('Unable to find screen center.');
+    if (position == Offset.zero) _log.info('Unable to find screen center.');
     return position;
   }
 

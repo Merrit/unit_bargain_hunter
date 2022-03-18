@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart' as semver;
 import 'package:yaml/yaml.dart';
 import 'package:http/http.dart' as http;
+
+final _log = Logger('Versions');
 
 /// Check app versions.
 class Versions {
@@ -55,7 +58,7 @@ class Versions {
       // May need to be updated if we starting using postfixes like `beta`.
       _latestVersion = tag.substring(1, 6);
     } else {
-      print('Issue getting latest version info from GitHub, '
+      _log.info('Issue getting latest version info from GitHub, '
           'status code: ${response.statusCode}\n');
     }
     return _latestVersion;
