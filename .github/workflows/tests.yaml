@@ -15,5 +15,6 @@ jobs:
         with:
           channel: beta
       - run: |
+          flutter upgrade
           flutter pub get
           flutter test
