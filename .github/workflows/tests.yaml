@@ -1,11 +1,12 @@
 name: Run tests
+
 on:
-  push:
-  pull_request:
   workflow_dispatch:
-  release:
-    types:
-      - created
+  pull_request:
+  push:
+    branches:
+      - main
+
 jobs:
   flutter_test:
     runs-on: ubuntu-latest
@@ -14,7 +15,11 @@ jobs:
       - uses: subosito/flutter-action@v1.5.0
         with:
           channel: beta
-      - run: |
+
+      - name: Setup
+        run: |
           flutter upgrade
           flutter pub get
+
+      - name: Run tests
           flutter test
