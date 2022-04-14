@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-import '../calculator.dart';
+import '../validators/validators.dart';
+import 'models.dart';
 
 @immutable
 class Item extends Equatable {

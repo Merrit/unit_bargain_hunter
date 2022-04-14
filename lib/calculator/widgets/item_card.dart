@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/calculator/cubit/calculator_cubit.dart';
-import '../../../application/item/cubit/item_cubit.dart';
-import '../../../domain/calculator/models/models.dart';
-import '../../../domain/calculator/validators/text_input_formatter.dart';
-import '../../styles.dart';
-import '../calculator.dart';
+import '../../presentation/styles.dart';
+import '../calculator_cubit/calculator_cubit.dart';
+import '../item_cubit/item_cubit.dart';
+import '../models/models.dart';
+import '../validators/validators.dart';
+import 'compare_items_shortcut.dart';
 
 /// The widget representing each item.
 class ItemCard extends StatelessWidget {

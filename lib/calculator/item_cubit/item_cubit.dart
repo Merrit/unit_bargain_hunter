@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/calculator/calculator.dart';
-import '../../calculator/cubit/calculator_cubit.dart';
+import '../calculator_cubit/calculator_cubit.dart';
+import '../models/models.dart';
 
 part 'item_state.dart';
 

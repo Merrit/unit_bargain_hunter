@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+import 'package:unit_bargain_hunter/calculator/models/models.dart';
+import 'package:unit_bargain_hunter/calculator/validators/validators.dart';
 
 void main() {
   group('Weight-based costs', () {

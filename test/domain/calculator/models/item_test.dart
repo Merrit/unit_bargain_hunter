@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+import 'package:unit_bargain_hunter/calculator/models/models.dart';
 
 void main() {
   test('items are distinct', () {

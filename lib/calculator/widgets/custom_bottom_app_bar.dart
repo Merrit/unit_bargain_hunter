@@ -8,7 +8,7 @@ import '../../../application/app/cubit/app_cubit.dart';
 import '../../../application/helpers/form_factor.dart';
 import '../../../application/theme/cubit/theme_cubit.dart';
 import '../../../infrastructure/platform/platform.dart';
-import '../../styles.dart';
+import '../../presentation/styles.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
   const CustomBottomAppBar({Key? key}) : super(key: key);

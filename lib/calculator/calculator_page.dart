@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../application/calculator/cubit/calculator_cubit.dart';
-import '../calculator.dart';
+import 'calculator_cubit/calculator_cubit.dart';
+import 'widgets/widgets.dart';
 
 class CalculatorPage extends StatelessWidget {
   CalculatorPage({Key? key}) : super(key: key);
