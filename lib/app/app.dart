@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../calculator/calculator_page.dart';
 import '../theme/cubit/theme_cubit.dart';
 
+export 'app_version.dart';
 export 'cubit/app_cubit.dart';
 
 class App extends StatelessWidget {

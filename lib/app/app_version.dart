@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 final _log = Logger('Versions');
 
 /// Check app versions.
-class Versions {
+class AppVersion {
   String _runningVersion = '';
 
   /// The application's version as read from pubspec.yaml,
