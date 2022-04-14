@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../application/helpers/form_factor.dart';
 import '../../../infrastructure/platform/platform.dart';
 import '../../app/app.dart';
+import '../../core/helpers/helpers.dart';
 import '../../theme/theme.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
