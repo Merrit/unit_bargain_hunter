@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Preferences {
-  Preferences._singleton();
-  static final Preferences instance = Preferences._singleton();
+class Settings {
+  Settings._singleton();
+  static final Settings instance = Settings._singleton();
 
   /// Instance of SharedPreferences for getting and setting preferences.
   late SharedPreferences _prefs;
