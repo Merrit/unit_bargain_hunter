@@ -86,7 +86,7 @@ class ScrollingItemsList extends StatelessWidget {
   Widget build(BuildContext context) {
     // Scrollbar is always shown when moved from the top,
     // but hides when at the top or the screen doesn't need to scroll.
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.addListener(() {
         final offset = scrollController.offset;
         final showScrollbar = (offset > 0) ? true : false;
