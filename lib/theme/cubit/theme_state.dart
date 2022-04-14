@@ -1,6 +1,5 @@
 part of 'theme_cubit.dart';
 
-@immutable
 class ThemeState extends Equatable {
   final Brightness brightness;
 
