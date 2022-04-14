@@ -1,7 +1,5 @@
 import 'src/platform.dart';
 
-export 'src/window.dart';
-
 abstract class Platform {
   const Platform();
 
