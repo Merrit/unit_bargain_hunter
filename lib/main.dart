@@ -8,13 +8,16 @@ import 'infrastructure/platform/platform.dart';
 import 'infrastructure/preferences/preferences.dart';
 import 'app.dart';
 import 'logs/logs.dart';
+import 'window/window.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   initializeLogger();
 
-  await init();
+  await Preferences.instance.initialize();
+
+  if (Platform.isDesktop) await Window.initialize();
 
   runApp(
     MultiBlocProvider(
@@ -32,13 +35,4 @@ Future<void> main() async {
       child: const App(),
     ),
   );
-}
-
-Future<void> init() async {
-  await Preferences.instance.initialize();
-  if (Platform.isDesktop) {
-    const window = Window();
-    window.setWindowTitle('Unit Bargain Hunter');
-    await window.setWindowFrame(width: 635, height: 650);
-  }
 }
