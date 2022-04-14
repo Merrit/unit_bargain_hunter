@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../infrastructure/platform/platform.dart';
+import '../../platform/platform.dart';
 import '../app_version.dart';
 
 part 'app_state.dart';
