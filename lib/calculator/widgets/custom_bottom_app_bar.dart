@@ -6,9 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../application/app/cubit/app_cubit.dart';
 import '../../../application/helpers/form_factor.dart';
-import '../../../application/theme/cubit/theme_cubit.dart';
 import '../../../infrastructure/platform/platform.dart';
-import '../../presentation/styles.dart';
+import '../../theme/theme.dart';
 
 class CustomBottomAppBar extends StatelessWidget {
   const CustomBottomAppBar({Key? key}) : super(key: key);
