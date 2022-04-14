@@ -88,7 +88,6 @@ jobs:
           flutter config --enable-macos-desktop
           flutter config --enable-windows-desktop
           flutter upgrade
-          flutter pub get
 
       # ----------------------------------- Build ---------------------------------- #
 
