@@ -1,4 +1,4 @@
-import '../calculator.dart';
+import '../models/models.dart';
 
 class CostValidator {
   const CostValidator();

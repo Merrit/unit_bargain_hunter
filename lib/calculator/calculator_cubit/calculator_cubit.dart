@@ -3,7 +3,8 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../domain/calculator/calculator.dart';
+import '../calculator.dart';
+import '../models/models.dart';
 
 part 'calculator_state.dart';
 
