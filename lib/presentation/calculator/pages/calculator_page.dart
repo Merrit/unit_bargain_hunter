@@ -1,7 +1,7 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/calculator/cubit/calculator_cubit.dart';
 import '../calculator.dart';
 
 class CalculatorPage extends StatelessWidget {

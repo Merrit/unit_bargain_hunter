@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
+import '../../../application/calculator/cubit/calculator_cubit.dart';
 
 class CompareItemsIntent extends Intent {
   const CompareItemsIntent();

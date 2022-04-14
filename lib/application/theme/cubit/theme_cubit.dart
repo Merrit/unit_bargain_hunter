@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:unit_bargain_hunter/infrastructure/preferences/preferences.dart';
-import 'package:unit_bargain_hunter/presentation/styles.dart';
+
+import '../../../infrastructure/preferences/preferences.dart';
+import '../../../presentation/styles.dart';
 
 part 'theme_state.dart';
 
