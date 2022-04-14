@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../application/app/cubit/app_cubit.dart';
-import '../../../application/theme/cubit/theme_cubit.dart';
+import '../../theme/cubit/theme_cubit.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
