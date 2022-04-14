@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 
@@ -8,7 +8,7 @@ import 'application/calculator/cubit/calculator_cubit.dart';
 import 'application/theme/cubit/theme_cubit.dart';
 import 'infrastructure/platform/platform.dart';
 import 'infrastructure/preferences/preferences.dart';
-import 'presentation/app_widget.dart';
+import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +37,7 @@ Future<void> main() async {
           create: (context) => CalculatorCubit(),
         ),
       ],
-      child: const AppWidget(),
+      child: const App(),
     ),
   );
 }
