@@ -22,4 +22,4 @@ jobs:
           flutter pub get
 
       - name: Run tests
-          flutter test
+        run: flutter test

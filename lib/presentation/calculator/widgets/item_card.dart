@@ -157,7 +157,7 @@ class _PriceWidget extends StatelessWidget {
         // Listen to the FocusNode & update [isFocused],
         // this ensures the widget doesn't rebuild when the user is
         // still actually editing it.
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _focusNode.addListener(() {
             if (_focusNode.hasFocus) {
               isFocused = true;
@@ -211,7 +211,7 @@ class _QuantityWidget extends StatelessWidget {
         // Listen to the FocusNode & update [isFocused],
         // this ensures the widget doesn't rebuild when the user is
         // still actually editing it.
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _focusNode.addListener(() {
             if (_focusNode.hasFocus) {
               isFocused = true;
