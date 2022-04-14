@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../application/theme/cubit/theme_cubit.dart';
-import 'calculator/calculator.dart';
+import 'application/theme/cubit/theme_cubit.dart';
+import 'presentation/calculator/calculator.dart';
 
-class AppWidget extends StatelessWidget {
-  const AppWidget({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
