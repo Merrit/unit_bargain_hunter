@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+import '../../../domain/calculator/calculator.dart';
+import '../../calculator/cubit/calculator_cubit.dart';
 
 part 'item_state.dart';
 

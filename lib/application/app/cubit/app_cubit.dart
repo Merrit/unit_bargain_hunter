@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:unit_bargain_hunter/infrastructure/platform/platform.dart';
-import 'package:unit_bargain_hunter/infrastructure/versions/versions.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../infrastructure/platform/platform.dart';
+import '../../../infrastructure/versions/versions.dart';
 
 part 'app_state.dart';
 

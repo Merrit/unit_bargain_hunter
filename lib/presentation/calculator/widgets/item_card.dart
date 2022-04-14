@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/application/item/cubit/item_cubit.dart';
-import 'package:unit_bargain_hunter/domain/calculator/models/models.dart';
-import 'package:unit_bargain_hunter/domain/calculator/validators/text_input_formatter.dart';
-
+import '../../../application/calculator/cubit/calculator_cubit.dart';
+import '../../../application/item/cubit/item_cubit.dart';
+import '../../../domain/calculator/models/models.dart';
+import '../../../domain/calculator/validators/text_input_formatter.dart';
 import '../../styles.dart';
 import '../calculator.dart';
 

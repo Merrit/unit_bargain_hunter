@@ -1,9 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+import '../../../domain/calculator/calculator.dart';
 
 part 'calculator_state.dart';
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/domain/calculator/calculator.dart';
+
+import '../../../application/calculator/cubit/calculator_cubit.dart';
+import '../../../domain/calculator/calculator.dart';
 
 class CompareByDropdownButton extends StatelessWidget {
   const CompareByDropdownButton({

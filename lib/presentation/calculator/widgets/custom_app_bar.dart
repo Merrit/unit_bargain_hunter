@@ -3,9 +3,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:unit_bargain_hunter/application/app/cubit/app_cubit.dart';
-import 'package:unit_bargain_hunter/application/calculator/cubit/calculator_cubit.dart';
-import 'package:unit_bargain_hunter/application/theme/cubit/theme_cubit.dart';
+
+import '../../../application/app/cubit/app_cubit.dart';
+import '../../../application/calculator/cubit/calculator_cubit.dart';
+import '../../../application/theme/cubit/theme_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
