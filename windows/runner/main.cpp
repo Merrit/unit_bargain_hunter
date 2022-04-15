@@ -29,7 +29,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(&run_loop, project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(650, 635);
+  Win32Window::Size size(635, 650);
   if (!window.CreateAndShow(L"unit_bargain_hunter", origin, size)) {
     return EXIT_FAILURE;
   }
