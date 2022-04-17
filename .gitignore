@@ -32,6 +32,11 @@
 /build/
 /output/
 
+# Flatpak
+
+.flatpak-builder/
+build-dir/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
