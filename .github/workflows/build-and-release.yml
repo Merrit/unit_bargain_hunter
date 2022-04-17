@@ -10,6 +10,7 @@ on:
       - "v*"
 
 env:
+  GH_TOKEN: $
   app-display-name: "Unit Bargain Hunter"
   author: "Kristen McWilliam"
   identifier: "codes.merritt.bargain"
