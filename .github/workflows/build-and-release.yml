@@ -10,7 +10,6 @@ on:
       - "v*"
 
 env:
-  GH_TOKEN: $
   app-display-name: "Unit Bargain Hunter"
   author: "Kristen McWilliam"
   identifier: "codes.merritt.bargain"
@@ -95,10 +94,14 @@ jobs:
 
       - name: Run build script for non-Windows platforms
         if: matrix.target != 'Windows'
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN }}
         run: flutter pub run flutter_app_builder --platforms=linux,android
 
       - name: Run build script for Windows
         if: matrix.target == 'Windows'
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN }}
         run: flutter pub run flutter_app_builder --platforms=windows
 
       # ---------------------------------- Upload ---------------------------------- #
