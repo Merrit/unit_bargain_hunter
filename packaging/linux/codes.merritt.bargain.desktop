@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Unit Bargain Hunter
+Comment=Easily compare items when shopping
+Categories=Utility;
+
+Icon=codes.merritt.bargain
+Exec=unit_bargain_hunter
+Terminal=false
+StartupWMClass=unit_bargain_hunter
