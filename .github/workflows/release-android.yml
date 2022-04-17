@@ -1,0 +1,35 @@
+name: Publish Android build to Google Play
+
+on:
+  # Enable manual run
+  workflow_dispatch:
+  # Build & deploy for published releases
+  release:
+    types:
+      - published
+
+env:
+  app-display-name: "Unit Bargain Hunter"
+  packageName: "codes.merritt.bargain"
+  repositoryUrl: https://github.com/Merrit/unit_bargain_hunter
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download .aab artifact
+        run: wget ${{env.repositoryUrl}}/releases/latest/download/${{env.app-display-name}}-Android.aab
+
+      - name: Access Google Play API key
+        env:
+          GOOGLE_PLAY_API_JSON: ${{ secrets.GOOGLE_PLAY_API_JSON }}
+        run: echo "$GOOGLE_PLAY_API_JSON" | base64 --decode > google_play_api.json
+
+      - name: Release Android build on Google Play
+        uses: r0adkll/upload-google-play@v1.0.15
+        with:
+          serviceAccountJson: google_play_api.json
+          packageName: ${{env.packageName}}
+          releaseFiles: ${{env.app-display-name}}-Android.aab
+          track: production
