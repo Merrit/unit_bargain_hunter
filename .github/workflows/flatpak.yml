@@ -11,7 +11,7 @@ on:
 # ${{ secrets.FLATHUB_TOKEN }} is a Personal Access Token to grant push access.
 
 env:
-  project-id: codes.merritt.FeelingFinder
+  project-id: codes.merritt.bargain
 
 jobs:
   update-recipe:
