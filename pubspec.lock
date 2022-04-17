@@ -129,8 +129,8 @@ packages:
     dependency: "direct dev"
     description:
       path: "."
-      ref: "702642b36a5bf20a20d036d004ad47fa65ac63b4"
-      resolved-ref: "702642b36a5bf20a20d036d004ad47fa65ac63b4"
+      ref: "741613cadf141117f7fea8c7e875edd178536951"
+      resolved-ref: "741613cadf141117f7fea8c7e875edd178536951"
       url: "https://github.com/Merrit/flutter_app_builder.git"
     source: git
     version: "1.0.0"
