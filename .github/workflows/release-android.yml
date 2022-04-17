@@ -9,7 +9,7 @@ on:
       - published
 
 env:
-  app-display-name: "Unit Bargain Hunter"
+  appname-without-spaces: "UnitBargainHunter"
   packageName: "codes.merritt.bargain"
   repositoryUrl: https://github.com/Merrit/unit_bargain_hunter
 
@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Download .aab artifact
-        run: wget ${{env.repositoryUrl}}/releases/latest/download/${{env.app-display-name}}-Android.aab
+        run: wget ${{env.repositoryUrl}}/releases/latest/download/${{env.appname-without-spaces}}-Android.aab
 
       - name: Access Google Play API key
         env:
@@ -31,5 +31,5 @@ jobs:
         with:
           serviceAccountJson: google_play_api.json
           packageName: ${{env.packageName}}
-          releaseFiles: ${{env.app-display-name}}-Android.aab
+          releaseFiles: ${{env.appname-without-spaces}}-Android.aab
           track: production
