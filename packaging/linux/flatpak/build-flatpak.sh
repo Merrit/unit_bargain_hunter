@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# No spaces in project name.
+projectName=UnitBargainHunter
 projectId=codes.merritt.bargain
 executableName=unit_bargain_hunter
 
@@ -10,15 +12,15 @@ executableName=unit_bargain_hunter
 set -e
 
 # Extract portable Flutter build.
-mkdir -p $projectId
-tar -xf $projectId-Linux-Portable.tar.gz -C $projectId
-rm $projectId/PORTABLE
+mkdir -p $projectName
+tar -xf $projectName-Linux-Portable.tar.gz -C $projectName
+rm $projectName/PORTABLE
 
 # Copy the portable app to the Flatpak-based location.
-cp -r $projectId /app/
-chmod +x /app/$projectId/$executableName
+cp -r $projectName /app/
+chmod +x /app/$projectName/$executableName
 mkdir -p /app/bin
-ln -s /app/$projectId/$executableName /app/bin/$executableName
+ln -s /app/$projectName/$executableName /app/bin/$executableName
 
 # Install the AppStream metadata info.
 mkdir -p /app/share/metainfo
