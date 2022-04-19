@@ -5,7 +5,7 @@ shop for.
 
 ![Showcase](https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/screenshot-showcase-desktop-and-mobile.png)
 
-Available on desktop, web & mobile. [Download](https://merritt.codes/bargain.html)
+Available on desktop, web & mobile. [Download](https://merritt.codes/bargain/)
 
 <br>
 
