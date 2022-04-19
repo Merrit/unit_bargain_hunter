@@ -8,7 +8,8 @@
     <name>Unit Bargain Hunter</name>
     <summary>Easily compare items when shopping</summary>
     <developer_name>Kristen McWilliam</developer_name>
-    <url type="homepage">https://github.com/Merrit/unit_bargain_hunter</url>
+    <url type="homepage">https://merritt.codes/bargain/</url>
+    <url type="donation">https://merritt.codes/support/</url>
     <metadata_license>MIT</metadata_license>
     <project_license>GPL-3.0-or-later</project_license>
     <supports>
