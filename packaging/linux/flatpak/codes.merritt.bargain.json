@@ -22,6 +22,7 @@
             ],
             "build-commands": [
                 "cp -r packaging/linux/flatpak/build-flatpak.sh .",
+                "cp -r packaging/linux/flatpak/codes.merritt.bargain.metainfo.xml .",
                 "cp -r packaging/linux/codes.merritt.bargain.desktop .",
                 "cp -r assets/icon/icon.svg .",
                 "cp -r packaging/linux/flatpak/build-flatpak.sh .",
@@ -31,23 +32,12 @@
                 {
                     "type": "file",
                     "url": "https://github.com/Merrit/unit_bargain_hunter/releases/download/v1.1.1/UnitBargainHunter-Linux-Portable.tar.gz",
-                    "sha256": "abbfe9ff9b7d8132ade1962328ac446bf54f8edf85619e02e576883a9e98dd86",
-                    "tag": null,
-                    "path": null
+                    "sha256": "17c01d07fa3b1b86a13db6608cf26bf00233c03be6ef9503dc8943da12cee7fd"
                 },
                 {
                     "type": "git",
                     "url": "https://github.com/Merrit/unit_bargain_hunter.git",
-                    "sha256": null,
-                    "tag": "v1.1.1",
-                    "path": null
-                },
-                {
-                    "type": "file",
-                    "url": null,
-                    "sha256": null,
-                    "tag": null,
-                    "path": "codes.merritt.bargain.metainfo.xml"
+                    "tag": "v1.1.1"
                 }
             ]
         }
