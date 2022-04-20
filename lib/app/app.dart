@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../calculator/calculator_page.dart';
+import '../shortcuts/app_shortcuts.dart';
 import '../theme/cubit/theme_cubit.dart';
 
 export 'app_version.dart';
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
           title: 'Unit Bargain Hunter',
           debugShowCheckedModeBanner: false,
           theme: state.themeData,
-          home: CalculatorPage(),
+          home: AppShortcuts(child: CalculatorPage()),
         );
       },
     );
