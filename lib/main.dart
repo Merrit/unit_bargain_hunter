@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
@@ -31,7 +32,9 @@ Future<void> main() async {
           create: (context) => CalculatorCubit(),
         ),
       ],
-      child: const App(),
+      child: const ProviderScope(
+        child: App(),
+      ),
     ),
   );
 }

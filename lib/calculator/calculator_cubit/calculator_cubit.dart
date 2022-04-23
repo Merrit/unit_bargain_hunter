@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 import '../calculator.dart';
 import '../models/models.dart';
@@ -51,14 +49,14 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(items: items, result: null));
   }
 
-  void removeItem(UniqueKey key) {
+  void removeItem(String uuid) {
     final items = List<Item>.from(state.items);
-    items.removeWhere((element) => element.key == key);
+    items.removeWhere((element) => element.uuid == uuid);
     emit(state.copyWith(items: items, result: null));
   }
 
   void updateItem({
-    required UniqueKey key,
+    required Item item,
     String? price,
     String? quantity,
     Unit? unit,
@@ -68,15 +66,13 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     double? validatedQuantity;
     if (price != null) validatedPrice = double.tryParse(price);
     if (quantity != null) validatedQuantity = double.tryParse(quantity);
-    final item = state.items.singleWhereOrNull((element) => element.key == key);
-    if (item == null) return;
     final updatedItem = item.copyWith(
       price: validatedPrice,
       quantity: validatedQuantity,
       unit: unit,
     );
     final items = List<Item>.from(state.items);
-    final index = items.indexWhere((element) => element.key == key);
+    final index = items.indexWhere((element) => element.uuid == item.uuid);
     items.removeAt(index);
     items.insert(index, updatedItem);
     emit(state.copyWith(items: items));

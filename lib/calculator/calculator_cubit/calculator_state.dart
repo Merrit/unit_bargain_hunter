@@ -1,6 +1,5 @@
 part of 'calculator_cubit.dart';
 
-@immutable
 class CalculatorState extends Equatable {
   final bool alwaysShowScrollbar;
   final Unit comareBy;
@@ -46,5 +45,10 @@ class CalculatorState extends Equatable {
   }
 
   @override
-  List<Object> get props => [alwaysShowScrollbar, comareBy, items, result];
+  List<Object?> get props => [
+        alwaysShowScrollbar,
+        comareBy,
+        items,
+        result,
+      ];
 }
