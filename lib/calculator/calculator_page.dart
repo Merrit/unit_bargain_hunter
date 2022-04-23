@@ -96,12 +96,7 @@ class ScrollingItemsList extends StatelessWidget {
 
     return Expanded(
       child: BlocBuilder<CalculatorCubit, CalculatorState>(
-        buildWhen: (previous, current) =>
-            (previous.items.length != current.items.length) ||
-            (previous.comareBy != current.comareBy) ||
-            (previous.alwaysShowScrollbar != current.alwaysShowScrollbar),
         builder: (context, state) {
-          final itemCount = state.items.length;
           return Scrollbar(
             controller: scrollController,
             thumbVisibility: state.alwaysShowScrollbar,
@@ -111,10 +106,9 @@ class ScrollingItemsList extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: [
                   const SizedBox(width: double.infinity),
-                  for (var index = 0; index < itemCount; index++)
+                  for (var item in state.items)
                     ItemCard(
-                      key: ValueKey(index),
-                      index: index,
+                      item: item,
                     ),
                 ],
               ),

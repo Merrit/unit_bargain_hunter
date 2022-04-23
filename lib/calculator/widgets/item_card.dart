@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/helpers/helpers.dart';
 import '../../theme/theme.dart';
 import '../calculator_cubit/calculator_cubit.dart';
-import '../item_cubit/item_cubit.dart';
 import '../models/models.dart';
 import '../validators/validators.dart';
 import 'compare_items_shortcut.dart';
 
+/// A reference to the current item for each [ItemCard], via `Riverpod`.
+///
+/// Accessing this means not having to pass the [Item] to child widgets.
+final _currentItem = Provider<Item>((ref) => throw UnimplementedError());
+
 /// The widget representing each item.
 class ItemCard extends StatelessWidget {
-  final int index;
+  final Item item;
 
   const ItemCard({
     Key? key,
-    required this.index,
+    required this.item,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ItemCubit(index),
+    return ProviderScope(
+      overrides: [
+        _currentItem.overrideWithValue(item),
+      ],
       // Stack is used so the close button doesn't push down the contents.
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
-        children: [
+        children: const [
           _ItemContents(),
           _CloseButton(),
         ],
@@ -33,14 +41,20 @@ class ItemCard extends StatelessWidget {
   }
 }
 
-class _ItemContents extends StatefulWidget {
+// class _ItemContents extends StatefulWidget {
+class _ItemContents extends ConsumerStatefulWidget {
+  const _ItemContents({
+    Key? key,
+  }) : super(key: key);
+
   @override
   __ItemContentsState createState() => __ItemContentsState();
 }
 
 // Contents uses a StatefulWidget in order to get the
 // Ticker & setState for the animations.
-class __ItemContentsState extends State<_ItemContents>
+// class __ItemContentsState extends State<_ItemContents>
+class __ItemContentsState extends ConsumerState<_ItemContents>
     with TickerProviderStateMixin {
   // Start with no opacity.
   double _opacity = 0;
@@ -64,6 +78,8 @@ class __ItemContentsState extends State<_ItemContents>
 
   @override
   Widget build(BuildContext context) {
+    final item = ref.watch(_currentItem);
+
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 800),
       opacity: _opacity,
@@ -81,13 +97,18 @@ class __ItemContentsState extends State<_ItemContents>
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: BlocBuilder<ItemCubit, ItemState>(
+                  child: BlocBuilder<CalculatorCubit, CalculatorState>(
                     builder: (context, state) {
+                      final isCheapest = state.result
+                          .map((e) => e.uuid)
+                          .toList()
+                          .contains(item.uuid);
+
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeIn,
                         decoration: BoxDecoration(
-                          gradient: (state.isCheapest)
+                          gradient: (isCheapest)
                               ? const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -104,31 +125,28 @@ class __ItemContentsState extends State<_ItemContents>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 14,
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    right: 14,
+                    bottom: 14,
                   ),
                   // FocusTraversalGroup ensures that using `Tab` to
                   // navigate with a keyboard moves in the correct direction.
                   child: FocusTraversalGroup(
-                    child: Focus(
-                      skipTraversal: true,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                              'Item ${context.read<ItemCubit>().state.index + 1}'),
-                          Spacers.verticalSmall,
-                          _PriceWidget(),
-                          Spacers.verticalXtraSmall,
-                          _QuantityWidget(),
-                          Spacers.verticalXtraSmall,
-                          const Text('Unit'),
-                          _UnitChooser(),
-                          Spacers.verticalSmall,
-                          _PerUnitCalculation(),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const ItemNameWidget(),
+                        Spacers.verticalXtraSmall,
+                        _PriceWidget(),
+                        Spacers.verticalXtraSmall,
+                        _QuantityWidget(),
+                        Spacers.verticalXtraSmall,
+                        const Text('Unit'),
+                        _UnitChooser(),
+                        Spacers.verticalSmall,
+                        _PerUnitCalculation(),
+                      ],
                     ),
                   ),
                 )
@@ -141,52 +159,138 @@ class __ItemContentsState extends State<_ItemContents>
   }
 }
 
+class ItemNameWidget extends StatefulWidget {
+  const ItemNameWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ItemNameWidget> createState() => _ItemNameWidgetState();
+}
+
+class _ItemNameWidgetState extends State<ItemNameWidget> {
+  final controller = TextEditingController();
+  final nameFocusNode = FocusNode();
+  final textFieldFocusNode = FocusNode();
+  bool nameHasFocus = false;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    nameFocusNode.dispose();
+    textFieldFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _updateItem(Item item) {
+    calcCubit.updateItem(
+      item: item.copyWith(name: controller.text),
+    );
+    nameFocusNode.unfocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      focusNode: nameFocusNode,
+      onFocusChange: (focused) => setState(() => nameHasFocus = focused),
+      skipTraversal: true,
+      descendantsAreTraversable: false,
+      child: Consumer(
+        builder: (context, ref, child) {
+          final item = ref.watch(_currentItem);
+
+          Widget child;
+          if (nameFocusNode.hasFocus) {
+            child = TextFormField(
+              focusNode: textFieldFocusNode,
+              controller: controller,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              textAlignVertical: TextAlignVertical.center,
+              onFieldSubmitted: (_) => _updateItem(item),
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                suffixIcon: IconButton(
+                  onPressed: () => _updateItem(item),
+                  padding: const EdgeInsets.all(4),
+                  icon: const Icon(Icons.done, color: Colors.green),
+                ),
+              ),
+            );
+          } else {
+            child = Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: '${item.name} '),
+                    const WidgetSpan(
+                      child: Icon(Icons.edit, size: 15, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Center(
+                  child: InkWell(
+                    onTap: () {
+                      nameFocusNode.requestFocus();
+                      textFieldFocusNode.requestFocus();
+                    },
+                    child: child,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
 class _PriceWidget extends StatelessWidget {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    bool isFocused = false;
-    return BlocBuilder<ItemCubit, ItemState>(
-      buildWhen: (previous, current) => !isFocused || current.resultExists,
-      builder: (context, state) {
-        _controller.text = state.priceAsString;
+    return Consumer(
+      builder: (context, ref, child) {
+        final item = ref.watch(_currentItem);
 
-        // Listen to the FocusNode & update [isFocused],
-        // this ensures the widget doesn't rebuild when the user is
-        // still actually editing it.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _focusNode.addListener(() {
-            if (_focusNode.hasFocus) {
-              isFocused = true;
-              _controller.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: _controller.text.length,
-              );
+        _controller.text = item.price.toStringAsFixed(2);
+
+        return Focus(
+          onFocusChange: (focused) {
+            if (focused) {
+              _controller.selectAll();
             } else {
-              isFocused = false;
-            }
-          });
-        });
-
-        return CompareItemsShortcut(
-          child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Price',
-            ),
-            focusNode: _focusNode,
-            controller: _controller,
-            textAlign: TextAlign.center,
-            inputFormatters: [BetterTextInputFormatter.doubleOnly],
-            keyboardType: const TextInputType.numberWithOptions(),
-            textInputAction: TextInputAction.next,
-            onChanged: (value) {
               calcCubit.updateItem(
-                key: state.item.key,
+                item: item,
                 price: _controller.text,
               );
-            },
+            }
+          },
+          child: CompareItemsShortcut(
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Price',
+              ),
+              focusNode: _focusNode,
+              controller: _controller,
+              textAlign: TextAlign.center,
+              inputFormatters: [BetterTextInputFormatter.doubleOnly],
+              keyboardType: const TextInputType.numberWithOptions(),
+              textInputAction: TextInputAction.next,
+            ),
           ),
         );
       },
@@ -200,47 +304,35 @@ class _QuantityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isFocused = false;
+    return Consumer(
+      builder: (context, ref, child) {
+        final item = ref.watch(_currentItem);
 
-    return BlocBuilder<ItemCubit, ItemState>(
-      buildWhen: (previous, current) => !isFocused || current.resultExists,
-      builder: (context, state) {
-        _controller.text = state.quantityAsString;
+        _controller.text = item.quantity.toStringAsFixed(2);
 
-        // Listen to the FocusNode & update [isFocused],
-        // this ensures the widget doesn't rebuild when the user is
-        // still actually editing it.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _focusNode.addListener(() {
-            if (_focusNode.hasFocus) {
-              isFocused = true;
-              _controller.selection = TextSelection(
-                baseOffset: 0,
-                extentOffset: _controller.text.length,
-              );
+        return Focus(
+          onFocusChange: (focused) {
+            if (focused) {
+              _controller.selectAll();
             } else {
-              isFocused = false;
-            }
-          });
-        });
-
-        return CompareItemsShortcut(
-          child: TextField(
-            decoration: const InputDecoration(
-              labelText: 'Quantity',
-            ),
-            focusNode: _focusNode,
-            controller: _controller,
-            textAlign: TextAlign.center,
-            inputFormatters: [BetterTextInputFormatter.doubleOnly],
-            keyboardType: const TextInputType.numberWithOptions(),
-            textInputAction: TextInputAction.next,
-            onChanged: (value) {
               calcCubit.updateItem(
-                key: state.item.key,
+                item: item,
                 quantity: _controller.text,
               );
-            },
+            }
+          },
+          child: CompareItemsShortcut(
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Quantity',
+              ),
+              focusNode: _focusNode,
+              controller: _controller,
+              textAlign: TextAlign.center,
+              inputFormatters: [BetterTextInputFormatter.doubleOnly],
+              keyboardType: const TextInputType.numberWithOptions(),
+              textInputAction: TextInputAction.next,
+            ),
           ),
         );
       },
@@ -252,14 +344,14 @@ class _QuantityWidget extends StatelessWidget {
 class _UnitChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemCubit, ItemState>(
-      builder: (context, state) {
-        final item = state.item;
+    return Consumer(
+      builder: (context, ref, child) {
+        final item = ref.watch(_currentItem);
 
         return DropdownButton<Unit>(
           value: item.unit,
           onChanged: (value) => calcCubit.updateItem(
-            key: item.key,
+            item: item,
             unit: value,
           ),
           items: context
@@ -283,17 +375,35 @@ class _UnitChooser extends StatelessWidget {
 class _PerUnitCalculation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemCubit, ItemState>(
-      builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (var unit in state.costPerUnits)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(unit),
-              ),
-          ],
+    return Consumer(
+      builder: (context, ref, child) {
+        final item = ref.watch(_currentItem);
+        return BlocBuilder<CalculatorCubit, CalculatorState>(
+          builder: (context, state) {
+            return (item.costPerUnit.isEmpty || !state.resultExists)
+                ? const SizedBox()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: item.costPerUnit.map((cost) {
+                      String stringValue = cost.value.toStringAsFixed(3);
+                      if (stringValue == '0.000') {
+                        // Calculated value too small to show within 3 decimal points.
+                        stringValue = '--.--';
+                      }
+                      if (stringValue.endsWith('0')) {
+                        // Only show 2 decimal places when ending with a 0, for example:
+                        // 77.50 instead of 77.500
+                        final lastIndex = stringValue.length - 1;
+                        stringValue = stringValue.substring(0, lastIndex);
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Text('\$$stringValue per ${cost.unit}'),
+                      );
+                    }).toList(),
+                  );
+          },
         );
       },
     );
@@ -301,29 +411,35 @@ class _PerUnitCalculation extends StatelessWidget {
 }
 
 /// Only shown when there are more than 2 item cards.
-class _CloseButton extends StatelessWidget {
+// class _CloseButton extends StatelessWidget {
+class _CloseButton extends ConsumerWidget {
+  const _CloseButton({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ItemCubit, ItemState>(
-      builder: (context, state) {
-        return FocusTraversalGroup(
-          descendantsAreFocusable: false,
-          child: (state.shouldShowCloseButton)
-              ? Material(
-                  color: Colors.transparent,
-                  type: MaterialType.circle,
-                  clipBehavior: Clip.antiAlias,
-                  child: IconButton(
-                    onPressed: () => calcCubit.removeItem(state.item.key),
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white38,
-                    ),
-                  ),
-                )
-              : const SizedBox(),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final item = ref.watch(_currentItem);
+
+    final shouldShowCloseButton =
+        context.watch<CalculatorCubit>().state.items.length > 2;
+
+    return FocusTraversalGroup(
+      descendantsAreFocusable: false,
+      child: (shouldShowCloseButton)
+          ? Material(
+              color: Colors.transparent,
+              type: MaterialType.circle,
+              clipBehavior: Clip.antiAlias,
+              child: IconButton(
+                onPressed: () => calcCubit.removeItem(item.uuid),
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.white38,
+                ),
+              ),
+            )
+          : const SizedBox(),
     );
   }
 }

@@ -17,6 +17,6 @@ void main() {
   test('copied item has same key', () {
     final item = Item(price: 0, quantity: 0, unit: Unit.gram);
     final itemChanged = item.copyWith(quantity: 150);
-    expect(item.key == itemChanged.key, true);
+    expect(item.uuid == itemChanged.uuid, true);
   });
 }
