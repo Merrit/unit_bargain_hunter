@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../ads/banner_ad_widget.dart';
+import '../platform/platform.dart';
 import 'calculator_cubit/calculator_cubit.dart';
 import 'widgets/widgets.dart';
 
@@ -12,18 +14,24 @@ class CalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      // GestureDetector & FocusNode allow clicking outside input areas in
-      // order to deselect them as expected on web & desktop platforms.
-      child: GestureDetector(
-        onTap: () => focusNode.requestFocus(),
-        child: FocusableActionDetector(
-          focusNode: focusNode,
-          child: Scaffold(
-            appBar: const CustomAppBar(),
-            body: CalculatorView(),
-            bottomNavigationBar: const CustomBottomAppBar(),
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          // GestureDetector & FocusNode allow clicking outside input areas in
+          // order to deselect them as expected on web & desktop platforms.
+          GestureDetector(
+            onTap: () => focusNode.requestFocus(),
+            child: FocusableActionDetector(
+              focusNode: focusNode,
+              child: Scaffold(
+                appBar: const CustomAppBar(),
+                body: CalculatorView(),
+                bottomNavigationBar: const CustomBottomAppBar(),
+              ),
+            ),
           ),
-        ),
+          if (Platform.isAndroid) BannerAdWidget(key: UniqueKey()),
+        ],
       ),
     );
   }
