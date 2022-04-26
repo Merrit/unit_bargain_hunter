@@ -7,7 +7,6 @@ import '../../theme/theme.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
 import '../validators/validators.dart';
-import 'compare_items_shortcut.dart';
 
 /// A reference to the current item for each [ItemCard], via `Riverpod`.
 ///
@@ -138,9 +137,9 @@ class __ItemContentsState extends ConsumerState<_ItemContents>
                       children: [
                         const ItemNameWidget(),
                         Spacers.verticalXtraSmall,
-                        _PriceWidget(),
+                        _NumericInputWidget('Price'),
                         Spacers.verticalXtraSmall,
-                        _QuantityWidget(),
+                        _NumericInputWidget('Quantity'),
                         Spacers.verticalXtraSmall,
                         const Text('Unit'),
                         _UnitChooser(),
@@ -256,51 +255,35 @@ class _ItemNameWidgetState extends State<ItemNameWidget> {
   }
 }
 
-class _PriceWidget extends StatelessWidget {
+/// Input box for the `Price` & `Quantity` fields.
+class _NumericInputWidget extends StatelessWidget {
+  /// Either `Price` or `Quantity`.
+  final String itemProperty;
+
+  _NumericInputWidget(
+    this.itemProperty, {
+    Key? key,
+  }) : super(key: key);
+
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final item = ref.watch(_currentItem);
+  /// Set the text on the [_controller].
+  void _setText(Item item) {
+    if (itemProperty == 'Price') {
+      _controller.text = item.price.toStringAsFixed(2);
+    } else {
+      _controller.text = item.quantity.toStringAsFixed(2);
+    }
+  }
 
-        _controller.text = item.price.toStringAsFixed(2);
-
-        return Focus(
-          onFocusChange: (focused) {
-            if (focused) {
-              _controller.selectAll();
-            } else {
-              calcCubit.updateItem(
-                item: item,
-                price: _controller.text,
-              );
-            }
-          },
-          child: CompareItemsShortcut(
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Price',
-              ),
-              focusNode: _focusNode,
-              controller: _controller,
-              textAlign: TextAlign.center,
-              inputFormatters: [BetterTextInputFormatter.doubleOnly],
-              keyboardType: const TextInputType.numberWithOptions(),
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-        );
-      },
+  void _updateItem(Item item) {
+    calcCubit.updateItem(
+      item: item,
+      price: (itemProperty == 'Price') ? _controller.text : null,
+      quantity: (itemProperty == 'Quantity') ? _controller.text : null,
     );
   }
-}
-
-class _QuantityWidget extends StatelessWidget {
-  final _controller = TextEditingController();
-  final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -308,31 +291,32 @@ class _QuantityWidget extends StatelessWidget {
       builder: (context, ref, child) {
         final item = ref.watch(_currentItem);
 
-        _controller.text = item.quantity.toStringAsFixed(2);
+        _setText(item);
 
         return Focus(
           onFocusChange: (focused) {
             if (focused) {
               _controller.selectAll();
+              // If the user is selecting a field *after* having done
+              // a calculation we want to clear the results so that we
+              // are no longer showing a winner until a new calculation.
+              calcCubit.resetResult();
             } else {
-              calcCubit.updateItem(
-                item: item,
-                quantity: _controller.text,
-              );
+              _updateItem(item);
             }
           },
-          child: CompareItemsShortcut(
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Quantity',
-              ),
-              focusNode: _focusNode,
-              controller: _controller,
-              textAlign: TextAlign.center,
-              inputFormatters: [BetterTextInputFormatter.doubleOnly],
-              keyboardType: const TextInputType.numberWithOptions(),
-              textInputAction: TextInputAction.next,
-            ),
+          child: TextField(
+            decoration: InputDecoration(labelText: itemProperty),
+            focusNode: _focusNode,
+            controller: _controller,
+            textAlign: TextAlign.center,
+            inputFormatters: [BetterTextInputFormatter.doubleOnly],
+            keyboardType: const TextInputType.numberWithOptions(),
+            textInputAction: TextInputAction.next,
+            onSubmitted: (_) {
+              _updateItem(item);
+              calcCubit.compare();
+            },
           ),
         );
       },

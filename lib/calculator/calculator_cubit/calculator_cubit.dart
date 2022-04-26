@@ -61,7 +61,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     String? quantity,
     Unit? unit,
   }) {
-    if (state.resultExists) resetResult();
     double? validatedPrice;
     double? validatedQuantity;
     if (price != null) validatedPrice = double.tryParse(price);
@@ -85,7 +84,10 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   /// Reset the results if user changes values.
-  void resetResult() => emit(state.copyWith(result: []));
+  void resetResult() {
+    if (state.result.isEmpty) return;
+    emit(state.copyWith(result: []));
+  }
 
   void updateShowScrollbar(bool showScrollbar) {
     emit(state.copyWith(alwaysShowScrollbar: showScrollbar));
