@@ -313,7 +313,7 @@ class _NumericInputWidget extends StatelessWidget {
             controller: _controller,
             textAlign: TextAlign.center,
             inputFormatters: [BetterTextInputFormatter.doubleOnly],
-            keyboardType: const TextInputType.numberWithOptions(),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             textInputAction: TextInputAction.next,
             onSubmitted: (_) {
               _updateItem(item);
