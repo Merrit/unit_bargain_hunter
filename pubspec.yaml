@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_markdown: ^0.6.10
   flutter_riverpod: ^2.0.0-dev.5
   font_awesome_flutter: ^9.1.0
   http: ^0.13.3
@@ -40,7 +41,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/bio-photo.jpg
     - assets/images/theme_switch/
     - pubspec.yaml
 
