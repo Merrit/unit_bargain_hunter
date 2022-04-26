@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app/app.dart';
+import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../theme/cubit/theme_cubit.dart';
-import '../calculator_cubit/calculator_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
