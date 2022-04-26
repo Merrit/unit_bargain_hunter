@@ -7,7 +7,10 @@ import 'widgets/widgets.dart';
 class CalculatorPage extends StatelessWidget {
   CalculatorPage({Key? key}) : super(key: key);
 
-  final focusNode = FocusNode();
+  final focusNode = FocusNode(
+    debugLabel: 'Background node',
+    skipTraversal: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,10 @@ class CalculatorPage extends StatelessWidget {
 }
 
 class CalculatorView extends StatelessWidget {
-  final focusNode = FocusNode();
+  final focusNode = FocusNode(
+    debugLabel: 'CalculatorView node',
+    skipTraversal: true,
+  );
 
   CalculatorView({Key? key}) : super(key: key);
 
@@ -53,18 +59,20 @@ class CalculatorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12,
-                    bottom: 8,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text('Compare by:'),
-                      SizedBox(width: 10),
-                      CompareByDropdownButton(),
-                    ],
+                ExcludeFocusTraversal(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                      bottom: 8,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text('Compare by:'),
+                        SizedBox(width: 10),
+                        CompareByDropdownButton(),
+                      ],
+                    ),
                   ),
                 ),
                 ScrollingItemsList(),

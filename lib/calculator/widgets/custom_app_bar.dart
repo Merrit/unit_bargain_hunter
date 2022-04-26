@@ -16,39 +16,41 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Stack(
-        children: [
-          const UpdateButton(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Transform flips the icon to give us a restart icon.
-              Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.rotationY(math.pi),
-                child: IconButton(
-                  onPressed: () => calcCubit.reset(),
-                  icon: const Icon(
-                    Icons.refresh,
+    return ExcludeFocusTraversal(
+      child: AppBar(
+        title: Stack(
+          children: [
+            const UpdateButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Transform flips the icon to give us a restart icon.
+                Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: IconButton(
+                    onPressed: () => calcCubit.reset(),
+                    icon: const Icon(
+                      Icons.refresh,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                  onPressed: () => calcCubit.compare(),
-                  child: const Text('Compare'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                    onPressed: () => calcCubit.compare(),
+                    child: const Text('Compare'),
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: () => calcCubit.addItem(),
-                icon: const Icon(Icons.add),
-              ),
-            ],
-          ),
-          const ThemeSwitch(),
-        ],
+                IconButton(
+                  onPressed: () => calcCubit.addItem(),
+                  icon: const Icon(Icons.add),
+                ),
+              ],
+            ),
+            const ThemeSwitch(),
+          ],
+        ),
       ),
     );
   }

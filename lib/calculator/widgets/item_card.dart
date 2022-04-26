@@ -169,8 +169,8 @@ class ItemNameWidget extends StatefulWidget {
 
 class _ItemNameWidgetState extends State<ItemNameWidget> {
   final controller = TextEditingController();
-  final nameFocusNode = FocusNode();
-  final textFieldFocusNode = FocusNode();
+  final nameFocusNode = FocusNode(debugLabel: 'ItemName node');
+  final textFieldFocusNode = FocusNode(debugLabel: 'ItemName TextField node');
   bool nameHasFocus = false;
 
   @override
@@ -266,7 +266,7 @@ class _NumericInputWidget extends StatelessWidget {
   }) : super(key: key);
 
   final _controller = TextEditingController();
-  final _focusNode = FocusNode();
+  final _focusNode = FocusNode(debugLabel: '_NumericInputWidget node');
 
   /// Set the text on the [_controller].
   void _setText(Item item) {
@@ -294,6 +294,8 @@ class _NumericInputWidget extends StatelessWidget {
         _setText(item);
 
         return Focus(
+          skipTraversal: true,
+          debugLabel: '_NumericInputWidget focus controller node',
           onFocusChange: (focused) {
             if (focused) {
               _controller.selectAll();
@@ -408,8 +410,7 @@ class _CloseButton extends ConsumerWidget {
     final shouldShowCloseButton =
         context.watch<CalculatorCubit>().state.items.length > 2;
 
-    return FocusTraversalGroup(
-      descendantsAreFocusable: false,
+    return ExcludeFocusTraversal(
       child: (shouldShowCloseButton)
           ? Material(
               color: Colors.transparent,
