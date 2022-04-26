@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../app/app.dart';
 import '../../core/helpers/helpers.dart';
@@ -53,9 +53,25 @@ class InfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formFactor = getFormFactor(context);
-    final isHandset = (formFactor == FormFactor.handset);
-    final isMobile = (isHandset && !Platform.isDesktop && !kIsWeb);
+    final FormFactor formFactor = getFormFactor(context);
+    final bool isHandset = (formFactor == FormFactor.handset);
+    final bool isMobile = (isHandset && !Platform.isDesktop && !kIsWeb);
+    final ThemeData themeData = Theme.of(context);
+    final TextTheme textThemeData = themeData.textTheme;
+
+    final _markdownStyleSheet = MarkdownStyleSheet.fromTheme(
+      themeData.copyWith(
+        textTheme: textThemeData.copyWith(
+          bodyText2: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+
+    final _greyButtonStyle = ElevatedButton.styleFrom(
+      primary: Colors.grey[700],
+    );
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -72,116 +88,70 @@ class InfoDialog extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        foregroundImage:
-                            AssetImage('assets/images/bio-photo.jpg'),
-                        radius: 50,
-                      ),
-                      Spacers.horizontalSmall,
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Hello! My name is Kristen.\n'
-                                'I am the developer of this app. \n'
-                                '\n'
-                                'My website:'),
-                            TextButton(
-                              onPressed: () => appCubit.launchURL(
-                                'https://merritt.codes',
-                              ),
-                              child: Text(
-                                'https://merritt.codes',
-                                style: TextStyles.link1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  MarkdownBody(
+                    styleSheet: _markdownStyleSheet,
+                    data: '''
+Hello! 👋
+
+I hope you are enjoying Unit Bargain Hunter.
+
+If you find it useful, please consider buying me a coffee. ☕
+''',
                   ),
-                  Spacers.verticalSmall,
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: 'If you find Unit Bargain Hunter useful and '
-                              'would like to show appreciation you can ',
-                        ),
-                        TextSpan(
-                          text: 'buy me a coffee',
-                          style: TextStyles.link1,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => appCubit.launchURL(
-                                  'https://merritt.codes/support',
-                                ),
-                        ),
-                        const TextSpan(text: '. ☕'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  InkWell(
-                    onTap: () => appCubit.launchURL(
-                      'https://merritt.codes/bargain.html',
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[
-                            context.read<ThemeCubit>().state.isDarkTheme
-                                ? 850
-                                : 300],
-                        borderRadius: BorderRadii.gentlyRounded,
-                      ),
-                      child: Column(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        appCubit.launchURL(
+                          'https://www.buymeacoffee.com/Merritt',
+                        );
+                      },
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          'Find bargains on these platforms: ',
-                                    ),
-                                    WidgetSpan(
-                                      child: Icon(
-                                        Icons.launch,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // const Text('Find bargains on these platforms:\n'),
-                              // Icon(Icons.launch),
-                            ],
-                          ),
-                          const Text('Windows, Linux, Android & web.'),
+                        children: const [
+                          Text('Buy me a coffee '),
+                          Icon(Icons.coffee),
                         ],
                       ),
                     ),
                   ),
-                  Spacers.verticalSmall,
-                  const Text(
-                    'This app is free and libre / open source software.',
-                  ),
-                  Spacers.verticalSmall,
-                  const Text('The source code is available on GitHub.'),
-                  IconButton(
-                    onPressed: () => appCubit.launchURL(
-                      'https://github.com/Merrit/unit_bargain_hunter',
-                    ),
-                    icon: const FaIcon(FontAwesomeIcons.github),
+                  MarkdownBody(
+                    styleSheet: _markdownStyleSheet,
+                    onTapLink: (String text, String? href, String title) {
+                      if (href == null) return;
+                      appCubit.launchURL(href);
+                    },
+                    data: '''
+Every contribution is greatly appreciated, and allows me to continue creating. 💙
+
+This app is free and open source software.
+
+Available for: Linux, Windows, Android & Web.''',
                   ),
                   Spacers.verticalMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: _greyButtonStyle,
+                        onPressed: () {
+                          appCubit.launchURL('https://merritt.codes/bargain/');
+                        },
+                        child: const Text('Website'),
+                      ),
+                      Spacers.horizontalSmall,
+                      ElevatedButton(
+                        style: _greyButtonStyle,
+                        onPressed: () {
+                          appCubit.launchURL(
+                            'https://github.com/Merrit/unit_bargain_hunter',
+                          );
+                        },
+                        child: const Text('GitHub'),
+                      ),
+                    ],
+                  ),
+                  Spacers.verticalXtraSmall,
                   BlocBuilder<AppCubit, AppState>(
                     builder: (context, state) {
                       return Text('Version: ${state.runningVersion}');
