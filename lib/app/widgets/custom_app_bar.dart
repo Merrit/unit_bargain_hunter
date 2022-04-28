@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app/app.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
+import '../../core/constants.dart';
 import '../../theme/cubit/theme_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -85,11 +86,7 @@ class UpdateButton extends StatelessWidget {
                             child: const Text('Close'),
                           ),
                           TextButton(
-                            onPressed: () {
-                              appCubit.launchURL(
-                                'https://merritt.codes/bargain.html',
-                              );
-                            },
+                            onPressed: () => appCubit.launchURL(websiteUrl),
                             child: const Text('Open'),
                           ),
                         ],

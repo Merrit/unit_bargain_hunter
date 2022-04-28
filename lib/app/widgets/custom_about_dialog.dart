@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import '../../core/constants.dart';
 import '../../theme/styles.dart';
 import '../app.dart';
 
@@ -88,9 +89,7 @@ Available for: Linux, Windows, Android & Web.''',
               children: [
                 ElevatedButton(
                   style: _greyButtonStyle,
-                  onPressed: () {
-                    appCubit.launchURL('https://merritt.codes/bargain/');
-                  },
+                  onPressed: () => appCubit.launchURL(websiteUrl),
                   child: const Text('Website'),
                 ),
                 Spacers.horizontalSmall,
