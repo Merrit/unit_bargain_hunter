@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/helpers/helpers.dart';
-import '../../theme/theme.dart';
+import '../../theme/styles.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
 import '../validators/validators.dart';

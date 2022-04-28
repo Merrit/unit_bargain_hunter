@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../app/app.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../core/constants.dart';
-import '../../theme/cubit/theme_cubit.dart';
+import '../../settings/cubit/settings_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -115,22 +115,19 @@ class ThemeSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 0,
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return Switch(
-            value: state.isDarkTheme,
-            activeColor: Colors.grey[700],
-            activeThumbImage: const AssetImage(
-              'assets/images/theme_switch/moon.png',
-            ),
-            inactiveThumbColor: Colors.yellow,
-            inactiveThumbImage: const AssetImage(
-              'assets/images/theme_switch/sun.png',
-            ),
-            onChanged: (value) {
-              context.read<ThemeCubit>().toggleTheme(isDark: value);
-            },
-          );
+      child: Switch(
+        value: Theme.of(context).brightness == Brightness.dark,
+        activeColor: Colors.grey[700],
+        activeThumbImage: const AssetImage(
+          'assets/images/theme_switch/moon.png',
+        ),
+        inactiveThumbColor: Colors.yellow,
+        inactiveThumbImage: const AssetImage(
+          'assets/images/theme_switch/sun.png',
+        ),
+        onChanged: (isDarkMode) {
+          final themeMode = (isDarkMode) ? ThemeMode.dark : ThemeMode.light;
+          settingsCubit.updateThemeMode(themeMode);
         },
       ),
     );
