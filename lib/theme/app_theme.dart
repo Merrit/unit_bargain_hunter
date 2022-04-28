@@ -1,9 +1,11 @@
-part of 'theme_cubit.dart';
+import 'package:flutter/material.dart';
 
-class ThemeState extends Equatable {
+import 'styles.dart';
+
+class AppTheme {
   final Brightness brightness;
 
-  ThemeState({
+  AppTheme({
     required this.brightness,
   });
 
@@ -18,8 +20,6 @@ class ThemeState extends Equatable {
     isDense: true,
   );
 
-  bool get isDarkTheme => (brightness == Brightness.dark);
-
   ThemeData get themeData {
     return ThemeData(
       brightness: brightness,
@@ -27,15 +27,4 @@ class ThemeState extends Equatable {
       inputDecorationTheme: inputDecorationTheme,
     );
   }
-
-  ThemeState copyWith({
-    Brightness? brightness,
-  }) {
-    return ThemeState(
-      brightness: brightness ?? this.brightness,
-    );
-  }
-
-  @override
-  List<Object> get props => [brightness];
 }
