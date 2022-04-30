@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,7 +26,16 @@ class App extends StatelessWidget {
             case ThemeMode.light:
               return Brightness.light;
             case ThemeMode.system:
-              return MediaQuery.of(context).platformBrightness;
+              if (kIsWeb) {
+                // On web the MediaQuery isn't available at this point.
+                // On platforms where it is available we prefer to get it from
+                // a context so we don't have to worry about subscribing
+                // to updates on the platform brightness.
+                return MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                    .platformBrightness;
+              } else {
+                return MediaQuery.of(context).platformBrightness;
+              }
           }
         }
 
