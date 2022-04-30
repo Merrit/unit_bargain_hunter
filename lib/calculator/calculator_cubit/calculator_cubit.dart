@@ -92,4 +92,10 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void updateShowScrollbar(bool showScrollbar) {
     emit(state.copyWith(alwaysShowScrollbar: showScrollbar));
   }
+
+  /// Toggle show/hide for the large screen side
+  /// panel that holds the drawer contents.
+  void toggleShowSidePanel() {
+    emit(state.copyWith(showSidePanel: !state.showSidePanel));
+  }
 }
