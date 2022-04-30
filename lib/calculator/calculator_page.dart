@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../app/widgets/widgets.dart';
+import '../core/helpers/helpers.dart';
 import 'calculator_cubit/calculator_cubit.dart';
 import 'widgets/widgets.dart';
 
@@ -15,6 +16,25 @@ class CalculatorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? _drawer;
+    if (isHandset(context)) _drawer = const Drawer(child: SidePanel());
+
+    final Widget _sidePanelToggleButton =
+        BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        if (isHandset(context)) return const SizedBox();
+        if (state.showSidePanel) return const SizedBox();
+
+        return Opacity(
+          opacity: 0.8,
+          child: IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () => calcCubit.toggleShowSidePanel(),
+          ),
+        );
+      },
+    );
+
     return SafeArea(
       // GestureDetector & FocusNode allow clicking outside input areas in
       // order to deselect them as expected on web & desktop platforms.
@@ -24,8 +44,13 @@ class CalculatorPage extends StatelessWidget {
           focusNode: focusNode,
           child: Scaffold(
             appBar: const CustomAppBar(),
-            body: CalculatorView(),
-            bottomNavigationBar: const CustomBottomAppBar(),
+            drawer: _drawer,
+            body: Stack(
+              children: [
+                _sidePanelToggleButton,
+                CalculatorView(),
+              ],
+            ),
           ),
         ),
       ),
@@ -41,6 +66,13 @@ class CalculatorView extends StatelessWidget {
 
   CalculatorView({Key? key}) : super(key: key);
 
+  final Widget _sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
+    builder: (context, state) {
+      final bool showSidePanel = !isHandset(context) && state.showSidePanel;
+      return (showSidePanel) ? const SidePanel() : const SizedBox();
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CalculatorCubit, CalculatorState>(
@@ -49,38 +81,44 @@ class CalculatorView extends StatelessWidget {
         // input fields to have a clean look for the compared items.
         if (state.resultExists) focusNode.requestFocus();
       },
-      // GestureDetector & FocusNode allow clicking outside input areas in
-      // order to deselect them as expected on web & desktop platforms.
-      child: GestureDetector(
-        onTap: () => focusNode.requestFocus(),
-        child: Focus(
-          focusNode: focusNode,
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ExcludeFocusTraversal(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 12,
-                      bottom: 8,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sidePanel,
+          Expanded(
+            // GestureDetector & FocusNode allow clicking outside input areas in
+            // order to deselect them as expected on web & desktop platforms.
+            child: GestureDetector(
+              onTap: () => focusNode.requestFocus(),
+              child: Focus(
+                focusNode: focusNode,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ExcludeFocusTraversal(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 12,
+                          bottom: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Text('Compare by:'),
+                            SizedBox(width: 10),
+                            CompareByDropdownButton(),
+                            SizedBox(width: 10),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text('Compare by:'),
-                        SizedBox(width: 10),
-                        CompareByDropdownButton(),
-                      ],
-                    ),
-                  ),
+                    ScrollingItemsList(),
+                  ],
                 ),
-                ScrollingItemsList(),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -1,6 +1,10 @@
 part of 'calculator_cubit.dart';
 
 class CalculatorState extends Equatable {
+  /// Whether to show the side panel that on large
+  /// displays that holds the drawer contents.
+  final bool showSidePanel;
+
   final bool alwaysShowScrollbar;
   final Unit comareBy;
   final List<Item> items;
@@ -12,6 +16,7 @@ class CalculatorState extends Equatable {
   bool get resultExists => result.isNotEmpty;
 
   const CalculatorState({
+    required this.showSidePanel,
     required this.alwaysShowScrollbar,
     required this.comareBy,
     required this.items,
@@ -20,6 +25,7 @@ class CalculatorState extends Equatable {
 
   factory CalculatorState.initial() {
     return CalculatorState(
+      showSidePanel: false,
       alwaysShowScrollbar: false,
       comareBy: UnitType.weight,
       items: [
@@ -31,12 +37,14 @@ class CalculatorState extends Equatable {
   }
 
   CalculatorState copyWith({
+    bool? showSidePanel,
     bool? alwaysShowScrollbar,
     Unit? comareBy,
     List<Item>? items,
     List<Item>? result,
   }) {
     return CalculatorState(
+      showSidePanel: showSidePanel ?? this.showSidePanel,
       alwaysShowScrollbar: alwaysShowScrollbar ?? this.alwaysShowScrollbar,
       comareBy: comareBy ?? this.comareBy,
       items: items ?? this.items,
@@ -45,10 +53,13 @@ class CalculatorState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        alwaysShowScrollbar,
-        comareBy,
-        items,
-        result,
-      ];
+  List<Object> get props {
+    return [
+      showSidePanel,
+      alwaysShowScrollbar,
+      comareBy,
+      items,
+      result,
+    ];
+  }
 }

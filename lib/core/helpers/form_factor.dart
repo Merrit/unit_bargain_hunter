@@ -25,3 +25,8 @@ bool isLargeFormFactor(BuildContext context) {
   final isTablet = (formFactor == FormFactor.tablet);
   return (isDesktop || isTablet) ? true : false;
 }
+
+bool isHandset(BuildContext context) {
+  final formFactor = getFormFactor(context);
+  return (formFactor == FormFactor.handset);
+}
