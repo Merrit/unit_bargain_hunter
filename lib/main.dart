@@ -18,8 +18,7 @@ Future<void> main() async {
   // Wait for the storage service to initialize while showing the splash screen.
   // This allows us to be certain that settings are available right away,
   // and prevents unsightly things like the theme suddenly changing when loaded.
-  final storageService = StorageService();
-  await storageService.init();
+  final storageService = await StorageService.initialize();
   final settingsService = SettingsService(storageService);
 
   final _calculatorCubit = await CalculatorCubit.initialize(storageService);

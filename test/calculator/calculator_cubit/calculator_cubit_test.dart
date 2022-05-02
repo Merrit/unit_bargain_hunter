@@ -8,8 +8,7 @@ CalculatorState state() => cubit.state;
 
 Future<void> main() async {
   setUp(() async {
-    storageService = StorageService();
-    await storageService.init();
+    storageService = await StorageService.initialize();
   });
 
   group('CalculatorCubit: ', () {
