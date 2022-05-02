@@ -68,7 +68,7 @@ class _SidePanelState extends State<SidePanel> {
 
     return Container(
       color: Theme.of(context).cardColor,
-      width: 150,
+      width: 180,
       child: _panelBody,
     );
   }
