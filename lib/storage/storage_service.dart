@@ -6,24 +6,17 @@ import '../core/helpers/helpers.dart';
 /// Interfaces with the host OS to store & retrieve data from disk.
 class StorageService {
   /// This class is a singleton.
-  /// This variable holds the instance once created.
-  static StorageService? _instance;
+  /// Singleton instance of the service.
+  static StorageService? instance;
 
   /// Private singleton constructor.
   StorageService._singleton();
 
-  /// Factory ensures only one instance is ever created.
-  factory StorageService() {
-    if (_instance != null) return _instance!;
-    return StorageService._singleton();
-  }
-
-  /// A generic storage pool, anything large should make its own box.
-  static const String _generalBox = 'general';
-
-  /// Initialize the storage access.
+  /// Initialize the storage access and [instance].
   /// Needs to be initialized only once, in the `main()` function.
-  Future<void> init() async {
+  static Future<StorageService> initialize() async {
+    if (instance != null) return instance!;
+
     /// On desktop platforms initialize to a specific directory.
     if (platformIsDesktop()) {
       final dir = await getApplicationSupportDirectory();
@@ -33,7 +26,13 @@ class StorageService {
       // On mobile and web initialize to default location.
       await Hive.initFlutter();
     }
+
+    instance = StorageService._singleton();
+    return instance!;
   }
+
+  /// A generic storage pool, anything large should make its own box.
+  static const String _generalBox = 'general';
 
   /// Persist a value to local disk storage.
   Future<void> saveValue({
