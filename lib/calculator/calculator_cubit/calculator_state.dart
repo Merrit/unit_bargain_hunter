@@ -7,6 +7,18 @@ class CalculatorState extends Equatable {
 
   final bool alwaysShowScrollbar;
   final Unit comareBy;
+
+  /// A list of sheets.
+  ///
+  /// Each [Sheet] contains a list of related [Item] objects for calculation.
+  final List<Sheet> sheets;
+
+  /// The UUID of the active [Sheet].
+  final String activeSheetId;
+
+  /// The active [Sheet], that is displayed in the [CalculatorView].
+  final Sheet activeSheet;
+
   final List<Item> items;
 
   /// Contains the cheapest items.
@@ -19,27 +31,20 @@ class CalculatorState extends Equatable {
     required this.showSidePanel,
     required this.alwaysShowScrollbar,
     required this.comareBy,
+    required this.sheets,
+    required this.activeSheetId,
+    required this.activeSheet,
     required this.items,
     required this.result,
   });
-
-  factory CalculatorState.initial() {
-    return CalculatorState(
-      showSidePanel: false,
-      alwaysShowScrollbar: false,
-      comareBy: UnitType.weight,
-      items: [
-        Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
-        Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
-      ],
-      result: const <Item>[],
-    );
-  }
 
   CalculatorState copyWith({
     bool? showSidePanel,
     bool? alwaysShowScrollbar,
     Unit? comareBy,
+    List<Sheet>? sheets,
+    String? activeSheetId,
+    Sheet? activeSheet,
     List<Item>? items,
     List<Item>? result,
   }) {
@@ -47,6 +52,9 @@ class CalculatorState extends Equatable {
       showSidePanel: showSidePanel ?? this.showSidePanel,
       alwaysShowScrollbar: alwaysShowScrollbar ?? this.alwaysShowScrollbar,
       comareBy: comareBy ?? this.comareBy,
+      sheets: sheets ?? this.sheets,
+      activeSheetId: activeSheetId ?? this.activeSheetId,
+      activeSheet: activeSheet ?? this.activeSheet,
       items: items ?? this.items,
       result: result ?? this.result,
     );
@@ -58,6 +66,9 @@ class CalculatorState extends Equatable {
       showSidePanel,
       alwaysShowScrollbar,
       comareBy,
+      sheets,
+      activeSheetId,
+      activeSheet,
       items,
       result,
     ];

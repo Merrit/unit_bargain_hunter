@@ -20,23 +20,19 @@ Future<void> main() async {
   // and prevents unsightly things like the theme suddenly changing when loaded.
   final storageService = StorageService();
   await storageService.init();
-
   final settingsService = SettingsService(storageService);
+
+  final _calculatorCubit = await CalculatorCubit.initialize(storageService);
+  final _settingsCubit = await SettingsCubit.initialize(settingsService);
 
   if (Platform.isDesktop) await Window.initialize();
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => AppCubit(),
-        ),
-        BlocProvider(
-          create: (context) => CalculatorCubit(),
-        ),
-        BlocProvider(
-          create: (context) => SettingsCubit(settingsService),
-        )
+        BlocProvider(create: (context) => AppCubit()),
+        BlocProvider.value(value: _calculatorCubit),
+        BlocProvider.value(value: _settingsCubit),
       ],
       child: const ProviderScope(
         child: App(),

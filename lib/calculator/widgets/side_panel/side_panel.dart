@@ -33,7 +33,7 @@ class _SidePanelState extends State<SidePanel> {
     opacity: 0.8,
     child: IconButton(
       icon: const Icon(Icons.add),
-      onPressed: () {},
+      onPressed: () => calcCubit.addSheet(),
     ),
   );
 

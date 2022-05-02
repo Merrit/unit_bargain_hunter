@@ -1,13 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/storage/storage_service.dart';
 
-CalculatorCubit cubit = CalculatorCubit();
+late StorageService storageService;
+late CalculatorCubit cubit;
 CalculatorState state() => cubit.state;
 
-void main() {
+Future<void> main() async {
+  setUp(() async {
+    storageService = StorageService();
+    await storageService.init();
+  });
+
   group('CalculatorCubit: ', () {
-    setUp(() {
-      cubit = CalculatorCubit();
+    setUp(() async {
+      cubit = await CalculatorCubit.initialize(storageService);
     });
 
     test('initializes with 2 items', () {

@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../storage/storage_service.dart';
 import '../calculator.dart';
+import '../calculator_page.dart';
 import '../models/models.dart';
 
 part 'calculator_state.dart';
@@ -12,9 +14,45 @@ part 'calculator_state.dart';
 late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
-  CalculatorCubit() : super(CalculatorState.initial()) {
+  final StorageService _storageService;
+
+  CalculatorCubit(this._storageService, {required CalculatorState initialState})
+      : super(initialState) {
     calcCubit = this;
   }
+
+  static Future<CalculatorCubit> initialize(
+    StorageService storageService,
+  ) async {
+    final bool? showSidePanel = await storageService.getValue('showSidePanel');
+    final storedSheets = await storageService.getStorageAreaValues('sheets');
+
+    final List<Sheet> sheets;
+    if (storedSheets.isEmpty) {
+      sheets = [Sheet()];
+    } else {
+      sheets = storedSheets.map((e) => Sheet.fromJson(e)).toList();
+    }
+
+    return CalculatorCubit(
+      storageService,
+      initialState: CalculatorState(
+        showSidePanel: showSidePanel ?? true,
+        alwaysShowScrollbar: false,
+        comareBy: UnitType.weight,
+        sheets: sheets,
+        activeSheetId: sheets.first.uuid,
+        activeSheet: sheets.first,
+        items: _defaultItems,
+        result: const <Item>[],
+      ),
+    );
+  }
+
+  static final _defaultItems = [
+    Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
+    Item(price: 0.00, quantity: 0.00, unit: Unit.gram),
+  ];
 
   /// Compare all items to find the best value.
   void compare() {
@@ -77,11 +115,8 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(items: items));
   }
 
-  /// Reset the calculator to initial values.
-  void reset() {
-    emit(state.copyWith(items: []));
-    emit(CalculatorState.initial());
-  }
+  /// Reset the sheet's items to default.
+  void reset() => emit(state.copyWith(items: _defaultItems));
 
   /// Reset the results if user changes values.
   void resetResult() {
@@ -93,9 +128,49 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(alwaysShowScrollbar: showScrollbar));
   }
 
-  /// Toggle show/hide for the large screen side
-  /// panel that holds the drawer contents.
+  /// Toggle show/hide for the side panel that holds
+  /// the drawer contents on large screen devices.
   void toggleShowSidePanel() {
     emit(state.copyWith(showSidePanel: !state.showSidePanel));
+    _storageService.saveValue(key: 'showSidePanel', value: state.showSidePanel);
   }
+
+  void addSheet() {
+    final sheets = List<Sheet>.from(state.sheets);
+    final newSheet = Sheet();
+    sheets.insert(0, newSheet);
+    emit(state.copyWith(sheets: sheets, activeSheet: newSheet));
+    _saveSheet(newSheet);
+  }
+
+  void updateSheet(Sheet sheet) {
+    final sheets = List<Sheet>.from(state.sheets);
+    final oldSheet = state.sheets.firstWhere((e) => e.uuid == sheet.uuid);
+    final index = sheets.indexOf(oldSheet);
+    sheets.removeAt(index);
+    sheets.insert(index, sheet);
+    emit(state.copyWith(sheets: sheets, activeSheet: sheet));
+    _saveSheet(sheet);
+  }
+
+  /// Persist sheet data to disk.
+  Future<void> _saveSheet(Sheet sheet) async {
+    await _storageService.saveValue(
+      key: sheet.uuid,
+      value: sheet.toJson(),
+      storageArea: 'sheets',
+    );
+  }
+
+  void removeSheet(Sheet sheet) {
+    assert(state.sheets.length != 1);
+    final sheets = List<Sheet>.from(state.sheets) //
+      ..remove(sheet);
+    final activeSheet = (sheet == state.activeSheet) ? sheets.first : null;
+    emit(state.copyWith(sheets: sheets, activeSheet: activeSheet));
+    _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
+  }
+
+  /// Set [sheet] as the active sheet that is seen in the [CalculatorView].
+  void selectSheet(Sheet sheet) => emit(state.copyWith(activeSheet: sheet));
 }

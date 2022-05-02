@@ -17,13 +17,20 @@ late SettingsCubit settingsCubit;
 class SettingsCubit extends Cubit<SettingsState> {
   final SettingsService _settingsService;
 
-  SettingsCubit(this._settingsService)
-      : super(
-          SettingsState(
-            themeMode: _settingsService.themeMode(),
-          ),
-        ) {
+  SettingsCubit(this._settingsService, {required SettingsState initialState})
+      : super(initialState) {
     settingsCubit = this;
+  }
+
+  static Future<SettingsCubit> initialize(
+    SettingsService settingsService,
+  ) async {
+    final ThemeMode themeMode = await settingsService.themeMode();
+
+    return SettingsCubit(
+      settingsService,
+      initialState: SettingsState(themeMode: themeMode),
+    );
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
