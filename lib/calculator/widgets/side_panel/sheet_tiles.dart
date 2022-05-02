@@ -6,8 +6,15 @@ import '../../calculator_cubit/calculator_cubit.dart';
 import '../../models/models.dart';
 
 /// The scrolling list of tiles in the drawer for each calculator sheet.
-class SheetTiles extends StatelessWidget {
+class SheetTiles extends StatefulWidget {
   const SheetTiles({Key? key}) : super(key: key);
+
+  @override
+  State<SheetTiles> createState() => _SheetTilesState();
+}
+
+class _SheetTilesState extends State<SheetTiles> {
+  Sheet? hoveredSheet;
 
   @override
   Widget build(BuildContext context) {
@@ -59,26 +66,49 @@ class SheetTiles extends StatelessWidget {
             ];
           }
 
+          Color? _getContainerColor(Sheet sheet) {
+            if (sheet == state.activeSheet) {
+              return Colors.grey.withOpacity(0.2);
+            }
+
+            if (sheet == hoveredSheet) {
+              return Colors.grey.withOpacity(0.1);
+            }
+
+            return null;
+          }
+
           return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             children: state.sheets
-                .map((sheet) => GestureDetector(
-                      onTap: () => calcCubit.selectSheet(sheet),
-                      onSecondaryTapUp: (TapUpDetails details) {
-                        showContextMenu(
-                          context: context,
-                          offset: details.globalPosition,
-                          items: contextMenuItems(sheet),
-                        );
-                      },
-                      onLongPressEnd: (LongPressEndDetails details) {
-                        showContextMenu(
-                          context: context,
-                          offset: details.globalPosition,
-                          items: contextMenuItems(sheet),
-                        );
-                      },
-                      child: ListTile(
-                        title: Center(child: Text(sheet.name)),
+                .map((Sheet sheet) => MouseRegion(
+                      onEnter: (_) => setState(() => hoveredSheet = sheet),
+                      onExit: (_) => setState(() => hoveredSheet = null),
+                      child: GestureDetector(
+                        onTap: () => calcCubit.selectSheet(sheet),
+                        onSecondaryTapUp: (TapUpDetails details) {
+                          showContextMenu(
+                            context: context,
+                            offset: details.globalPosition,
+                            items: contextMenuItems(sheet),
+                          );
+                        },
+                        onLongPressEnd: (LongPressEndDetails details) {
+                          showContextMenu(
+                            context: context,
+                            offset: details.globalPosition,
+                            items: contextMenuItems(sheet),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _getContainerColor(sheet),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListTile(
+                            title: Center(child: Text(sheet.name)),
+                          ),
+                        ),
                       ),
                     ))
                 .toList(),
