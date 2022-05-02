@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../app/widgets/widgets.dart';
 import '../core/helpers/helpers.dart';
 import 'calculator_cubit/calculator_cubit.dart';
+import 'models/models.dart';
 import 'widgets/widgets.dart';
 
 class CalculatorPage extends StatelessWidget {
@@ -75,51 +76,58 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CalculatorCubit, CalculatorState>(
+    return BlocConsumer<CalculatorCubit, CalculatorState>(
       listener: (context, state) {
         // When user initiates compare we remove focus from any
         // input fields to have a clean look for the compared items.
         if (state.resultExists) focusNode.requestFocus();
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _sidePanel,
-          Expanded(
-            // GestureDetector & FocusNode allow clicking outside input areas in
-            // order to deselect them as expected on web & desktop platforms.
-            child: GestureDetector(
-              onTap: () => focusNode.requestFocus(),
-              child: Focus(
-                focusNode: focusNode,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ExcludeFocusTraversal(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 12,
-                          bottom: 8,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+      builder: (context, state) {
+        final Sheet sheet = state.sheets.singleWhere(
+          (element) => element.uuid == state.activeSheetId,
+        );
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _sidePanel,
+            Expanded(
+              // GestureDetector & FocusNode allow clicking outside input areas in
+              // order to deselect them as expected on web & desktop platforms.
+              child: GestureDetector(
+                onTap: () => focusNode.requestFocus(),
+                child: Focus(
+                  focusNode: focusNode,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ExcludeFocusTraversal(
+                        child: Stack(
                           children: const [
-                            Text('Compare by:'),
-                            SizedBox(width: 10),
-                            CompareByDropdownButton(),
-                            SizedBox(width: 10),
+                            SheetNameWidget(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: 12,
+                                  right: 10,
+                                  bottom: 8,
+                                ),
+                                child: CompareByDropdownButton(),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    ScrollingItemsList(),
-                  ],
+                      ScrollingItemsList(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

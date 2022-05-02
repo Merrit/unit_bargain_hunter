@@ -28,6 +28,40 @@ abstract class Unit extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'baseUnit': baseUnit.toString(),
+      'unitType': unitType.toString(),
+    };
+  }
+
+  factory Unit.fromMap(Map<String, dynamic> map) {
+    switch (map['baseUnit'] as String) {
+      case 'milligram':
+        return Milligram();
+      case 'gram':
+        return Gram();
+      case 'kilogram':
+        return Kilogram();
+      case 'ounce':
+        return Ounce();
+      case 'pound':
+        return Pound();
+      case 'millilitre':
+        return Millilitre();
+      case 'litre':
+        return Litre();
+      case 'fluid ounce':
+        return FluidOunce();
+      case 'quart':
+        return Quart();
+      case 'item':
+        return const ItemUnit();
+      default:
+        throw Exception('Unable to parse Unit from map.');
+    }
+  }
 }
 
 abstract class UnitType {

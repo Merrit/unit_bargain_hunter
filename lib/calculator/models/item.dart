@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -74,4 +76,28 @@ class Item extends Equatable {
     if (name == '') return null;
     return name;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uuid': uuid,
+      'price': price,
+      'quantity': quantity,
+      'unit': unit.toMap(),
+      'name': name,
+    };
+  }
+
+  factory Item.fromMap(Map<String, dynamic> map) {
+    return Item(
+      uuid: map['uuid'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      quantity: map['quantity']?.toDouble() ?? 0.0,
+      unit: Unit.fromMap(map['unit']),
+      name: map['name'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Item.fromJson(String source) => Item.fromMap(json.decode(source));
 }
