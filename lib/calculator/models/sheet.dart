@@ -31,12 +31,11 @@ class Sheet extends Equatable {
   Sheet copyWith({
     List<Item>? items,
     String? name,
-    String? uuid,
   }) {
     return Sheet(
       items: items ?? this.items,
       name: name ?? this.name,
-      uuid: uuid ?? this.uuid,
+      uuid: uuid,
     );
   }
 
@@ -45,6 +44,7 @@ class Sheet extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'uuid': uuid,
       'items': items.map((x) => x.toMap()).toList(),
       'name': name,
     };
@@ -52,6 +52,7 @@ class Sheet extends Equatable {
 
   factory Sheet.fromMap(Map<String, dynamic> map) {
     return Sheet(
+      uuid: map['uuid'],
       items: List<Item>.from(map['items']?.map((x) => Item.fromMap(x))),
       name: map['name'] ?? '',
     );

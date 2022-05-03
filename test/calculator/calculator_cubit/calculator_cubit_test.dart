@@ -40,5 +40,22 @@ Future<void> main() async {
       expect(initialItems.contains(newItem), false);
       expect(updatedItems.contains(newItem), true);
     });
+
+    test('deleting sheet works', () async {
+      final initalSheets = state().sheets;
+      expect(initalSheets.isNotEmpty, true);
+      final initialSheetUuids = initalSheets.map((e) => e.uuid).toList();
+
+      await cubit.addSheet();
+      expect(state().sheets.length == (initalSheets.length + 1), true);
+
+      final newSheet = state()
+          .sheets
+          .where((element) => !initialSheetUuids.contains(element.uuid))
+          .first;
+
+      await cubit.removeSheet(newSheet);
+      expect(state().sheets.contains(newSheet), false);
+    });
   });
 }
