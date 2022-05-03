@@ -14,7 +14,7 @@ class CompareByDropdownButton extends StatelessWidget {
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         return DropdownButton<Unit>(
-          value: state.comareBy,
+          value: state.activeSheet.compareBy,
           items: UnitType.all
               .map(
                 (unitType) => DropdownMenuItem(

@@ -17,24 +17,26 @@ Future<void> main() async {
     });
 
     test('initializes with 2 items', () {
-      expect(state().items.length, 2);
+      expect(state().activeSheet.items.length, 2);
     });
 
     test('items have unique uuids', () {
-      final uuidA = state().items[0].uuid;
-      final uuidB = state().items[1].uuid;
+      final uuidA = state().activeSheet.items[0].uuid;
+      final uuidB = state().activeSheet.items[1].uuid;
       expect(uuidA != uuidB, true);
     });
 
     test('added item is in correct order', () {
-      final initialItems = state().items.map((e) => e.uuid).toList();
+      final initialItems =
+          state().activeSheet.items.map((e) => e.uuid).toList();
 
       cubit.addItem();
 
-      expect(state().items[0].uuid, initialItems[0]);
-      expect(state().items[1].uuid, initialItems[1]);
+      expect(state().activeSheet.items[0].uuid, initialItems[0]);
+      expect(state().activeSheet.items[1].uuid, initialItems[1]);
 
-      final updatedItems = state().items.map((e) => e.uuid).toList();
+      final updatedItems =
+          state().activeSheet.items.map((e) => e.uuid).toList();
       final newItem = updatedItems[2];
 
       expect(initialItems.contains(newItem), false);

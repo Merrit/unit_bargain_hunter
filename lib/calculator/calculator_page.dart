@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../app/widgets/widgets.dart';
 import '../core/helpers/helpers.dart';
 import 'calculator_cubit/calculator_cubit.dart';
-import 'models/models.dart';
 import 'widgets/widgets.dart';
 
 class CalculatorPage extends StatelessWidget {
@@ -83,10 +82,6 @@ class CalculatorView extends StatelessWidget {
         if (state.resultExists) focusNode.requestFocus();
       },
       builder: (context, state) {
-        final Sheet sheet = state.sheets.singleWhere(
-          (element) => element.uuid == state.activeSheetId,
-        );
-
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -161,7 +156,7 @@ class ScrollingItemsList extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: [
                   const SizedBox(width: double.infinity),
-                  for (var item in state.items)
+                  for (var item in state.activeSheet.items)
                     ItemCard(
                       item: item,
                     ),

@@ -343,7 +343,8 @@ class _UnitChooser extends StatelessWidget {
           items: context
               .watch<CalculatorCubit>()
               .state
-              .comareBy
+              .activeSheet
+              .compareBy
               .subTypes
               .map((value) => DropdownMenuItem<Unit>(
                     value: value,
@@ -408,7 +409,7 @@ class _CloseButton extends ConsumerWidget {
     final item = ref.watch(_currentItem);
 
     final shouldShowCloseButton =
-        context.watch<CalculatorCubit>().state.items.length > 2;
+        context.watch<CalculatorCubit>().state.activeSheet.items.length > 2;
 
     return ExcludeFocusTraversal(
       child: (shouldShowCloseButton)
