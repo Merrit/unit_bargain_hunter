@@ -135,22 +135,22 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     _storageService.saveValue(key: 'showSidePanel', value: state.showSidePanel);
   }
 
-  void addSheet() {
+  Future<void> addSheet() async {
     final sheets = List<Sheet>.from(state.sheets);
     final newSheet = Sheet();
     sheets.insert(0, newSheet);
     emit(state.copyWith(sheets: sheets, activeSheet: newSheet));
-    _saveSheet(newSheet);
+    await _saveSheet(newSheet);
   }
 
-  void updateSheet(Sheet sheet) {
+  Future<void> updateSheet(Sheet sheet) async {
     final sheets = List<Sheet>.from(state.sheets);
     final oldSheet = state.sheets.firstWhere((e) => e.uuid == sheet.uuid);
     final index = sheets.indexOf(oldSheet);
     sheets.removeAt(index);
     sheets.insert(index, sheet);
     emit(state.copyWith(sheets: sheets, activeSheet: sheet));
-    _saveSheet(sheet);
+    await _saveSheet(sheet);
   }
 
   /// Persist sheet data to disk.
@@ -162,13 +162,13 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     );
   }
 
-  void removeSheet(Sheet sheet) {
+  Future<void> removeSheet(Sheet sheet) async {
     assert(state.sheets.length != 1);
     final sheets = List<Sheet>.from(state.sheets) //
       ..remove(sheet);
     final activeSheet = (sheet == state.activeSheet) ? sheets.first : null;
     emit(state.copyWith(sheets: sheets, activeSheet: activeSheet));
-    _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
+    await _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
   }
 
   /// Set [sheet] as the active sheet that is seen in the [CalculatorView].
