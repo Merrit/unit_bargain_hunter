@@ -6,7 +6,6 @@ class CalculatorState extends Equatable {
   final bool showSidePanel;
 
   final bool alwaysShowScrollbar;
-  final Unit comareBy;
 
   /// A list of sheets.
   ///
@@ -19,8 +18,6 @@ class CalculatorState extends Equatable {
   /// The active [Sheet], that is displayed in the [CalculatorView].
   final Sheet activeSheet;
 
-  final List<Item> items;
-
   /// Contains the cheapest items.
   /// Will only include multiple items if there was a tie.
   final List<Item> result;
@@ -30,32 +27,26 @@ class CalculatorState extends Equatable {
   const CalculatorState({
     required this.showSidePanel,
     required this.alwaysShowScrollbar,
-    required this.comareBy,
     required this.sheets,
     required this.activeSheetId,
     required this.activeSheet,
-    required this.items,
     required this.result,
   });
 
   CalculatorState copyWith({
     bool? showSidePanel,
     bool? alwaysShowScrollbar,
-    Unit? comareBy,
     List<Sheet>? sheets,
     String? activeSheetId,
     Sheet? activeSheet,
-    List<Item>? items,
     List<Item>? result,
   }) {
     return CalculatorState(
       showSidePanel: showSidePanel ?? this.showSidePanel,
       alwaysShowScrollbar: alwaysShowScrollbar ?? this.alwaysShowScrollbar,
-      comareBy: comareBy ?? this.comareBy,
       sheets: sheets ?? this.sheets,
       activeSheetId: activeSheetId ?? this.activeSheetId,
       activeSheet: activeSheet ?? this.activeSheet,
-      items: items ?? this.items,
       result: result ?? this.result,
     );
   }
@@ -65,11 +56,9 @@ class CalculatorState extends Equatable {
     return [
       showSidePanel,
       alwaysShowScrollbar,
-      comareBy,
       sheets,
       activeSheetId,
       activeSheet,
-      items,
       result,
     ];
   }

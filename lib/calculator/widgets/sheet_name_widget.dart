@@ -44,7 +44,7 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
               controller.text = state.activeSheet.name;
 
               void _updateSheet() {
-                calcCubit.updateSheet(
+                calcCubit.updateActiveSheet(
                   state.activeSheet.copyWith(name: controller.text),
                 );
                 focusNode.unfocus();
