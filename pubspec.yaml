@@ -20,6 +20,7 @@ dependencies:
   intl: ^0.17.0
   logging: ^1.0.2
   pub_semver: ^2.0.0
+  universal_html: ^2.0.8
   url_launcher: ^6.0.20
   uuid: ^3.0.6
   window_size:

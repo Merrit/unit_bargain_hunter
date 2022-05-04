@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'app/app.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
@@ -25,6 +26,9 @@ Future<void> main() async {
   final _settingsCubit = await SettingsCubit.initialize(settingsService);
 
   if (Platform.isDesktop) await Window.initialize();
+
+  // Prevent the right-click context menu on web.
+  html.document.onContextMenu.listen((event) => event.preventDefault());
 
   runApp(
     MultiBlocProvider(
