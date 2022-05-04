@@ -26,7 +26,7 @@ class _SheetTilesState extends State<SheetTiles> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: const Text('Remove sheet?'),
+              content: Text('Remove sheet "${sheet.name}?"'),
               actions: [
                 TextButton(
                   onPressed: () {
