@@ -33,7 +33,11 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
   Widget build(BuildContext context) {
     return Focus(
       focusNode: focusNode,
-      onFocusChange: (focused) => calcCubit.updateEditingSheetName(focused),
+      onFocusChange: (focused) {
+        calcCubit.updateEditingSheetName(focused);
+
+        if (!focused) FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Center(
         child: Container(
           width: 250,
