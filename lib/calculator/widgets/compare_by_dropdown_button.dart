@@ -11,21 +11,33 @@ class CompareByDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        return DropdownButton<Unit>(
-          value: state.activeSheet.compareBy,
-          items: UnitType.all
-              .map(
-                (unitType) => DropdownMenuItem(
-                  value: unitType,
-                  child: Text('$unitType'),
-                ),
-              )
-              .toList(),
-          onChanged: (value) => calcCubit.updateCompareBy(value!),
-        );
-      },
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 12,
+          right: 10,
+          bottom: 8,
+        ),
+        child: BlocBuilder<CalculatorCubit, CalculatorState>(
+          builder: (context, state) {
+            if (state.editingSheetName) return const SizedBox();
+
+            return DropdownButton<Unit>(
+              value: state.activeSheet.compareBy,
+              items: UnitType.all
+                  .map(
+                    (unitType) => DropdownMenuItem(
+                      value: unitType,
+                      child: Text('$unitType'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => calcCubit.updateCompareBy(value!),
+            );
+          },
+        ),
+      ),
     );
   }
 }
