@@ -61,6 +61,8 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
                   autofocus: true,
                   textAlign: TextAlign.center,
                   textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
                   onSubmitted: (_) => _updateSheet(),
                 );
               } else {
