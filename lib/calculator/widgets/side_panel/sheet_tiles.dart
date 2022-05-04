@@ -54,7 +54,6 @@ class _SheetTilesState extends State<SheetTiles> {
         builder: (context, state) {
           List<PopupMenuItem> contextMenuItems(Sheet sheet) {
             return [
-              const PopupMenuItem(child: Text('data')),
               if (state.sheets.length > 1)
                 PopupMenuItem(
                   child: const Text(
