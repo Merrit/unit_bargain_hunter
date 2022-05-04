@@ -20,7 +20,6 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
   final FocusNode textFieldFocusNode = FocusNode(
     debugLabel: 'SheetNameWidget TextField node',
   );
-  bool hasFocus = false;
 
   @override
   void dispose() {
@@ -34,7 +33,7 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
   Widget build(BuildContext context) {
     return Focus(
       focusNode: focusNode,
-      onFocusChange: (focused) => setState(() => hasFocus = focused),
+      onFocusChange: (focused) => calcCubit.updateEditingSheetName(focused),
       child: Center(
         child: Container(
           width: 250,

@@ -100,17 +100,7 @@ class CalculatorView extends StatelessWidget {
                         child: Stack(
                           children: const [
                             SheetNameWidget(),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left: 12,
-                                  right: 10,
-                                  bottom: 8,
-                                ),
-                                child: CompareByDropdownButton(),
-                              ),
-                            ),
+                            CompareByDropdownButton(),
                           ],
                         ),
                       ),

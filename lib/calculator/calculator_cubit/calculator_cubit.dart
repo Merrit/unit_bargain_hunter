@@ -37,6 +37,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     return CalculatorCubit(
       storageService,
       initialState: CalculatorState(
+        editingSheetName: false,
         showSidePanel: showSidePanel ?? true,
         alwaysShowScrollbar: false,
         sheets: sheets,
@@ -45,6 +46,10 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         result: const <Item>[],
       ),
     );
+  }
+
+  void updateEditingSheetName(bool value) {
+    emit(state.copyWith(editingSheetName: value));
   }
 
   /// Compare all items to find the best value.
