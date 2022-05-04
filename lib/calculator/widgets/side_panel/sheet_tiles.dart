@@ -85,7 +85,11 @@ class _SheetTilesState extends State<SheetTiles> {
                       onEnter: (_) => setState(() => hoveredSheet = sheet),
                       onExit: (_) => setState(() => hoveredSheet = null),
                       child: GestureDetector(
-                        onTap: () => calcCubit.selectSheet(sheet),
+                        onTap: () {
+                          calcCubit.selectSheet(sheet);
+
+                          if (isHandset(context)) Navigator.pop(context);
+                        },
                         onSecondaryTapUp: (TapUpDetails details) {
                           showContextMenu(
                             context: context,
