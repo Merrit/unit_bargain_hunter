@@ -69,7 +69,9 @@ class CalculatorView extends StatelessWidget {
   final Widget _sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
     builder: (context, state) {
       final bool showSidePanel = !isHandset(context) && state.showSidePanel;
-      return (showSidePanel) ? const SidePanel() : const SizedBox();
+      return ExcludeFocusTraversal(
+        child: (showSidePanel) ? const SidePanel() : const SizedBox(),
+      );
     },
   );
 
