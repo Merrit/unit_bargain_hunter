@@ -141,7 +141,6 @@ class __ItemContentsState extends ConsumerState<_ItemContents>
                         Spacers.verticalXtraSmall,
                         _NumericInputWidget('Quantity'),
                         Spacers.verticalXtraSmall,
-                        const Text('Unit'),
                         _UnitChooser(),
                         Spacers.verticalSmall,
                         _PerUnitCalculation(),
@@ -343,23 +342,31 @@ class _UnitChooser extends StatelessWidget {
       builder: (context, ref, child) {
         final item = ref.watch(_currentItem);
 
-        return DropdownButton<Unit>(
-          value: item.unit,
-          onChanged: (value) => calcCubit.updateItem(
-            item: item,
-            unit: value,
-          ),
-          items: context
-              .watch<CalculatorCubit>()
-              .state
-              .activeSheet
-              .compareBy
-              .subTypes
-              .map((value) => DropdownMenuItem<Unit>(
-                    value: value,
-                    child: Text('$value'),
-                  ))
-              .toList(),
+        return BlocBuilder<CalculatorCubit, CalculatorState>(
+          builder: (context, state) {
+            if (state.activeSheet.compareBy is ItemUnit) {
+              return const SizedBox();
+            }
+
+            return Column(
+              children: [
+                const Text('Unit'),
+                DropdownButton<Unit>(
+                  value: item.unit,
+                  onChanged: (value) => calcCubit.updateItem(
+                    item: item,
+                    unit: value,
+                  ),
+                  items: state.activeSheet.compareBy.subTypes
+                      .map((value) => DropdownMenuItem<Unit>(
+                            value: value,
+                            child: Text('$value'),
+                          ))
+                      .toList(),
+                ),
+              ],
+            );
+          },
         );
       },
     );
