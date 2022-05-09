@@ -1,42 +1,54 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
 
-late StorageService storageService;
+class MockStorageService extends Mock implements StorageService {}
+
+late MockStorageService storageService;
 late CalculatorCubit cubit;
-CalculatorState state() => cubit.state;
 
 Future<void> main() async {
-  setUp(() async {
-    storageService = await StorageService.initialize();
-  });
-
   group('CalculatorCubit: ', () {
     setUp(() async {
+      storageService = MockStorageService();
+      when(() => storageService.getValue('showSidePanel'))
+          .thenAnswer((_) async => true);
+      when(() => storageService.getStorageAreaValues('sheets'))
+          .thenAnswer((_) async => []);
+      when(() => storageService.saveValue(
+            key: any(named: 'key'),
+            value: any(named: 'value'),
+            storageArea: any(named: 'storageArea'),
+          )).thenAnswer((_) async => Future.value());
+      when(() => storageService.deleteValue(
+            any(),
+            storageArea: any(named: 'storageArea'),
+          )).thenAnswer((_) async => Future.value());
       cubit = await CalculatorCubit.initialize(storageService);
     });
 
     test('initializes with 2 items', () {
-      expect(state().activeSheet.items.length, 2);
+      expect(cubit.state.activeSheet.items.length, 2);
     });
 
     test('items have unique uuids', () {
-      final uuidA = state().activeSheet.items[0].uuid;
-      final uuidB = state().activeSheet.items[1].uuid;
+      final uuidA = cubit.state.activeSheet.items[0].uuid;
+      final uuidB = cubit.state.activeSheet.items[1].uuid;
       expect(uuidA != uuidB, true);
     });
 
     test('added item is in correct order', () {
       final initialItems =
-          state().activeSheet.items.map((e) => e.uuid).toList();
+          cubit.state.activeSheet.items.map((e) => e.uuid).toList();
 
       cubit.addItem();
 
-      expect(state().activeSheet.items[0].uuid, initialItems[0]);
-      expect(state().activeSheet.items[1].uuid, initialItems[1]);
+      expect(cubit.state.activeSheet.items[0].uuid, initialItems[0]);
+      expect(cubit.state.activeSheet.items[1].uuid, initialItems[1]);
 
       final updatedItems =
-          state().activeSheet.items.map((e) => e.uuid).toList();
+          cubit.state.activeSheet.items.map((e) => e.uuid).toList();
       final newItem = updatedItems[2];
 
       expect(initialItems.contains(newItem), false);
@@ -44,20 +56,19 @@ Future<void> main() async {
     });
 
     test('deleting sheet works', () async {
-      final initalSheets = state().sheets;
+      final initalSheets = cubit.state.sheets;
       expect(initalSheets.isNotEmpty, true);
       final initialSheetUuids = initalSheets.map((e) => e.uuid).toList();
 
       await cubit.addSheet();
-      expect(state().sheets.length == (initalSheets.length + 1), true);
+      expect(cubit.state.sheets.length == (initalSheets.length + 1), true);
 
-      final newSheet = state()
-          .sheets
+      final newSheet = cubit.state.sheets
           .where((element) => !initialSheetUuids.contains(element.uuid))
           .first;
 
       await cubit.removeSheet(newSheet);
-      expect(state().sheets.contains(newSheet), false);
+      expect(cubit.state.sheets.contains(newSheet), false);
     });
   });
 }
