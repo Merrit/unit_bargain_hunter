@@ -6,6 +6,7 @@ import 'app/app.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
 import 'logs/logs.dart';
 import 'platform/platform.dart';
+import 'purchases/cubit/purchases_cubit.dart';
 import 'settings/cubit/settings_cubit.dart';
 import 'settings/settings_service.dart';
 import 'setup/setup.dart';
@@ -23,7 +24,11 @@ Future<void> main() async {
   final storageService = await StorageService.initialize();
   final settingsService = SettingsService(storageService);
 
-  final _calculatorCubit = await CalculatorCubit.initialize(storageService);
+  final _purchasesCubit = await PurchasesCubit.initialize();
+  final _calculatorCubit = await CalculatorCubit.initialize(
+    _purchasesCubit,
+    storageService,
+  );
   final _settingsCubit = await SettingsCubit.initialize(settingsService);
 
   if (Platform.isDesktop) await Window.initialize();
@@ -33,6 +38,7 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (context) => AppCubit()),
         BlocProvider.value(value: _calculatorCubit),
+        BlocProvider.value(value: _purchasesCubit),
         BlocProvider.value(value: _settingsCubit),
       ],
       child: const ProviderScope(

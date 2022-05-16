@@ -1,16 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/purchases/cubit/purchases_cubit.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
+
+class MockPurchasesCubit extends Mock implements PurchasesCubit {}
 
 class MockStorageService extends Mock implements StorageService {}
 
+late MockPurchasesCubit _purchasesCubit;
 late MockStorageService storageService;
 late CalculatorCubit cubit;
 
 Future<void> main() async {
   group('CalculatorCubit: ', () {
     setUp(() async {
+      _purchasesCubit = MockPurchasesCubit();
       storageService = MockStorageService();
       when(() => storageService.getValue('showSidePanel'))
           .thenAnswer((_) async => true);
@@ -25,7 +30,7 @@ Future<void> main() async {
             any(),
             storageArea: any(named: 'storageArea'),
           )).thenAnswer((_) async => Future.value());
-      cubit = await CalculatorCubit.initialize(storageService);
+      cubit = await CalculatorCubit.initialize(_purchasesCubit, storageService);
     });
 
     test('initializes with 2 items', () {
