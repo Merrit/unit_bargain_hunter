@@ -171,5 +171,8 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   /// Set [sheet] as the active sheet that is seen in the [CalculatorView].
-  void selectSheet(Sheet sheet) => emit(state.copyWith(activeSheet: sheet));
+  void selectSheet(Sheet sheet) {
+    emit(state.copyWith(activeSheet: sheet));
+    compare();
+  }
 }
