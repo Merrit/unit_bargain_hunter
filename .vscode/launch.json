@@ -7,6 +7,13 @@
             "type": "dart",
         },
         {
+            "name": "Profile",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "flutterMode": "profile"
+        },
+        {
             "name": "Web Server",
             "request": "launch",
             "type": "dart",
