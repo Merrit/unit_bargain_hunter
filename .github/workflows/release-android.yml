@@ -21,6 +21,12 @@ jobs:
       - name: Download .aab artifact
         run: wget ${{env.repositoryUrl}}/releases/latest/download/${{env.appname-without-spaces}}-Android.aab
 
+        # Works with the r0adkll/upload-google-play action.
+      - name: Download changelog
+        run: |
+          mkdir whatsNewDirectory
+          gh release view  --json body --jq .body >> whatsNewDirectory/whatsnew-en-US
+
       - name: Access Google Play API key
         env:
           GOOGLE_PLAY_API_JSON: ${{ secrets.GOOGLE_PLAY_API_JSON }}
