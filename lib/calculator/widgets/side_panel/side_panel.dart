@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app/widgets/widgets.dart';
 import '../../../core/helpers/form_factor.dart';
+import '../../../purchases/cubit/purchases_cubit.dart';
+import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import 'sheet_tiles.dart';
 
@@ -41,19 +44,41 @@ class _SidePanelState extends State<SidePanel> {
   Widget build(BuildContext context) {
     final bool _isHandset = isHandset(context);
 
+    final Widget _proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
+      builder: (context, state) {
+        if (!state.installedFromPlayStore) return const SizedBox();
+
+        if (state.proPurchased) {
+          return const ListTile(
+            title: Opacity(
+              opacity: 0.6,
+              child: Center(child: Text('Pro purchased')),
+            ),
+          );
+        } else {
+          return Center(
+            child: TextButton(
+              onPressed: () => Navigator.pushNamed(context, PurchasesPage.id),
+              child: const Text('PRO'),
+            ),
+          );
+        }
+      },
+    );
+
     final Widget _panelBody = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: (_isHandset)
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (!_isHandset) _closePanelButton,
+            if (_isHandset) const SizedBox(), // So add button is on the right.
             _addSheetButton,
           ],
         ),
         const SheetTiles(),
+        _proButton,
         ListTile(
           title: const Center(child: Text('About')),
           onTap: () => showDialog(

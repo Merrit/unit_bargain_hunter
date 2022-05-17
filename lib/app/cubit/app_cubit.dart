@@ -39,4 +39,9 @@ class AppCubit extends Cubit<AppState> {
         ? await launch(url)
         : throw 'Could not launch url: $url';
   }
+
+  void promptForProUpgrade() {
+    emit(state.copyWith(promptForProUpgrade: true));
+    emit(state.copyWith(promptForProUpgrade: false));
+  }
 }

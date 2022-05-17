@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../app/cubit/app_cubit.dart';
+import '../../purchases/cubit/purchases_cubit.dart';
 import '../../storage/storage_service.dart';
 import '../calculator.dart';
 import '../calculator_page.dart';
@@ -14,14 +16,19 @@ part 'calculator_state.dart';
 late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
+  final PurchasesCubit _purchasesCubit;
   final StorageService _storageService;
 
-  CalculatorCubit(this._storageService, {required CalculatorState initialState})
-      : super(initialState) {
+  CalculatorCubit(
+    this._purchasesCubit,
+    this._storageService, {
+    required CalculatorState initialState,
+  }) : super(initialState) {
     calcCubit = this;
   }
 
   static Future<CalculatorCubit> initialize(
+    PurchasesCubit purchasesCubit,
     StorageService storageService,
   ) async {
     final bool? showSidePanel = await storageService.getValue('showSidePanel');
@@ -35,6 +42,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     return CalculatorCubit(
+      purchasesCubit,
       storageService,
       initialState: CalculatorState(
         editingSheetName: false,
@@ -123,6 +131,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   Future<void> addSheet() async {
+    if (state.sheets.length >= 5 && !_purchasesCubit.state.proPurchased) {
+      appCubit.promptForProUpgrade();
+      return;
+    }
+
     final sheets = List<Sheet>.from(state.sheets);
     final newSheet = Sheet();
     sheets.insert(0, newSheet);

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/helpers/helpers.dart';
+import '../../../purchases/cubit/purchases_cubit.dart';
+import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import '../../models/models.dart';
 
@@ -77,44 +79,58 @@ class _SheetTilesState extends State<SheetTiles> {
             return null;
           }
 
-          return ListView(
+          return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            children: state.sheets
-                .map((Sheet sheet) => MouseRegion(
-                      onEnter: (_) => setState(() => hoveredSheet = sheet),
-                      onExit: (_) => setState(() => hoveredSheet = null),
-                      child: GestureDetector(
-                        onTap: () {
-                          calcCubit.selectSheet(sheet);
+            itemCount: state.sheets.length,
+            itemBuilder: (BuildContext context, int index) {
+              final Sheet sheet = state.sheets[index];
 
-                          if (isHandset(context)) Navigator.pop(context);
-                        },
-                        onSecondaryTapUp: (TapUpDetails details) {
-                          showContextMenu(
-                            context: context,
-                            offset: details.globalPosition,
-                            items: contextMenuItems(sheet),
-                          );
-                        },
-                        onLongPressEnd: (LongPressEndDetails details) {
-                          showContextMenu(
-                            context: context,
-                            offset: details.globalPosition,
-                            items: contextMenuItems(sheet),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: _getContainerColor(sheet),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListTile(
-                            title: Center(child: Text(sheet.name)),
-                          ),
-                        ),
+              final bool proDisabled =
+                  (!context.watch<PurchasesCubit>().state.proPurchased) &&
+                      (index > 4);
+
+              return Opacity(
+                opacity: (proDisabled) ? 0.4 : 1.0,
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => hoveredSheet = sheet),
+                  onExit: (_) => setState(() => hoveredSheet = null),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (proDisabled) {
+                        Navigator.pushNamed(context, PurchasesPage.id);
+                      } else {
+                        calcCubit.selectSheet(sheet);
+
+                        if (isHandset(context)) Navigator.pop(context);
+                      }
+                    },
+                    onSecondaryTapUp: (TapUpDetails details) {
+                      showContextMenu(
+                        context: context,
+                        offset: details.globalPosition,
+                        items: contextMenuItems(sheet),
+                      );
+                    },
+                    onLongPressEnd: (LongPressEndDetails details) {
+                      showContextMenu(
+                        context: context,
+                        offset: details.globalPosition,
+                        items: contextMenuItems(sheet),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _getContainerColor(sheet),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ))
-                .toList(),
+                      child: ListTile(
+                        title: Center(child: Text(sheet.name)),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),

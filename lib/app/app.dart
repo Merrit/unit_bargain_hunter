@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../calculator/calculator_page.dart';
+import '../purchases/pages/purchase_successful_page.dart';
+import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
 import '../shortcuts/app_shortcuts.dart';
 import '../theme/app_theme.dart';
@@ -43,6 +45,12 @@ class App extends StatelessWidget {
           title: 'Unit Bargain Hunter',
           debugShowCheckedModeBanner: false,
           theme: AppTheme(brightness: brightness()).themeData,
+          routes: {
+            CalculatorPage.id: (context) => CalculatorPage(),
+            PurchasesPage.id: (context) => const PurchasesPage(),
+            PurchaseSuccessfulPage.id: (context) =>
+                const PurchaseSuccessfulPage(),
+          },
           home: AppShortcuts(child: CalculatorPage()),
         );
       },
