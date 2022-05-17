@@ -28,128 +28,86 @@ class ItemCard extends StatelessWidget {
       overrides: [
         _currentItem.overrideWithValue(item),
       ],
-      // Stack is used so the close button doesn't push down the contents.
-      child: Stack(
-        alignment: AlignmentDirectional.topEnd,
-        children: const [
-          _ItemContents(),
-          _CloseButton(),
-        ],
+      child: Consumer(
+        builder: (context, ref, child) {
+          final item = ref.watch(_currentItem);
+
+          final isCheapest = context
+              .watch<CalculatorCubit>()
+              .state
+              .result
+              .map((e) => e.uuid)
+              .toList()
+              .contains(item.uuid);
+
+          final BoxDecoration itemBorder;
+          if (isCheapest) {
+            itemBorder = const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.lightBlueAccent,
+                  blurRadius: 15.0,
+                  spreadRadius: 5.0,
+                ),
+              ],
+            );
+          } else {
+            itemBorder = const BoxDecoration();
+          }
+
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: (isCheapest) ? 20 : 0),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 190,
+              decoration: itemBorder,
+              // Stack is used so the close button doesn't push down the contents.
+              child: Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: const [
+                  _ItemContents(),
+                  _CloseButton(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-// class _ItemContents extends StatefulWidget {
-class _ItemContents extends ConsumerStatefulWidget {
+class _ItemContents extends StatelessWidget {
   const _ItemContents({
     Key? key,
   }) : super(key: key);
 
   @override
-  __ItemContentsState createState() => __ItemContentsState();
-}
-
-// Contents uses a StatefulWidget in order to get the
-// Ticker & setState for the animations.
-// class __ItemContentsState extends State<_ItemContents>
-class __ItemContentsState extends ConsumerState<_ItemContents>
-    with TickerProviderStateMixin {
-  // Start with no opacity.
-  double _opacity = 0;
-
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 800),
-    vsync: this,
-  )..forward();
-
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.easeInOutCirc,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    // Opacity fades in when widget is created.
-    setState(() => _opacity = 1);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final item = ref.watch(_currentItem);
-
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 800),
-      opacity: _opacity,
-      child: ScaleTransition(
-        scale: _animation,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            // Prevent the card from taking all available width.
-            maxWidth: 190,
-          ),
-          child: Card(
-            elevation: 2,
-            // Stack is used to layer the 'winner' color underneath
-            // the actual widgets that make up the card.
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: BlocBuilder<CalculatorCubit, CalculatorState>(
-                    builder: (context, state) {
-                      final isCheapest = state.result
-                          .map((e) => e.uuid)
-                          .toList()
-                          .contains(item.uuid);
-
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeIn,
-                        decoration: BoxDecoration(
-                          gradient: (isCheapest)
-                              ? const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Colors.greenAccent,
-                                    Colors.lightBlue,
-                                  ],
-                                )
-                              : null,
-                          borderRadius: BorderRadii.gentlyRounded,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12,
-                    right: 14,
-                    bottom: 14,
-                  ),
-                  // FocusTraversalGroup ensures that using `Tab` to
-                  // navigate with a keyboard moves in the correct direction.
-                  child: FocusTraversalGroup(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const ItemNameWidget(),
-                        Spacers.verticalXtraSmall,
-                        _NumericInputWidget('Price'),
-                        Spacers.verticalXtraSmall,
-                        _NumericInputWidget('Quantity'),
-                        Spacers.verticalXtraSmall,
-                        _UnitChooser(),
-                        Spacers.verticalSmall,
-                        _PerUnitCalculation(),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 12,
+          right: 14,
+          bottom: 14,
+        ),
+        // FocusTraversalGroup ensures that using `Tab` to
+        // navigate with a keyboard moves in the correct direction.
+        child: FocusTraversalGroup(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ItemNameWidget(),
+              Spacers.verticalXtraSmall,
+              _NumericInputWidget('Price'),
+              Spacers.verticalXtraSmall,
+              _NumericInputWidget('Quantity'),
+              Spacers.verticalXtraSmall,
+              _UnitChooser(),
+              Spacers.verticalSmall,
+              _PerUnitCalculation(),
+            ],
           ),
         ),
       ),
