@@ -156,6 +156,7 @@ class ScrollingItemsList extends StatelessWidget {
             child: SingleChildScrollView(
               controller: scrollController,
               child: Wrap(
+                runSpacing: 20.0,
                 alignment: WrapAlignment.center,
                 children: [
                   const SizedBox(width: double.infinity),
