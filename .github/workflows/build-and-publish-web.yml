@@ -24,8 +24,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
-        with:
-          channel: beta
+        # with:
+        #   channel: beta
 
       - name: Get packages
         run: flutter pub get
@@ -43,4 +43,4 @@ jobs:
         # For example if the url was example.com/myapp then the
         # baseHref should be: /myapp/
         # with:
-          # baseHref: /myapp/
+        #   baseHref: /myapp/
