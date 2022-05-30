@@ -22,10 +22,6 @@ chmod +x /app/$projectName/$executableName
 mkdir -p /app/bin
 ln -s /app/$projectName/$executableName /app/bin/$executableName
 
-# Install the AppStream metadata info.
-mkdir -p /app/share/metainfo
-cp -r $projectId.metainfo.xml /app/share/metainfo/
-
 # Install the icon.
 iconDir=/app/share/icons/hicolor/scalable/apps
 mkdir -p $iconDir
@@ -37,6 +33,6 @@ mkdir -p $desktopFileDir
 cp -r $projectId.desktop $desktopFileDir/
 
 # Install the AppStream metadata file.
-metadataDir=/app/share/appdata
+metadataDir=/app/share/metainfo
 mkdir -p $metadataDir
 cp -r $projectId.metainfo.xml $metadataDir/
