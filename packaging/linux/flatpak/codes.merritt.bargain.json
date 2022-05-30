@@ -25,7 +25,6 @@
                 "cp -r packaging/linux/flatpak/codes.merritt.bargain.metainfo.xml .",
                 "cp -r packaging/linux/codes.merritt.bargain.desktop .",
                 "cp -r assets/icon/icon.svg .",
-                "cp -r packaging/linux/flatpak/build-flatpak.sh .",
                 "./build-flatpak.sh"
             ],
             "sources": [

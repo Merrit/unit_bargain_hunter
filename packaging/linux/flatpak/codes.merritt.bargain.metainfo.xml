@@ -18,7 +18,18 @@
         <control>touch</control>
     </supports>
     <description>
-        <p>A quick and simple way to verify which is the best value when comparing what to shop for.</p>
+        <p>Save money: Unit Bargain Hunter helps you figure out and keep track of the best value for products.</p>
+        <p>Is that family-sized pack really a better value?</p>
+        <p>If a brand-name item is $14.99 for 500g and the no-name item beside it is $13.99 for 20 oz, which is the better deal?</p>
+        <p>Unit Bargain Hunter makes it easy to compare any number of items to find
+            exactly how they stack up against each other.</p>
+        <ul>
+            <li>Compare unlimited items</li>
+            <li>Compare by weight, volume, or number of items</li>
+            <li>Saves your information between sessions</li>
+            <li>Available cross-platform: Linux, Windows, Web, Android</li>
+            <li>Open source</li>
+        </ul>
     </description>
     <launchable type="desktop-id">codes.merritt.bargain.desktop</launchable>
     <screenshots>
