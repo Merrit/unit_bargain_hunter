@@ -46,8 +46,7 @@ class ItemCard extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.lightBlueAccent,
-                  blurRadius: 15.0,
-                  spreadRadius: 5.0,
+                  blurRadius: 6.0,
                 ),
               ],
             );
@@ -55,20 +54,17 @@ class ItemCard extends StatelessWidget {
             itemBorder = const BoxDecoration();
           }
 
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: (isCheapest) ? 20 : 0),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 190,
-              decoration: itemBorder,
-              // Stack is used so the close button doesn't push down the contents.
-              child: Stack(
-                alignment: AlignmentDirectional.topEnd,
-                children: const [
-                  _ItemContents(),
-                  _CloseButton(),
-                ],
-              ),
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 190,
+            decoration: itemBorder,
+            // Stack is used so the close button doesn't push down the contents.
+            child: Stack(
+              alignment: AlignmentDirectional.topEnd,
+              children: const [
+                _ItemContents(),
+                _CloseButton(),
+              ],
             ),
           );
         },
