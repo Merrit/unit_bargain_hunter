@@ -86,10 +86,6 @@ class Sheet extends Equatable {
     return copyWith(compareBy: unit, items: updatedItems);
   }
 
-  Sheet reset() {
-    return copyWith(compareBy: const Weight(), items: _defaultItems());
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,

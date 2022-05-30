@@ -21,8 +21,6 @@ class CompareByDropdownButton extends StatelessWidget {
         ),
         child: BlocBuilder<CalculatorCubit, CalculatorState>(
           builder: (context, state) {
-            if (state.editingSheetName) return const SizedBox();
-
             return DropdownButton<Unit>(
               value: state.activeSheet.compareBy,
               items: UnitType.all

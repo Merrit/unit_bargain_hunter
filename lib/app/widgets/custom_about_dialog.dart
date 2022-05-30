@@ -79,7 +79,7 @@ If you find it useful, please consider buying me a coffee. ☕
               data: '''
 Every contribution is greatly appreciated, and allows me to continue creating. 💙
 
-This app is free and open source software.
+This app is open source software. The source is available on GitHub.
 
 Available for: Linux, Windows, Android & Web.''',
             ),

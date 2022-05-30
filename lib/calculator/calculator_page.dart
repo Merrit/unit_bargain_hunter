@@ -61,6 +61,10 @@ class CalculatorPage extends StatelessWidget {
                   CalculatorView(),
                 ],
               ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () => calcCubit.addItem(),
+                child: const Icon(Icons.add),
+              ),
             ),
           ),
         ),
@@ -88,12 +92,7 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CalculatorCubit, CalculatorState>(
-      listener: (context, state) {
-        // When user initiates compare we remove focus from any
-        // input fields to have a clean look for the compared items.
-        if (state.resultExists) focusNode.requestFocus();
-      },
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,20 +105,7 @@ class CalculatorView extends StatelessWidget {
                 onTap: () => focusNode.requestFocus(),
                 child: Focus(
                   focusNode: focusNode,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ExcludeFocusTraversal(
-                        child: Stack(
-                          children: const [
-                            SheetNameWidget(),
-                            CompareByDropdownButton(),
-                          ],
-                        ),
-                      ),
-                      ScrollingItemsList(),
-                    ],
-                  ),
+                  child: ScrollingItemsList(),
                 ),
               ),
             ),
