@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_markdown: ^0.6.10
-  flutter_riverpod: ^2.0.0-dev.5
+  flutter_riverpod: ^2.0.0-dev.9
   font_awesome_flutter: ^9.1.0
   hive: ^2.1.0
   hive_flutter: ^1.1.0
@@ -31,6 +31,7 @@ dependencies:
       ref: e48abe7c3e9ebfe0b81622167c5201d4e783bb81
 
 dev_dependencies:
+  bloc_test: ^9.0.3
   flutter_app_builder:
     git:
       url: https://github.com/Merrit/flutter_app_builder.git
