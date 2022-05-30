@@ -16,74 +16,64 @@ class SheetNameWidget extends StatefulWidget {
 
 class _SheetNameWidgetState extends State<SheetNameWidget> {
   final TextEditingController controller = TextEditingController();
-  final FocusNode focusNode = FocusNode(debugLabel: 'SheetNameWidget node');
-  final FocusNode textFieldFocusNode = FocusNode(
-    debugLabel: 'SheetNameWidget TextField node',
+  final FocusNode focusNode = FocusNode(
+    debugLabel: 'SheetNameWidget FocusNode',
   );
 
   @override
   void dispose() {
     controller.dispose();
     focusNode.dispose();
-    textFieldFocusNode.dispose();
     super.dispose();
   }
 
+  bool _showTextField = false;
+
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      focusNode: focusNode,
-      onFocusChange: (focused) {
-        calcCubit.updateEditingSheetName(focused);
+    focusNode.addListener(() {
+      // When focus is lost, switch back to showing the Text widget.
+      if (!focusNode.hasFocus) setState(() => _showTextField = false);
+    });
 
-        if (!focused) FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Center(
-        child: Container(
-          width: 250,
-          padding: const EdgeInsets.only(top: 10),
-          child: BlocBuilder<CalculatorCubit, CalculatorState>(
-            builder: (context, state) {
-              controller.text = state.activeSheet.name;
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        controller.text = state.activeSheet.name;
 
-              void _updateSheet() {
-                calcCubit.updateActiveSheet(
-                  state.activeSheet.copyWith(name: controller.text),
-                );
-                focusNode.unfocus();
-              }
+        void _updateSheet() {
+          calcCubit.updateActiveSheet(
+            state.activeSheet.copyWith(name: controller.text),
+          );
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
 
-              Widget child;
-              if (focusNode.hasFocus) {
-                child = TextField(
-                  focusNode: textFieldFocusNode,
-                  controller: controller..selectAll(),
-                  autofocus: true,
-                  textAlign: TextAlign.center,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  onSubmitted: (_) => _updateSheet(),
-                );
-              } else {
-                child = Center(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(state.activeSheet.name),
-                ));
-              }
+        Widget child;
+        if (_showTextField) {
+          child = TextField(
+            focusNode: focusNode,
+            controller: controller..selectAll(),
+            autofocus: true,
+            textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.words,
+            onSubmitted: (_) => _updateSheet(),
+          );
+        } else {
+          child = Text(state.activeSheet.name);
+        }
 
-              return InkWell(
-                onTap: () {
-                  focusNode.requestFocus();
-                  textFieldFocusNode.requestFocus();
-                },
-                child: child,
-              );
-            },
+        return InkWell(
+          onTap: () {
+            focusNode.requestFocus();
+            setState(() => _showTextField = true);
+          },
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: child,
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
