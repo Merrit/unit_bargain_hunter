@@ -45,7 +45,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       purchasesCubit,
       storageService,
       initialState: CalculatorState(
-        editingSheetName: false,
         showSidePanel: showSidePanel ?? true,
         alwaysShowScrollbar: false,
         sheets: sheets,
@@ -54,10 +53,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         result: const <Item>[],
       ),
     );
-  }
-
-  void updateEditingSheetName(bool value) {
-    emit(state.copyWith(editingSheetName: value));
   }
 
   /// Compare all items to find the best value.
@@ -103,13 +98,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     );
     resetResult();
     final updatedSheet = state.activeSheet.updateItem(updatedItem);
-    updateActiveSheet(updatedSheet);
-  }
-
-  /// Reset the sheet's items to default.
-  void reset() {
-    resetResult();
-    final updatedSheet = state.activeSheet.reset();
     updateActiveSheet(updatedSheet);
   }
 
