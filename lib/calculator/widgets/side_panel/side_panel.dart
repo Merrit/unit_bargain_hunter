@@ -161,23 +161,20 @@ class ThemeSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      child: Switch(
-        value: Theme.of(context).brightness == Brightness.dark,
-        activeColor: Colors.grey[700],
-        activeThumbImage: const AssetImage(
-          'assets/images/theme_switch/moon.png',
-        ),
-        inactiveThumbColor: Colors.yellow,
-        inactiveThumbImage: const AssetImage(
-          'assets/images/theme_switch/sun.png',
-        ),
-        onChanged: (isDarkMode) {
-          final themeMode = (isDarkMode) ? ThemeMode.dark : ThemeMode.light;
-          settingsCubit.updateThemeMode(themeMode);
-        },
+    return Switch(
+      value: Theme.of(context).brightness == Brightness.dark,
+      activeColor: Colors.grey[700],
+      activeThumbImage: const AssetImage(
+        'assets/images/theme_switch/moon.png',
       ),
+      inactiveThumbColor: Colors.yellow,
+      inactiveThumbImage: const AssetImage(
+        'assets/images/theme_switch/sun.png',
+      ),
+      onChanged: (isDarkMode) {
+        final themeMode = (isDarkMode) ? ThemeMode.dark : ThemeMode.light;
+        settingsCubit.updateThemeMode(themeMode);
+      },
     );
   }
 }
