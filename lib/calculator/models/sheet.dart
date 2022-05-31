@@ -91,7 +91,7 @@ class Sheet extends Equatable {
       'uuid': uuid,
       'items': items.map((x) => x.toMap()).toList(),
       'name': name,
-      'compareBy': compareBy.toMap(),
+      'compareBy': compareBy.toString(),
     };
   }
 
@@ -100,7 +100,7 @@ class Sheet extends Equatable {
       uuid: map['uuid'],
       items: List<Item>.from(map['items']?.map((x) => Item.fromMap(x))),
       name: map['name'] ?? '',
-      compareBy: Unit.fromMap(map['compareBy']).unitType,
+      compareBy: Unit.fromString(map['compareBy']).unitType,
     );
   }
 

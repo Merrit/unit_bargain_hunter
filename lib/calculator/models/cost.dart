@@ -23,14 +23,14 @@ class Cost extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      'unit': unit.toMap(),
+      'unit': unit.toString(),
       'value': value,
     };
   }
 
   factory Cost.fromMap(Map<String, dynamic> map) {
     return Cost(
-      unit: Unit.fromMap(map['unit']),
+      unit: Unit.fromString(map['unit']),
       value: map['value']?.toDouble() ?? 0.0,
     );
   }

@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 
 // All of the unit types the app supports comparisons of.
+
+final _log = Logger('Unit');
 
 abstract class Unit extends Equatable {
   const Unit();
@@ -29,15 +32,14 @@ abstract class Unit extends Equatable {
   @override
   List<Object> get props => [];
 
-  Map<String, dynamic> toMap() {
-    return {
-      'baseUnit': baseUnit.toString(),
-      'unitType': unitType.toString(),
-    };
-  }
+  /// Accepts a String version, obtained via eg `Kilogram.toString()`.
+  ///
+  /// Accepts `Object` in order to accomodate the old Map values that were used.
+  factory Unit.fromString(Object source) {
+    // Handle old map values.
+    if (source.runtimeType != String) source = 'gram';
 
-  factory Unit.fromMap(Map<String, dynamic> map) {
-    switch (map['baseUnit'] as String) {
+    switch (source as String) {
       case 'milligram':
         return Milligram();
       case 'gram':
@@ -59,7 +61,8 @@ abstract class Unit extends Equatable {
       case 'item':
         return const ItemUnit();
       default:
-        throw Exception('Unable to parse Unit from map.');
+        _log.warning('Unable to parse Unit from map.');
+        return Gram();
     }
   }
 }
