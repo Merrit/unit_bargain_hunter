@@ -46,7 +46,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       storageService,
       initialState: CalculatorState(
         showSidePanel: showSidePanel ?? true,
-        alwaysShowScrollbar: false,
         sheets: sheets,
         activeSheetId: sheets.first.uuid,
         activeSheet: sheets.first,
@@ -105,10 +104,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void resetResult() {
     if (state.result.isEmpty) return;
     emit(state.copyWith(result: []));
-  }
-
-  void updateShowScrollbar(bool showScrollbar) {
-    emit(state.copyWith(alwaysShowScrollbar: showScrollbar));
   }
 
   /// Toggle show/hide for the side panel that holds

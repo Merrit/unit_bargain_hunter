@@ -105,7 +105,7 @@ class CalculatorView extends StatelessWidget {
                 onTap: () => focusNode.requestFocus(),
                 child: Focus(
                   focusNode: focusNode,
-                  child: ScrollingItemsList(),
+                  child: const ScrollingItemsList(),
                 ),
               ),
             ),
@@ -117,40 +117,24 @@ class CalculatorView extends StatelessWidget {
 }
 
 class ScrollingItemsList extends StatelessWidget {
-  final scrollController = ScrollController();
-
-  ScrollingItemsList({Key? key}) : super(key: key);
+  const ScrollingItemsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Scrollbar is always shown when moved from the top,
-    // but hides when at the top or the screen doesn't need to scroll.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.addListener(() {
-        final offset = scrollController.offset;
-        final showScrollbar = (offset > 0) ? true : false;
-        calcCubit.updateShowScrollbar(showScrollbar);
-      });
-    });
-
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        return Scrollbar(
-          controller: scrollController,
-          thumbVisibility: state.alwaysShowScrollbar,
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Wrap(
-              runSpacing: 20.0,
-              alignment: WrapAlignment.center,
-              children: [
-                const SizedBox(width: double.infinity),
-                for (var item in state.activeSheet.items)
-                  ItemCard(
-                    item: item,
-                  ),
-              ],
-            ),
+        return SingleChildScrollView(
+          controller: ScrollController(),
+          child: Wrap(
+            runSpacing: 20.0,
+            alignment: WrapAlignment.center,
+            children: [
+              const SizedBox(width: double.infinity),
+              for (var item in state.activeSheet.items)
+                ItemCard(
+                  item: item,
+                ),
+            ],
           ),
         );
       },

@@ -22,7 +22,6 @@ final _defaultSheet = Sheet();
 
 final _defaultState = CalculatorState(
   showSidePanel: true,
-  alwaysShowScrollbar: false,
   sheets: [_defaultSheet],
   activeSheetId: 'activeSheetId',
   activeSheet: _defaultSheet,
