@@ -5,8 +5,6 @@ class CalculatorState extends Equatable {
   /// displays that holds the drawer contents.
   final bool showSidePanel;
 
-  final bool alwaysShowScrollbar;
-
   /// A list of sheets.
   ///
   /// Each [Sheet] contains a list of related [Item] objects for calculation.
@@ -26,7 +24,6 @@ class CalculatorState extends Equatable {
 
   const CalculatorState({
     required this.showSidePanel,
-    required this.alwaysShowScrollbar,
     required this.sheets,
     required this.activeSheetId,
     required this.activeSheet,
@@ -35,7 +32,6 @@ class CalculatorState extends Equatable {
 
   CalculatorState copyWith({
     bool? showSidePanel,
-    bool? alwaysShowScrollbar,
     List<Sheet>? sheets,
     String? activeSheetId,
     Sheet? activeSheet,
@@ -43,7 +39,6 @@ class CalculatorState extends Equatable {
   }) {
     return CalculatorState(
       showSidePanel: showSidePanel ?? this.showSidePanel,
-      alwaysShowScrollbar: alwaysShowScrollbar ?? this.alwaysShowScrollbar,
       sheets: sheets ?? this.sheets,
       activeSheetId: activeSheetId ?? this.activeSheetId,
       activeSheet: activeSheet ?? this.activeSheet,
@@ -55,7 +50,6 @@ class CalculatorState extends Equatable {
   List<Object> get props {
     return [
       showSidePanel,
-      alwaysShowScrollbar,
       sheets,
       activeSheetId,
       activeSheet,
