@@ -133,29 +133,27 @@ class ScrollingItemsList extends StatelessWidget {
       });
     });
 
-    return Expanded(
-      child: BlocBuilder<CalculatorCubit, CalculatorState>(
-        builder: (context, state) {
-          return Scrollbar(
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        return Scrollbar(
+          controller: scrollController,
+          thumbVisibility: state.alwaysShowScrollbar,
+          child: SingleChildScrollView(
             controller: scrollController,
-            thumbVisibility: state.alwaysShowScrollbar,
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Wrap(
-                runSpacing: 20.0,
-                alignment: WrapAlignment.center,
-                children: [
-                  const SizedBox(width: double.infinity),
-                  for (var item in state.activeSheet.items)
-                    ItemCard(
-                      item: item,
-                    ),
-                ],
-              ),
+            child: Wrap(
+              runSpacing: 20.0,
+              alignment: WrapAlignment.center,
+              children: [
+                const SizedBox(width: double.infinity),
+                for (var item in state.activeSheet.items)
+                  ItemCard(
+                    item: item,
+                  ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
