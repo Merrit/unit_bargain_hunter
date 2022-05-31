@@ -58,6 +58,10 @@ abstract class Unit extends Equatable {
         return FluidOunce();
       case 'quart':
         return Quart();
+      case 'weight':
+        return const Weight();
+      case 'volume':
+        return const Volume();
       case 'item':
         return const ItemUnit();
       default:
