@@ -82,7 +82,7 @@ class Item extends Equatable {
       'uuid': uuid,
       'price': price,
       'quantity': quantity,
-      'unit': unit.toMap(),
+      'unit': unit.toString(),
       'name': name,
     };
   }
@@ -92,7 +92,7 @@ class Item extends Equatable {
       uuid: map['uuid'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       quantity: map['quantity']?.toDouble() ?? 0.0,
-      unit: Unit.fromMap(map['unit']),
+      unit: Unit.fromString(map['unit']),
       name: map['name'] ?? '',
     );
   }
