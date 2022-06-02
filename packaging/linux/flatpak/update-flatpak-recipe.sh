@@ -8,4 +8,4 @@ githubUsername=merrit
 dart run update_flatpak_recipe/bin/update.dart $projectId $repository $githubUsername
 
 # Verify AppStream metadata file.
-appstream-util validate $projectId.metainfo.xml
+flatpak run org.freedesktop.appstream-glib validate $projectId.metainfo.xml
