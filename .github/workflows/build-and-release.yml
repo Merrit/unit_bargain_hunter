@@ -11,7 +11,7 @@ on:
 
 env:
   app-display-name: "Unit Bargain Hunter"
-  author: "Kristen McWilliam"
+  author: "Merritt Codes"
   identifier: "codes.merritt.bargain"
   msix-icon-path: "assets\\icon\\icon.png"
 
