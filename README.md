@@ -1,7 +1,7 @@
 # Unit Bargain Hunter
 
 
-![Showcase](https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/screenshot-showcase-desktop-and-mobile.png)
+![Showcase](https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/promo/promo.png)
 
 
 Save money: Unit Bargain Hunter helps you figure out and keep track of the best value for products.
