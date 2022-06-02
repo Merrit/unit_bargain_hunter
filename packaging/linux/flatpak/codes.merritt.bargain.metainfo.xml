@@ -7,7 +7,7 @@
     <id>codes.merritt.bargain</id>
     <name>Unit Bargain Hunter</name>
     <summary>Easily compare items when shopping</summary>
-    <developer_name>Kristen McWilliam</developer_name>
+    <developer_name>Merritt Codes</developer_name>
     <url type="homepage">https://merritt.codes/bargain/</url>
     <url type="donation">https://merritt.codes/support/</url>
     <metadata_license>MIT</metadata_license>
@@ -34,7 +34,19 @@
     <launchable type="desktop-id">codes.merritt.bargain.desktop</launchable>
     <screenshots>
         <screenshot type="default">
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/8e4b9d3aed66fbf0744704e7a60b3846e49b78a5/assets/images/promo/promo.png</image>
+            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/promo/promo.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark1.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark2.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light1.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light2.png</image>
         </screenshot>
     </screenshots>
     <content_rating type="oars-1.1" />
