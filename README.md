@@ -1,6 +1,3 @@
-# Unit Bargain Hunter
-
-
 ![Showcase](https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/promo/promo.png)
 
 
