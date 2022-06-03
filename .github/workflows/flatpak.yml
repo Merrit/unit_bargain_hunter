@@ -44,8 +44,8 @@ jobs:
         run: bash flatpak/update-flatpak-recipe.sh
 
       - name: Verify Flatpak builds successfully
-        working-directory: ${{ github.workspace }}
-        run: flatpak-builder --force-clean build-dir ${{ github.workspace }}/packaging/linux/flatpak/${{ env.project-id }}.json
+        working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak
+        run: flatpak-builder --force-clean build-dir ${{ env.project-id }}.json
 
       - name: Checkout flathub repository
         uses: actions/checkout@v2
