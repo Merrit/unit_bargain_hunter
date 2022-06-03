@@ -41,7 +41,7 @@ jobs:
 
       - name: Update recipe files
         working-directory: ${{ github.workspace }}/code/packaging/linux
-        run: bash update-flatpak-recipe.sh
+        run: bash flatpak/update-flatpak-recipe.sh
 
       - name: Verify Flatpak builds successfully
         working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak
