@@ -22,13 +22,15 @@ class Source {
         path: data['path'] as String?,
       );
 
-  Map<String, dynamic> toMap() => {
-        'type': type,
-        'url': url,
-        'sha256': sha256,
-        'tag': tag,
-        'path': path,
-      };
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> map = {};
+    if (type != null) map['type'] = type;
+    if (url != null) map['url'] = url;
+    if (sha256 != null) map['sha256'] = sha256;
+    if (tag != null) map['tag'] = tag;
+    if (path != null) map['path'] = path;
+    return map;
+  }
 
   /// `dart:convert`
   ///

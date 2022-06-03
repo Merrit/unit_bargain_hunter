@@ -4,53 +4,52 @@
     https://www.freedesktop.org/software/appstream/metainfocreator/#/
 -->
 <component type="desktop-application">
-    <id>codes.merritt.bargain</id>
-    <name>Unit Bargain Hunter</name>
-    <summary>Easily compare items when shopping</summary>
-    <developer_name>Merritt Codes</developer_name>
-    <url type="homepage">https://merritt.codes/bargain/</url>
-    <url type="donation">https://merritt.codes/support/</url>
-    <metadata_license>MIT</metadata_license>
-    <project_license>GPL-3.0-or-later</project_license>
-    <supports>
-        <control>pointing</control>
-        <control>keyboard</control>
-        <control>touch</control>
-    </supports>
-    <description>
-        <p>Save money: Unit Bargain Hunter helps you figure out and keep track of the best value for products.</p>
-        <p>Is that family-sized pack really a better value?</p>
-        <p>If a brand-name item is $14.99 for 500g and the no-name item beside it is $13.99 for 20 oz, which is the better deal?</p>
-        <p>Unit Bargain Hunter makes it easy to compare any number of items to find
-            exactly how they stack up against each other.</p>
-        <ul>
-            <li>Compare unlimited items</li>
-            <li>Compare by weight, volume, or number of items</li>
-            <li>Saves your information between sessions</li>
-            <li>Available cross-platform: Linux, Windows, Web, Android</li>
-            <li>Open source</li>
-        </ul>
-    </description>
-    <launchable type="desktop-id">codes.merritt.bargain.desktop</launchable>
-    <screenshots>
-        <screenshot type="default">
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/promo/promo.png</image>
-        </screenshot>
-        <screenshot>
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark1.png</image>
-        </screenshot>
-        <screenshot>
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark2.png</image>
-        </screenshot>
-        <screenshot>
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light1.png</image>
-        </screenshot>
-        <screenshot>
-            <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light2.png</image>
-        </screenshot>
-    </screenshots>
-    <content_rating type="oars-1.1" />
-    <releases>
-        <release version="1.1.0" date="2022-04-17" />
-    </releases>
+  <id>codes.merritt.bargain</id>
+  <name>Unit Bargain Hunter</name>
+  <summary>Easily compare items when shopping</summary>
+  <developer_name>Merritt Codes</developer_name>
+  <url type="homepage">https://merritt.codes/bargain/</url>
+  <url type="donation">https://merritt.codes/support/</url>
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  <description>
+    <p>Save money: Unit Bargain Hunter helps you figure out and keep track of the best value for products.</p>
+    <p>Is that family-sized pack really a better value?</p>
+    <p>If a brand-name item is $14.99 for 500g and the no-name item beside it is $13.99 for 20 oz, which is the better deal?</p>
+    <p>Unit Bargain Hunter makes it easy to compare any number of items to find exactly how they stack up against each other.</p>
+    <ul>
+      <li>Compare unlimited items</li>
+      <li>Compare by weight, volume, or number of items</li>
+      <li>Saves your information between sessions</li>
+      <li>Available cross-platform: Linux, Windows, Web, Android</li>
+      <li>Open source</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">codes.merritt.bargain.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/promo/promo.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark1.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-dark2.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light1.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/Merrit/unit_bargain_hunter/main/assets/images/screenshots/linux-light2.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.4.1" date="2022-06-03"/>
+  </releases>
 </component>

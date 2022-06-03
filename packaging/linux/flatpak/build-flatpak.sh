@@ -4,8 +4,6 @@
 projectName=UnitBargainHunter
 projectId=codes.merritt.bargain
 executableName=unit_bargain_hunter
-repository=unit_bargain_hunter
-githubUsername=merrit
 
 # This script is triggered by the json manifest.
 # It can also be run manually: flatpak-builder build-dir $projectId.json
@@ -13,19 +11,12 @@ githubUsername=merrit
 # Exit if any command fails
 set -e
 
+# Echo all commands for debug purposes
+set -x
+
 # Grab Flatpak build files.
-cp -r packaging/linux/flatpak/build-flatpak.sh .
-cp -r packaging/linux/$projectId.metainfo.xml .
 cp -r packaging/linux/$projectId.desktop .
 cp -r assets/icon/icon.svg .
-
-# Setup Dart SDK.
-wget https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
-unzip dartsdk-linux-x64-release.zip
-
-# Update AppStream metainfo file.
-dart-sdk/bin/dart pub get packaging/linux/updater
-dart-sdk/bin/dart run packaging/linux/updater/bin/updater.dart $projectId $repository $githubUsername appstream_only
 
 # Extract portable Flutter build.
 mkdir -p $projectName

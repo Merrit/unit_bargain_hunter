@@ -8,9 +8,6 @@ Future<void> main(List<String> arguments) async {
   projectId = arguments[0];
   repository = arguments[1];
   user = arguments[2];
-  if (arguments.length > 3) {
-    target = arguments[3];
-  }
 
   final githubInfo = await GitHubInfo.fetch(
     projectId: projectId,
@@ -22,12 +19,8 @@ Future<void> main(List<String> arguments) async {
     throw Exception('Asset not found.');
   }
 
-  updateMetainfo(projectId, githubInfo);
-  if (target == 'appstream_only') {
-    exit(0);
-  }
-
   await updateManifest(projectId, githubInfo);
+  updateMetainfo(projectId, githubInfo);
 }
 
 /// Update the $projectId.json manifest file with the necessary info from
@@ -54,10 +47,6 @@ Future<void> updateManifest(String projectId, GitHubInfo githubInfo) async {
       type: 'git',
       url: githubInfo.repo.cloneUrl,
       tag: githubInfo.latestRelease.tagName,
-    ),
-    Source(
-      type: 'file',
-      path: '$projectId.metainfo.xml',
     ),
   ];
 

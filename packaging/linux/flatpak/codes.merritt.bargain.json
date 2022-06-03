@@ -1,40 +1,41 @@
 {
-    "app-id": "codes.merritt.bargain",
-    "runtime": "org.freedesktop.Platform",
-    "runtime-version": "21.08",
-    "sdk": "org.freedesktop.Sdk",
-    "command": "unit_bargain_hunter",
-    "separate-locales": false,
-    "finish-args": [
-        "--share=ipc",
-        "--socket=fallback-x11",
-        "--socket=wayland",
-        "--device=dri",
-        "--socket=pulseaudio",
-        "--share=network"
-    ],
-    "modules": [
+  "app-id": "codes.merritt.bargain",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "21.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "unit_bargain_hunter",
+  "separate-locales": false,
+  "finish-args": [
+    "--share=ipc",
+    "--socket=fallback-x11",
+    "--socket=wayland",
+    "--device=dri",
+    "--socket=pulseaudio",
+    "--share=network"
+  ],
+  "modules": [
+    {
+      "name": "unit_bargain_hunter",
+      "buildsystem": "simple",
+      "only-arches": [
+        "x86_64"
+      ],
+      "build-commands": [
+        "cp -r packaging/linux/flatpak/build-flatpak.sh .",
+        "./build-flatpak.sh"
+      ],
+      "sources": [
         {
-            "name": "unit_bargain_hunter",
-            "buildsystem": "simple",
-            "only-arches": [
-                "x86_64"
-            ],
-            "build-commands": [
-                "./build-flatpak.sh"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "url": "https://github.com/Merrit/unit_bargain_hunter/releases/download/v1.1.1/UnitBargainHunter-Linux-Portable.tar.gz",
-                    "sha256": "17c01d07fa3b1b86a13db6608cf26bf00233c03be6ef9503dc8943da12cee7fd"
-                },
-                {
-                    "type": "git",
-                    "url": "https://github.com/Merrit/unit_bargain_hunter.git",
-                    "tag": "v1.1.1"
-                }
-            ]
+          "type": "file",
+          "url": "https://github.com/Merrit/unit_bargain_hunter/releases/download/v1.4.1/UnitBargainHunter-Linux-Portable.tar.gz",
+          "sha256": "399fc36c7cf06861e2d7112fac46a041c75cb278d86e77dfa0c66018514c2e06"
+        },
+        {
+          "type": "git",
+          "url": "https://github.com/Merrit/unit_bargain_hunter.git",
+          "tag": "v1.4.1"
         }
-    ]
+      ]
+    }
+  ]
 }
