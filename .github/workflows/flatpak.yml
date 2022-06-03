@@ -46,7 +46,7 @@ jobs:
       - name: Verify Flatpak builds successfully
         working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak
         run: |
-          cp ../${{ env.project-id }}.json .
+          cp ../${{ env.project-id }}.metainfo.xml .
           flatpak-builder --force-clean build-dir ${{ env.project-id }}.json
 
       - name: Checkout flathub repository
