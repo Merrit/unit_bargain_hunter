@@ -33,9 +33,13 @@ Future<void> main(List<String> arguments) async {
 /// Update the $projectId.json manifest file with the necessary info from
 /// the latest release: tag / version and sha256 of the linux asset.
 Future<void> updateManifest(String projectId, GitHubInfo githubInfo) async {
-  final manifestFile = File(
-      '/home/merritt/Development/unit_bargain_hunter/packaging/linux/flatpak/codes.merritt.bargain.json');
-  // final manifestFile = File(projectId + '.json');
+  File manifestFile = File('$projectId.json');
+  bool exists = await manifestFile.exists();
+  if (!exists) {
+    // If run by the flathub builder, the files will all be in the same dir.
+    // Otherwise we check the dir above for the manifest.
+    manifestFile = File('flatpak/$projectId.json');
+  }
   String manifestJson = manifestFile.readAsStringSync();
 
   final manifest = Manifest.fromJson(manifestJson);
@@ -53,7 +57,7 @@ Future<void> updateManifest(String projectId, GitHubInfo githubInfo) async {
     ),
     Source(
       type: 'file',
-      path: projectId + '.metainfo.xml',
+      path: '$projectId.metainfo.xml',
     ),
   ];
 
@@ -64,9 +68,7 @@ Future<void> updateManifest(String projectId, GitHubInfo githubInfo) async {
 /// Update the $projectId.metainfo.xml file with the
 /// date and version of the new release.
 void updateMetainfo(String projectId, GitHubInfo githubInfo) {
-  final metainfoFile = File(
-      '/home/merritt/Development/unit_bargain_hunter/packaging/linux/flatpak/codes.merritt.bargain.metainfo.xml');
-  // final metainfoFile = File(projectId + '.metainfo.xml');
+  final metainfoFile = File('$projectId.metainfo.xml');
   final metainfo = XmlDocument.parse(metainfoFile.readAsStringSync());
 
   final publishDate = githubInfo.latestRelease.publishedAt;
