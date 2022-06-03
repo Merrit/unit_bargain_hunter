@@ -21,10 +21,6 @@
                 "x86_64"
             ],
             "build-commands": [
-                "cp -r packaging/linux/flatpak/build-flatpak.sh .",
-                "cp -r packaging/linux/flatpak/codes.merritt.bargain.metainfo.xml .",
-                "cp -r packaging/linux/codes.merritt.bargain.desktop .",
-                "cp -r assets/icon/icon.svg .",
                 "./build-flatpak.sh"
             ],
             "sources": [

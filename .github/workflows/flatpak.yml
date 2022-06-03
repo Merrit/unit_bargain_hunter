@@ -34,15 +34,13 @@ jobs:
 
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1.3
-        with:
-          sdk: beta
 
       - name: pub get
-        working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak/update_flatpak_recipe
+        working-directory: ${{ github.workspace }}/code/packaging/linux/updater
         run: dart pub get
 
       - name: Update recipe files
-        working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak
+        working-directory: ${{ github.workspace }}/code/packaging/linux
         run: bash update-flatpak-recipe.sh
 
       - name: Verify Flatpak builds successfully
