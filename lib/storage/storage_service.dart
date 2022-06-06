@@ -26,7 +26,7 @@ class StorageService {
     if (platformIsDesktop()) {
       final dir = await getApplicationSupportDirectory();
       // Defaults to ~/.local/share/feeling_finder/storage
-      Hive.init(dir.path + '/storage');
+      Hive.init('${dir.path}/storage');
     } else {
       // On mobile and web initialize to default location.
       await Hive.initFlutter();
@@ -45,28 +45,28 @@ class StorageService {
     required dynamic value,
     String? storageArea,
   }) async {
-    final Box _box = await _getBox(storageArea);
-    await _box.put(key, value);
+    final Box box = await _getBox(storageArea);
+    await box.put(key, value);
   }
 
   /// Get a value from local disk storage.
   ///
   /// If the [key] doesn't exist, `null` is returned.
   Future<dynamic> getValue(String key, {String? storageArea}) async {
-    final Box _box = await _getBox(storageArea);
-    return _box.get(key);
+    final Box box = await _getBox(storageArea);
+    return box.get(key);
   }
 
   /// Get all values associated with a particlar storage.
   Future<Iterable<dynamic>> getStorageAreaValues(String storageArea) async {
-    final Box _box = await _getBox(storageArea);
-    return _box.values;
+    final Box box = await _getBox(storageArea);
+    return box.values;
   }
 
   /// Delete a key from storage.
   Future<void> deleteValue(String key, {String? storageArea}) async {
-    final Box _box = await _getBox(storageArea);
-    await _box.delete(key);
+    final Box box = await _getBox(storageArea);
+    await box.delete(key);
   }
 
   /// Get a Hive storage box, either the one associated with

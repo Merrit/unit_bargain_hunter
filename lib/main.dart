@@ -24,12 +24,12 @@ Future<void> main() async {
   final storageService = await StorageService.initialize();
   final settingsService = SettingsService(storageService);
 
-  final _purchasesCubit = await PurchasesCubit.initialize();
-  final _calculatorCubit = await CalculatorCubit.initialize(
-    _purchasesCubit,
+  final purchasescubit = await PurchasesCubit.initialize();
+  final calculatorcubit = await CalculatorCubit.initialize(
+    purchasescubit,
     storageService,
   );
-  final _settingsCubit = await SettingsCubit.initialize(settingsService);
+  final settingscubit = await SettingsCubit.initialize(settingsService);
 
   if (Platform.isDesktop) await Window.initialize();
 
@@ -37,9 +37,9 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AppCubit()),
-        BlocProvider.value(value: _calculatorCubit),
-        BlocProvider.value(value: _purchasesCubit),
-        BlocProvider.value(value: _settingsCubit),
+        BlocProvider.value(value: calculatorcubit),
+        BlocProvider.value(value: purchasescubit),
+        BlocProvider.value(value: settingscubit),
       ],
       child: const ProviderScope(
         child: App(),

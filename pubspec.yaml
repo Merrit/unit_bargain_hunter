@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
+  bloc: ^8.0.3
   equatable: ^2.0.3
   flutter:
     sdk: flutter
@@ -18,8 +19,10 @@ dependencies:
   hive_flutter: ^1.1.0
   http: ^0.13.3
   in_app_purchase: ^3.0.2
+  in_app_purchase_android: ^0.2.2+6
   intl: ^0.17.0
   logging: ^1.0.2
+  path_provider: ^2.0.10
   pub_semver: ^2.0.0
   store_checker: ^1.0.0
   url_launcher: ^6.0.20
@@ -29,6 +32,7 @@ dependencies:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: e48abe7c3e9ebfe0b81622167c5201d4e783bb81
+  yaml: ^3.1.1
 
 dev_dependencies:
   bloc_test: ^9.0.3
@@ -37,7 +41,7 @@ dev_dependencies:
       url: https://github.com/Merrit/flutter_app_builder.git
       ref: 312f340a607caf3f019ec883a7e684ac4bada0cf
   flutter_launcher_icons: ^0.9.0
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0

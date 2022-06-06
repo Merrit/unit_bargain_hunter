@@ -46,9 +46,9 @@ class _SidePanelState extends State<SidePanel> {
 
   @override
   Widget build(BuildContext context) {
-    final bool _isHandset = isHandset(context);
+    final bool runningOnHandset = isHandset(context);
 
-    final Widget _proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
+    final Widget proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
       builder: (context, state) {
         if (!state.installedFromPlayStore) return const SizedBox();
 
@@ -70,19 +70,20 @@ class _SidePanelState extends State<SidePanel> {
       },
     );
 
-    final Widget _panelBody = Column(
+    final Widget panelBody = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (!_isHandset) _closePanelButton,
-            if (_isHandset) const SizedBox(), // So add button is on the right.
+            if (!runningOnHandset) _closePanelButton,
+            if (runningOnHandset)
+              const SizedBox(), // So add button is on the right.
             _addSheetButton,
           ],
         ),
         const SheetTiles(),
-        _proButton,
+        proButton,
         const UpdateButton(),
         const Center(child: ThemeSwitch()),
         ListTile(
@@ -95,12 +96,12 @@ class _SidePanelState extends State<SidePanel> {
       ],
     );
 
-    if (_isHandset) return _panelBody;
+    if (runningOnHandset) return panelBody;
 
     return Container(
       color: Theme.of(context).cardColor,
       width: 180,
-      child: _panelBody,
+      child: panelBody,
     );
   }
 }
