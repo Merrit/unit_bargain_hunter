@@ -70,7 +70,7 @@ class PurchasesPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              proProduct.price + ' ' + proProduct.currencyCode,
+                              '${proProduct.price} ${proProduct.currencyCode}',
                             ),
                           ),
                         ),

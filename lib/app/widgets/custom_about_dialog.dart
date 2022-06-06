@@ -14,7 +14,7 @@ class CustomAboutDialog extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     final TextTheme textThemeData = themeData.textTheme;
 
-    final _markdownStyleSheet = MarkdownStyleSheet.fromTheme(
+    final markdownStyleSheet = MarkdownStyleSheet.fromTheme(
       themeData.copyWith(
         textTheme: textThemeData.copyWith(
           bodyText2: const TextStyle(
@@ -24,12 +24,12 @@ class CustomAboutDialog extends StatelessWidget {
       ),
     );
 
-    final _greyButtonStyle = ElevatedButton.styleFrom(
+    final greyButtonStyle = ElevatedButton.styleFrom(
       primary: Colors.grey[700],
     );
 
     final String appVersion =
-        'v' + context.read<AppCubit>().state.runningVersion;
+        'v${context.read<AppCubit>().state.runningVersion}';
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -41,7 +41,7 @@ class CustomAboutDialog extends StatelessWidget {
           ),
           children: [
             MarkdownBody(
-              styleSheet: _markdownStyleSheet,
+              styleSheet: markdownStyleSheet,
               data: '''
 Hello! 👋
 
@@ -71,7 +71,7 @@ If you find it useful, please consider buying me a coffee. ☕
               ],
             ),
             MarkdownBody(
-              styleSheet: _markdownStyleSheet,
+              styleSheet: markdownStyleSheet,
               onTapLink: (String text, String? href, String title) {
                 if (href == null) return;
                 appCubit.launchURL(href);
@@ -88,13 +88,13 @@ Available for: Linux, Windows, Android & Web.''',
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  style: _greyButtonStyle,
+                  style: greyButtonStyle,
                   onPressed: () => appCubit.launchURL(websiteUrl),
                   child: const Text('Website'),
                 ),
                 Spacers.horizontalSmall,
                 ElevatedButton(
-                  style: _greyButtonStyle,
+                  style: greyButtonStyle,
                   onPressed: () {
                     appCubit.launchURL(
                       'https://github.com/Merrit/unit_bargain_hunter',

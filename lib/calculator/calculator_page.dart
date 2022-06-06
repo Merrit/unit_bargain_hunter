@@ -20,10 +20,10 @@ class CalculatorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget? _drawer;
-    if (isHandset(context)) _drawer = const Drawer(child: SidePanel());
+    Widget? drawer;
+    if (isHandset(context)) drawer = const Drawer(child: SidePanel());
 
-    final Widget _sidePanelToggleButton =
+    final Widget sidePanelToggleButton =
         BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         if (isHandset(context)) return const SizedBox();
@@ -54,10 +54,10 @@ class CalculatorPage extends StatelessWidget {
             focusNode: focusNode,
             child: Scaffold(
               appBar: const CustomAppBar(),
-              drawer: _drawer,
+              drawer: drawer,
               body: Stack(
                 children: [
-                  _sidePanelToggleButton,
+                  sidePanelToggleButton,
                   CalculatorView(),
                 ],
               ),
