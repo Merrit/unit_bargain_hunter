@@ -21,12 +21,14 @@ class CalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? drawer;
-    if (isHandset(context)) drawer = const Drawer(child: SidePanel());
+    if (FormFactor.isHandset(context)) {
+      drawer = const Drawer(child: SidePanel());
+    }
 
     final Widget sidePanelToggleButton =
         BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        if (isHandset(context)) return const SizedBox();
+        if (FormFactor.isHandset(context)) return const SizedBox();
         if (state.showSidePanel) return const SizedBox();
 
         return Opacity(
@@ -83,7 +85,8 @@ class CalculatorView extends StatelessWidget {
 
   final Widget _sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
     builder: (context, state) {
-      final bool showSidePanel = !isHandset(context) && state.showSidePanel;
+      final bool showSidePanel =
+          !FormFactor.isHandset(context) && state.showSidePanel;
       return ExcludeFocusTraversal(
         child: (showSidePanel) ? const SidePanel() : const SizedBox(),
       );
