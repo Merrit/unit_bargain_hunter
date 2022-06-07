@@ -53,6 +53,12 @@ flutter:
     - assets/icon/icon.png
     - assets/images/theme_switch/
     - pubspec.yaml
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
+        - asset: assets/fonts/Montserrat-Italic-VariableFont_wght.ttf
+          style: italic
 
 flutter_icons:
   android: "launcher_icon"

@@ -24,6 +24,7 @@ class AppTheme {
     return ThemeData(
       brightness: brightness,
       cardTheme: cardTheme,
+      fontFamily: 'Montserrat',
       inputDecorationTheme: inputDecorationTheme,
     );
   }
