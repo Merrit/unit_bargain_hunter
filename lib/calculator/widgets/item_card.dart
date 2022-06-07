@@ -159,7 +159,7 @@ class _ItemNameWidgetState extends State<ItemNameWidget> {
             onFieldSubmitted: (_) => _updateItem(item),
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
-              suffixIcon: (isHandset(context))
+              suffixIcon: (FormFactor.isHandset(context))
                   ? null
                   : IconButton(
                       onPressed: () => _updateItem(item),

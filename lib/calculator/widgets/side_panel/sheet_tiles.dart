@@ -101,7 +101,9 @@ class _SheetTilesState extends State<SheetTiles> {
                       } else {
                         calcCubit.selectSheet(sheet);
 
-                        if (isHandset(context)) Navigator.pop(context);
+                        if (FormFactor.isHandset(context)) {
+                          Navigator.pop(context);
+                        }
                       }
                     },
                     onSecondaryTapUp: (TapUpDetails details) {
