@@ -143,77 +143,79 @@ class _ItemNameWidgetState extends State<ItemNameWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final item = ref.watch(_currentItem);
+    return LayoutBuilder(builder: (context, constraints) {
+      return Consumer(
+        builder: (context, ref, child) {
+          final item = ref.watch(_currentItem);
 
-        Widget child;
-        if (nameFocusNode.hasFocus) {
-          child = TextFormField(
-            focusNode: textFieldFocusNode,
-            controller: controller..selectAll(),
-            autofocus: true,
-            textAlign: TextAlign.center,
-            textAlignVertical: TextAlignVertical.center,
-            textCapitalization: TextCapitalization.words,
-            onFieldSubmitted: (_) => _updateItem(item),
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              suffixIcon: (FormFactor.isHandset(context))
-                  ? null
-                  : IconButton(
-                      onPressed: () => _updateItem(item),
-                      padding: const EdgeInsets.all(4),
-                      icon: const Icon(Icons.done, color: Colors.green),
-                    ),
-            ),
-          );
-        } else {
-          child = Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: '${item.name} '),
-                  const WidgetSpan(
-                    child: Icon(Icons.edit, size: 15, color: Colors.grey),
-                  ),
-                ],
+          Widget child;
+          if (nameFocusNode.hasFocus) {
+            child = TextFormField(
+              focusNode: textFieldFocusNode,
+              controller: controller..selectAll(),
+              autofocus: true,
+              textAlign: TextAlign.center,
+              textAlignVertical: TextAlignVertical.center,
+              textCapitalization: TextCapitalization.words,
+              onFieldSubmitted: (_) => _updateItem(item),
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                suffixIcon: (constraints.isMobile)
+                    ? null
+                    : IconButton(
+                        onPressed: () => _updateItem(item),
+                        padding: const EdgeInsets.all(4),
+                        icon: const Icon(Icons.done, color: Colors.green),
+                      ),
               ),
-            ),
-          );
-        }
-
-        return Focus(
-          focusNode: nameFocusNode,
-          onFocusChange: (focused) {
-            setState(() => nameHasFocus = focused);
-
-            if (focused) controller.text = item.name;
-
-            if (!focused) FocusManager.instance.primaryFocus?.unfocus();
-          },
-          skipTraversal: true,
-          descendantsAreTraversable: false,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Center(
-                  child: InkWell(
-                    onTap: () {
-                      nameFocusNode.requestFocus();
-                      textFieldFocusNode.requestFocus();
-                    },
-                    child: child,
-                  ),
+            );
+          } else {
+            child = Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: '${item.name} '),
+                    const WidgetSpan(
+                      child: Icon(Icons.edit, size: 15, color: Colors.grey),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
+            );
+          }
+
+          return Focus(
+            focusNode: nameFocusNode,
+            onFocusChange: (focused) {
+              setState(() => nameHasFocus = focused);
+
+              if (focused) controller.text = item.name;
+
+              if (!focused) FocusManager.instance.primaryFocus?.unfocus();
+            },
+            skipTraversal: true,
+            descendantsAreTraversable: false,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        nameFocusNode.requestFocus();
+                        textFieldFocusNode.requestFocus();
+                      },
+                      child: child,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
   }
 }
 
