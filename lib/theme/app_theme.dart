@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'styles.dart';
 
@@ -21,11 +22,14 @@ class AppTheme {
   );
 
   ThemeData get themeData {
-    return ThemeData(
+    final theme = ThemeData(
       brightness: brightness,
       cardTheme: cardTheme,
       fontFamily: 'Montserrat',
       inputDecorationTheme: inputDecorationTheme,
+    );
+    return theme.copyWith(
+      textTheme: GoogleFonts.montserratTextTheme(theme.textTheme),
     );
   }
 }
