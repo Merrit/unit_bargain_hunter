@@ -20,58 +20,60 @@ class CalculatorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget? drawer;
-    if (FormFactor.isHandset(context)) {
-      drawer = const Drawer(child: SidePanel());
-    }
+    return LayoutBuilder(builder: (context, constraints) {
+      Widget? drawer;
+      if (constraints.isMobile) {
+        drawer = const Drawer(child: SidePanel());
+      }
 
-    final Widget sidePanelToggleButton =
-        BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        if (FormFactor.isHandset(context)) return const SizedBox();
-        if (state.showSidePanel) return const SizedBox();
+      final Widget sidePanelToggleButton =
+          BlocBuilder<CalculatorCubit, CalculatorState>(
+        builder: (context, state) {
+          if (constraints.isMobile) return const SizedBox();
+          if (state.showSidePanel) return const SizedBox();
 
-        return Opacity(
-          opacity: 0.8,
-          child: IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => calcCubit.toggleShowSidePanel(),
-          ),
-        );
-      },
-    );
+          return Opacity(
+            opacity: 0.8,
+            child: IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () => calcCubit.toggleShowSidePanel(),
+            ),
+          );
+        },
+      );
 
-    return BlocListener<AppCubit, AppState>(
-      listener: (context, state) {
-        if (state.promptForProUpgrade) {
-          Navigator.pushNamed(context, PurchasesPage.id);
-        }
-      },
-      child: SafeArea(
-        // GestureDetector & FocusNode allow clicking outside input areas in
-        // order to deselect them as expected on web & desktop platforms.
-        child: GestureDetector(
-          onTap: () => focusNode.requestFocus(),
-          child: FocusableActionDetector(
-            focusNode: focusNode,
-            child: Scaffold(
-              appBar: const CustomAppBar(),
-              drawer: drawer,
-              body: Stack(
-                children: [
-                  sidePanelToggleButton,
-                  CalculatorView(),
-                ],
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () => calcCubit.addItem(),
-                child: const Icon(Icons.add),
+      return BlocListener<AppCubit, AppState>(
+        listener: (context, state) {
+          if (state.promptForProUpgrade) {
+            Navigator.pushNamed(context, PurchasesPage.id);
+          }
+        },
+        child: SafeArea(
+          // GestureDetector & FocusNode allow clicking outside input areas in
+          // order to deselect them as expected on web & desktop platforms.
+          child: GestureDetector(
+            onTap: () => focusNode.requestFocus(),
+            child: FocusableActionDetector(
+              focusNode: focusNode,
+              child: Scaffold(
+                appBar: const CustomAppBar(),
+                drawer: drawer,
+                body: Stack(
+                  children: [
+                    sidePanelToggleButton,
+                    CalculatorView(),
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () => calcCubit.addItem(),
+                  child: const Icon(Icons.add),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -83,39 +85,41 @@ class CalculatorView extends StatelessWidget {
 
   CalculatorView({Key? key}) : super(key: key);
 
-  final Widget _sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
-    builder: (context, state) {
-      final bool showSidePanel =
-          !FormFactor.isHandset(context) && state.showSidePanel;
-      return ExcludeFocusTraversal(
-        child: (showSidePanel) ? const SidePanel() : const SizedBox(),
-      );
-    },
-  );
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sidePanel,
-            Expanded(
-              // GestureDetector & FocusNode allow clicking outside input areas in
-              // order to deselect them as expected on web & desktop platforms.
-              child: GestureDetector(
-                onTap: () => focusNode.requestFocus(),
-                child: Focus(
-                  focusNode: focusNode,
-                  child: const ScrollingItemsList(),
+    return LayoutBuilder(builder: (context, constraints) {
+      final Widget sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
+        builder: (context, state) {
+          final bool showSidePanel =
+              !constraints.isMobile && state.showSidePanel;
+          return ExcludeFocusTraversal(
+            child: (showSidePanel) ? const SidePanel() : const SizedBox(),
+          );
+        },
+      );
+
+      return BlocBuilder<CalculatorCubit, CalculatorState>(
+        builder: (context, state) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              sidePanel,
+              Expanded(
+                // GestureDetector & FocusNode allow clicking outside input areas in
+                // order to deselect them as expected on web & desktop platforms.
+                child: GestureDetector(
+                  onTap: () => focusNode.requestFocus(),
+                  child: Focus(
+                    focusNode: focusNode,
+                    child: const ScrollingItemsList(),
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    });
   }
 }
 
