@@ -46,67 +46,61 @@ class _SidePanelState extends State<SidePanel> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final Widget proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
-          builder: (context, state) {
-            if (!state.installedFromPlayStore) return const SizedBox();
+    final bool isHandset = FormFactor.isHandset(context);
 
-            if (state.proPurchased) {
-              return const ListTile(
-                title: Opacity(
-                  opacity: 0.6,
-                  child: Center(child: Text('Pro purchased')),
-                ),
-              );
-            } else {
-              return Center(
-                child: TextButton(
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    PurchasesPage.id,
-                  ),
-                  child: const Text('PRO'),
-                ),
-              );
-            }
-          },
-        );
+    final Widget proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
+      builder: (context, state) {
+        if (!state.installedFromPlayStore) return const SizedBox();
 
-        final Widget panelBody = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (!constraints.isMobile) _closePanelButton,
-                if (constraints.isMobile)
-                  const SizedBox(), // So add button is on the right.
-                _addSheetButton,
-              ],
+        if (state.proPurchased) {
+          return const ListTile(
+            title: Opacity(
+              opacity: 0.6,
+              child: Center(child: Text('Pro purchased')),
             ),
-            const SheetTiles(),
-            proButton,
-            const UpdateButton(),
-            const Center(child: ThemeSwitch()),
-            ListTile(
-              title: const Center(child: Text('About')),
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => const CustomAboutDialog(),
-              ),
+          );
+        } else {
+          return Center(
+            child: TextButton(
+              onPressed: () => Navigator.pushNamed(context, PurchasesPage.id),
+              child: const Text('PRO'),
             ),
-          ],
-        );
-
-        if (constraints.isMobile) return panelBody;
-
-        return Container(
-          color: Theme.of(context).cardColor,
-          width: 180,
-          child: panelBody,
-        );
+          );
+        }
       },
+    );
+
+    final Widget panelBody = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (!isHandset) _closePanelButton,
+            if (isHandset) const SizedBox(), // So add button is on the right.
+            _addSheetButton,
+          ],
+        ),
+        const SheetTiles(),
+        proButton,
+        const UpdateButton(),
+        const Center(child: ThemeSwitch()),
+        ListTile(
+          title: const Center(child: Text('About')),
+          onTap: () => showDialog(
+            context: context,
+            builder: (context) => const CustomAboutDialog(),
+          ),
+        ),
+      ],
+    );
+
+    if (isHandset) return panelBody;
+
+    return Container(
+      color: Theme.of(context).cardColor,
+      width: 180,
+      child: panelBody,
     );
   }
 }
