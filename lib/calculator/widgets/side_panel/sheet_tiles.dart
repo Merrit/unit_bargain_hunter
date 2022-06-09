@@ -89,51 +89,49 @@ class _SheetTilesState extends State<SheetTiles> {
                   (!context.watch<PurchasesCubit>().state.proPurchased) &&
                       (index > 4);
 
-              return LayoutBuilder(builder: (context, constraints) {
-                return Opacity(
-                  opacity: (proDisabled) ? 0.4 : 1.0,
-                  child: MouseRegion(
-                    onEnter: (_) => setState(() => hoveredSheet = sheet),
-                    onExit: (_) => setState(() => hoveredSheet = null),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (proDisabled) {
-                          Navigator.pushNamed(context, PurchasesPage.id);
-                        } else {
-                          calcCubit.selectSheet(sheet);
+              return Opacity(
+                opacity: (proDisabled) ? 0.4 : 1.0,
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => hoveredSheet = sheet),
+                  onExit: (_) => setState(() => hoveredSheet = null),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (proDisabled) {
+                        Navigator.pushNamed(context, PurchasesPage.id);
+                      } else {
+                        calcCubit.selectSheet(sheet);
 
-                          if (constraints.isMobile) {
-                            Navigator.pop(context);
-                          }
+                        if (FormFactor.isHandset(context)) {
+                          Navigator.pop(context);
                         }
-                      },
-                      onSecondaryTapUp: (TapUpDetails details) {
-                        showContextMenu(
-                          context: context,
-                          offset: details.globalPosition,
-                          items: contextMenuItems(sheet),
-                        );
-                      },
-                      onLongPressEnd: (LongPressEndDetails details) {
-                        showContextMenu(
-                          context: context,
-                          offset: details.globalPosition,
-                          items: contextMenuItems(sheet),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _getContainerColor(sheet),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListTile(
-                          title: Center(child: Text(sheet.name)),
-                        ),
+                      }
+                    },
+                    onSecondaryTapUp: (TapUpDetails details) {
+                      showContextMenu(
+                        context: context,
+                        offset: details.globalPosition,
+                        items: contextMenuItems(sheet),
+                      );
+                    },
+                    onLongPressEnd: (LongPressEndDetails details) {
+                      showContextMenu(
+                        context: context,
+                        offset: details.globalPosition,
+                        items: contextMenuItems(sheet),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _getContainerColor(sheet),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        title: Center(child: Text(sheet.name)),
                       ),
                     ),
                   ),
-                );
-              });
+                ),
+              );
             },
           );
         },
