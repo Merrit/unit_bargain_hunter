@@ -46,7 +46,7 @@ class _SidePanelState extends State<SidePanel> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isHandset = FormFactor.isHandset(context);
+    final mediaQuery = MediaQuery.of(context);
 
     final Widget proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
       builder: (context, state) {
@@ -76,8 +76,9 @@ class _SidePanelState extends State<SidePanel> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (!isHandset) _closePanelButton,
-            if (isHandset) const SizedBox(), // So add button is on the right.
+            if (!mediaQuery.isHandset) _closePanelButton,
+            // So add button is on the right.
+            if (mediaQuery.isHandset) const SizedBox(),
             _addSheetButton,
           ],
         ),
@@ -95,7 +96,7 @@ class _SidePanelState extends State<SidePanel> {
       ],
     );
 
-    if (isHandset) return panelBody;
+    if (mediaQuery.isHandset) return panelBody;
 
     return Container(
       color: Theme.of(context).cardColor,

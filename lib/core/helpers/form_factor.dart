@@ -14,19 +14,21 @@ enum FormFactor {
   final int deviceWidth;
 
   const FormFactor({required this.deviceWidth});
+}
 
+extension FormFactorHelper on MediaQueryData {
   /// Returns a [FormFactor] based on the current screen size.
-  static FormFactor check(BuildContext context) {
+  FormFactor get formFactor {
     /// Use `shortestSide` to detect device type regardless of orientation.
-    final double deviceWidth = MediaQuery.of(context).size.shortestSide;
-    if (deviceWidth > desktop.deviceWidth) return desktop;
-    if (deviceWidth > tablet.deviceWidth) return tablet;
-    if (deviceWidth > handset.deviceWidth) return handset;
+    final double deviceWidth = size.shortestSide;
+    if (deviceWidth > FormFactor.desktop.deviceWidth) return FormFactor.desktop;
+    if (deviceWidth > FormFactor.tablet.deviceWidth) return FormFactor.tablet;
+    if (deviceWidth > FormFactor.handset.deviceWidth) return FormFactor.handset;
     return FormFactor.watch;
   }
 
   /// Whether the current screen size counts as running on a handset / phone.
-  static bool isHandset(BuildContext context) {
-    return check(context) == FormFactor.handset;
+  bool get isHandset {
+    return formFactor == FormFactor.handset;
   }
 }
