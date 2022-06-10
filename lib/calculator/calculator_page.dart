@@ -20,15 +20,17 @@ class CalculatorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     Widget? drawer;
-    if (FormFactor.isHandset(context)) {
+    if (mediaQuery.isHandset) {
       drawer = const Drawer(child: SidePanel());
     }
 
     final Widget sidePanelToggleButton =
         BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        if (FormFactor.isHandset(context)) return const SizedBox();
+        if (mediaQuery.isHandset) return const SizedBox();
         if (state.showSidePanel) return const SizedBox();
 
         return Opacity(
@@ -83,24 +85,25 @@ class CalculatorView extends StatelessWidget {
 
   CalculatorView({Key? key}) : super(key: key);
 
-  final Widget _sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
-    builder: (context, state) {
-      final bool showSidePanel =
-          !FormFactor.isHandset(context) && state.showSidePanel;
-      return ExcludeFocusTraversal(
-        child: (showSidePanel) ? const SidePanel() : const SizedBox(),
-      );
-    },
-  );
-
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    final Widget sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        final bool showSidePanel = !mediaQuery.isHandset && state.showSidePanel;
+        return ExcludeFocusTraversal(
+          child: (showSidePanel) ? const SidePanel() : const SizedBox(),
+        );
+      },
+    );
+
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _sidePanel,
+            sidePanel,
             Expanded(
               // GestureDetector & FocusNode allow clicking outside input areas in
               // order to deselect them as expected on web & desktop platforms.

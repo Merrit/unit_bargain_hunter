@@ -143,6 +143,8 @@ class _ItemNameWidgetState extends State<ItemNameWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
     return Consumer(
       builder: (context, ref, child) {
         final item = ref.watch(_currentItem);
@@ -159,7 +161,7 @@ class _ItemNameWidgetState extends State<ItemNameWidget> {
             onFieldSubmitted: (_) => _updateItem(item),
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
-              suffixIcon: (FormFactor.isHandset(context))
+              suffixIcon: (mediaQuery.isHandset)
                   ? null
                   : IconButton(
                       onPressed: () => _updateItem(item),

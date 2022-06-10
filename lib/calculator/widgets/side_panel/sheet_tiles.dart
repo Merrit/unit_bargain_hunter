@@ -51,6 +51,8 @@ class _SheetTilesState extends State<SheetTiles> {
       );
     }
 
+    final mediaQuery = MediaQuery.of(context);
+
     return Expanded(
       child: BlocBuilder<CalculatorCubit, CalculatorState>(
         builder: (context, state) {
@@ -101,7 +103,7 @@ class _SheetTilesState extends State<SheetTiles> {
                       } else {
                         calcCubit.selectSheet(sheet);
 
-                        if (FormFactor.isHandset(context)) {
+                        if (mediaQuery.isHandset) {
                           Navigator.pop(context);
                         }
                       }
