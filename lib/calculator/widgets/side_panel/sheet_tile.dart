@@ -62,6 +62,7 @@ class _SheetTileState extends State<SheetTile> {
           opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
           child: Slidable(
             groupTag: '0',
+            enabled: mediaQuery.isHandset,
             endActionPane: ActionPane(
               motion: const StretchMotion(),
               children: [
