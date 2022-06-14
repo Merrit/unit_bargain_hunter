@@ -12,7 +12,7 @@ import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../../settings/cubit/settings_cubit.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
-import 'sheet_tiles.dart';
+import 'sheet_tile_list.dart';
 
 /// Widget that on larger screens will hold the contents of the drawer, in
 /// the form of a collapsible side panel.
@@ -82,7 +82,7 @@ class _SidePanelState extends State<SidePanel> {
             _addSheetButton,
           ],
         ),
-        const SheetTiles(),
+        const SheetTileList(),
         proButton,
         const UpdateButton(),
         const Center(child: ThemeSwitch()),

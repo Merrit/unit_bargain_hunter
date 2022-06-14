@@ -7,6 +7,10 @@ import 'models.dart';
 
 /// A sheet containing [Item] objects to be calculated.
 class Sheet extends Equatable {
+  /// If not provided the index defaults to `-1` to indicated this sheet has
+  /// not yet been properly assigned an order and must be dealt with.
+  final int index;
+
   final List<Item> items;
   final String name;
 
@@ -17,6 +21,7 @@ class Sheet extends Equatable {
   final Unit compareBy;
 
   Sheet({
+    this.index = -1,
     List<Item>? items,
     this.name = 'Unnamed Sheet',
     String? uuid,
@@ -33,11 +38,13 @@ class Sheet extends Equatable {
   }
 
   Sheet copyWith({
+    int? index,
     List<Item>? items,
     String? name,
     Unit? compareBy,
   }) {
     return Sheet(
+      index: index ?? this.index,
       items: items ?? this.items,
       name: name ?? this.name,
       uuid: uuid,
@@ -46,7 +53,7 @@ class Sheet extends Equatable {
   }
 
   @override
-  List<Object> get props => [items, name, uuid, compareBy];
+  List<Object> get props => [index, items, name, uuid, compareBy];
 
   Sheet addItem() {
     final updatedItems = List<Item>.from(items)
@@ -88,6 +95,7 @@ class Sheet extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'index': index,
       'uuid': uuid,
       'items': items.map((x) => x.toMap()).toList(),
       'name': name,
@@ -97,6 +105,7 @@ class Sheet extends Equatable {
 
   factory Sheet.fromMap(Map<String, dynamic> map) {
     return Sheet(
+      index: map['index'] ?? -1,
       uuid: map['uuid'],
       items: List<Item>.from(map['items']?.map((x) => Item.fromMap(x))),
       name: map['name'] ?? '',
