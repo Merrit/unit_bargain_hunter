@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +18,7 @@ import 'window/window.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeLogger();
+  _preloadEmojis();
   setup.init();
 
   // Wait for the storage service to initialize while showing the splash screen.
@@ -46,4 +49,13 @@ Future<void> main() async {
       ),
     ),
   );
+}
+
+/// Prevents delay in displaying emojis on Web.
+///
+/// https://github.com/flutter/flutter/issues/42586#issuecomment-541870382
+void _preloadEmojis() {
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  pb.addText('\ud83d\ude01'); // smiley face emoji
+  pb.build().layout(const ParagraphConstraints(width: 100));
 }
