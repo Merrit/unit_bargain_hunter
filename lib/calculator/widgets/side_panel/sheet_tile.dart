@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../core/helpers/helpers.dart';
@@ -7,6 +8,11 @@ import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import '../../models/models.dart';
+
+/// A reference to the current item for each [ItemCard], via `Riverpod`.
+///
+/// Accessing this means not having to pass the [Item] to child widgets.
+final _currentSheet = Provider<Sheet>((ref) => throw UnimplementedError());
 
 class SheetTile extends StatefulWidget {
   final Sheet sheet;
@@ -35,63 +41,51 @@ class _SheetTileState extends State<SheetTile> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        final int index = state.sheets.indexOf(sheet);
-        final bool isActiveSheet = (sheet == state.activeSheet);
-        final bool proPurchased = context //
-            .watch<PurchasesCubit>()
-            .state
-            .proPurchased;
-        final bool proFeaturesDisabled = !proPurchased && (index > 4);
+    return ProviderScope(
+      overrides: [
+        _currentSheet.overrideWithValue(sheet),
+      ],
+      child: BlocBuilder<CalculatorCubit, CalculatorState>(
+        builder: (context, state) {
+          final int index = state.sheets.indexOf(sheet);
+          final bool isActiveSheet = (sheet == state.activeSheet);
+          final bool proPurchased = context //
+              .watch<PurchasesCubit>()
+              .state
+              .proPurchased;
+          final bool proFeaturesDisabled = !proPurchased && (index > 4);
 
-        List<PopupMenuItem> contextMenuItems(Sheet sheet) {
-          return [
-            if (state.sheets.length > 1)
-              PopupMenuItem(
-                child: const Text(
-                  'Remove',
-                  style: TextStyle(color: Colors.red),
+          List<PopupMenuItem> contextMenuItems(Sheet sheet) {
+            return [
+              if (state.sheets.length > 1)
+                PopupMenuItem(
+                  child: const Text(
+                    'Remove',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onTap: () => _showConfirmRemovalDialog(context, sheet),
                 ),
-                onTap: () => _showConfirmRemovalDialog(context, sheet),
-              ),
-          ];
-        }
+            ];
+          }
 
-        return Opacity(
-          opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
-          child: Slidable(
-            groupTag: '0',
-            enabled: mediaQuery.isHandset,
-            endActionPane: ActionPane(
-              motion: const StretchMotion(),
-              children: [
-                SlidableAction(
-                  label: 'Delete',
-                  icon: Icons.delete_forever,
-                  backgroundColor: Colors.red.shade600,
-                  onPressed: (context) {
-                    _showConfirmRemovalDialog(context, sheet);
-                  },
-                ),
-              ],
-            ),
-            child: Builder(
-              builder: (context) {
-                return GestureDetector(
-                  onSecondaryTapUp: (TapUpDetails details) {
-                    showContextMenu(
-                      context: context,
-                      offset: details.globalPosition,
-                      items: contextMenuItems(sheet),
-                    );
-                  },
-                  child: MouseRegion(
-                    onEnter: (_) => setState(() => isHovered = true),
-                    onExit: (_) => setState(() => isHovered = false),
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: Builder(builder: (context) {
+          return Opacity(
+            opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
+            child: _Slidable(
+              child: GestureDetector(
+                onSecondaryTapUp: (TapUpDetails details) {
+                  showContextMenu(
+                    context: context,
+                    offset: details.globalPosition,
+                    items: contextMenuItems(sheet),
+                  );
+                },
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => isHovered = true),
+                  onExit: (_) => setState(() => isHovered = false),
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Builder(
+                      builder: (context) {
                         final listTile = ListTile(
                           selected: isActiveSheet,
                           title: Text(
@@ -125,15 +119,15 @@ class _SheetTileState extends State<SheetTile> {
                         } else {
                           return listTile;
                         }
-                      }),
+                      },
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -167,4 +161,43 @@ void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
       },
     ),
   );
+}
+
+class _Slidable extends StatelessWidget {
+  final Widget child;
+
+  const _Slidable({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    return Consumer(
+      builder: (context, ref, _) {
+        final sheet = ref.watch(_currentSheet);
+
+        return Slidable(
+          groupTag: '0',
+          enabled: mediaQuery.isHandset,
+          endActionPane: ActionPane(
+            motion: const StretchMotion(),
+            children: [
+              SlidableAction(
+                label: 'Delete',
+                icon: Icons.delete_forever,
+                backgroundColor: Colors.red.shade600,
+                onPressed: (context) {
+                  _showConfirmRemovalDialog(context, sheet);
+                },
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+    );
+  }
 }
