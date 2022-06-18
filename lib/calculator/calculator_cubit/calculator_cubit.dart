@@ -25,6 +25,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     required CalculatorState initialState,
   }) : super(initialState) {
     calcCubit = this;
+    _saveAllSheets(); // In case the order was fixed on load.
   }
 
   static Future<CalculatorCubit> initialize(
@@ -34,12 +35,14 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     final bool? showSidePanel = await storageService.getValue('showSidePanel');
     final storedSheets = await storageService.getStorageAreaValues('sheets');
 
-    final List<Sheet> sheets;
+    List<Sheet> sheets;
     if (storedSheets.isEmpty) {
       sheets = [Sheet()];
     } else {
       sheets = storedSheets.map((e) => Sheet.fromJson(e)).toList();
     }
+
+    sheets = putSheetsInOrder(sheets);
 
     return CalculatorCubit(
       purchasesCubit,
@@ -52,6 +55,32 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         result: const <Item>[],
       ),
     );
+  }
+
+  /// Verify's the index of the sheets and returns them in order.
+  static List<Sheet> putSheetsInOrder(List<Sheet> sheets) {
+    List<Sheet> unorderedSheets = [];
+    List<Sheet> orderedSheets = List.filled(sheets.length, Sheet());
+
+    for (var sheet in sheets) {
+      final bool hasNoIndex = (sheet.index == -1);
+      final bool indexOutOfRange = (sheet.index >= sheets.length);
+      if (hasNoIndex || indexOutOfRange) {
+        unorderedSheets.add(sheet);
+      } else {
+        orderedSheets[sheet.index] = sheet;
+      }
+    }
+
+    orderedSheets = List<Sheet>.from(orderedSheets)
+      ..removeWhere((element) => element.index == -1)
+      ..addAll(unorderedSheets);
+
+    for (var i = 0; i < orderedSheets.length; i++) {
+      orderedSheets[i] = orderedSheets[i].copyWith(index: i);
+    }
+
+    return orderedSheets;
   }
 
   /// Compare all items to find the best value.
@@ -120,8 +149,8 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     final sheets = List<Sheet>.from(state.sheets);
-    final newSheet = Sheet();
-    sheets.insert(0, newSheet);
+    final newSheet = Sheet(index: sheets.length);
+    sheets.add(newSheet);
     emit(state.copyWith(sheets: sheets, activeSheet: newSheet));
     await _saveSheet(newSheet);
   }
@@ -144,18 +173,44 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     );
   }
 
+  Future<void> _saveAllSheets() async {
+    for (var sheet in state.sheets) {
+      await _saveSheet(sheet);
+    }
+  }
+
   Future<void> removeSheet(Sheet sheet) async {
     assert(state.sheets.length != 1);
-    final sheets = List<Sheet>.from(state.sheets) //
+    List<Sheet> sheets = List<Sheet>.from(state.sheets) //
       ..remove(sheet);
+    sheets = putSheetsInOrder(sheets);
     final activeSheet = (sheet == state.activeSheet) ? sheets.first : null;
     emit(state.copyWith(sheets: sheets, activeSheet: activeSheet));
     await _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
+    await _saveAllSheets();
   }
 
   /// Set [sheet] as the active sheet that is seen in the [CalculatorView].
   void selectSheet(Sheet sheet) {
     emit(state.copyWith(activeSheet: sheet));
     compare();
+  }
+
+  /// Called when the user is reordering the list of sheets.
+  Future<void> reorderSheets(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) newIndex -= 1;
+    List<Sheet> sheets = List<Sheet>.from(state.sheets)
+      ..removeAt(oldIndex)
+      ..insert(newIndex, state.sheets[oldIndex]);
+    for (var i = 0; i < sheets.length; i++) {
+      sheets[i] = sheets[i].copyWith(index: i);
+    }
+    // sheets = putSheetsInOrder(sheets);
+    final activeSheetId = state.activeSheet.uuid;
+    emit(state.copyWith(
+      sheets: sheets,
+      activeSheet: sheets.singleWhere((e) => e.uuid == activeSheetId),
+    ));
+    await _saveAllSheets();
   }
 }

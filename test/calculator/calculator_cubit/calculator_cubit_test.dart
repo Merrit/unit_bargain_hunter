@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
+import 'package:unit_bargain_hunter/calculator/models/models.dart';
 import 'package:unit_bargain_hunter/purchases/cubit/purchases_cubit.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
 
@@ -74,6 +75,66 @@ Future<void> main() async {
 
       await cubit.removeSheet(newSheet);
       expect(cubit.state.sheets.contains(newSheet), false);
+    });
+
+    test('sheets without index return correctly', () {
+      List<Sheet> sheets = [
+        Sheet(name: 'Oats'),
+        Sheet(name: 'Rice'),
+        Sheet(name: 'Sugar'),
+      ];
+
+      /// Sheets initally all have index `-1` since it was not specified.
+      expect(sheets.map((e) => e.index).toSet().toList(), [-1]);
+
+      /// Sheets have been given a random index order.
+      sheets = CalculatorCubit.putSheetsInOrder(sheets);
+      expect(sheets.map((e) => e.index).toSet().toList(), [0, 1, 2]);
+    });
+
+    test('sheets where some are missing index returns correctly', () {
+      List<Sheet> sheets = [
+        Sheet(name: 'Oats', index: 0),
+        Sheet(name: 'Rice'),
+        Sheet(name: 'Sugar', index: 1),
+      ];
+
+      sheets = CalculatorCubit.putSheetsInOrder(sheets);
+      expect(sheets[0].name, 'Oats');
+      expect(sheets[0].index, 0);
+      expect(sheets[1].name, 'Sugar');
+      expect(sheets[1].index, 1);
+      expect(sheets[2].name, 'Rice');
+      expect(sheets[2].index, 2);
+    });
+
+    test('sheets with index returns correctly', () {
+      List<Sheet> sheets = [
+        Sheet(name: 'Oats', index: 0),
+        Sheet(name: 'Rice', index: 1),
+        Sheet(name: 'Sugar', index: 2),
+      ];
+
+      sheets = CalculatorCubit.putSheetsInOrder(sheets);
+      expect(sheets[0].name, 'Oats');
+      expect(sheets[0].index, 0);
+      expect(sheets[1].name, 'Rice');
+      expect(sheets[1].index, 1);
+      expect(sheets[2].name, 'Sugar');
+      expect(sheets[2].index, 2);
+    });
+
+    test('sheets with incorrect index returns correctly', () {
+      List<Sheet> sheets = [
+        Sheet(name: 'Oats', index: 0),
+        Sheet(name: 'Sugar', index: 2),
+      ];
+
+      sheets = CalculatorCubit.putSheetsInOrder(sheets);
+      expect(sheets[0].name, 'Oats');
+      expect(sheets[0].index, 0);
+      expect(sheets[1].name, 'Sugar');
+      expect(sheets[1].index, 1);
     });
   });
 }

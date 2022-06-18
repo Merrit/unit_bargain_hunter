@@ -33,15 +33,15 @@ void main() {
     setUp(() {
       _purchasesCubit = MockPurchasesCubit();
       _storageService = MockStorageService();
+      when(() => _storageService.saveValue(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+          storageArea: any(named: 'storageArea'))).thenAnswer((_) async {});
       _calcCubit = CalculatorCubit(
         _purchasesCubit,
         _storageService,
         initialState: _defaultState,
       );
-      when(() => _storageService.saveValue(
-          key: any(named: 'key'),
-          value: any(named: 'value'),
-          storageArea: any(named: 'storageArea'))).thenAnswer((_) async {});
     });
 
     testWidgets('name can be edited', (tester) async {
