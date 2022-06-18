@@ -9,9 +9,9 @@ import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import '../../models/models.dart';
 
-/// A reference to the current item for each [ItemCard], via `Riverpod`.
+/// A reference to the current sheet for each [SheetTile], via `Riverpod`.
 ///
-/// Accessing this means not having to pass the [Item] to child widgets.
+/// Accessing this means not having to pass the [Sheet] to child widgets.
 final _currentSheet = Provider<Sheet>((ref) => throw UnimplementedError());
 
 class SheetTile extends StatefulWidget {
