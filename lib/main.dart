@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
+import 'demonstration/cubit/demonstration_cubit.dart';
 import 'logs/logs.dart';
 import 'platform/platform.dart';
 import 'purchases/cubit/purchases_cubit.dart';
@@ -33,6 +34,9 @@ Future<void> main() async {
     storageService,
   );
   final settingscubit = await SettingsCubit.initialize(settingsService);
+  final demonstrationcubit = await DemonstrationCubit.initialize(
+    storageService,
+  );
 
   if (Platform.isDesktop) await Window.initialize();
 
@@ -43,6 +47,7 @@ Future<void> main() async {
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),
         BlocProvider.value(value: settingscubit),
+        BlocProvider.value(value: demonstrationcubit),
       ],
       child: const ProviderScope(
         child: App(),
