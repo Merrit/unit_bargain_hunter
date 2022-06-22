@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../core/helpers/helpers.dart';
+import '../../../demonstration/cubit/demonstration_cubit.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
@@ -163,7 +164,7 @@ void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
   );
 }
 
-class _Slidable extends StatelessWidget {
+class _Slidable extends StatefulWidget {
   final Widget child;
 
   const _Slidable({
@@ -172,8 +173,33 @@ class _Slidable extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_Slidable> createState() => _SlidableState();
+}
+
+class _SlidableState extends State<_Slidable> {
+  late bool slidableEnabled;
+
+  /// Demonstrate how the slidable works, and that it exists.
+  Future<void> _demoSlidable(BuildContext context) async {
+    if (!slidableEnabled) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final slidable = Slidable.of(context);
+      if (slidable == null) return;
+
+      await Future.delayed(const Duration(milliseconds: 1500));
+      slidable.openEndActionPane();
+      await Future.delayed(const Duration(milliseconds: 800));
+      slidable.close();
+    });
+
+    demonstrationCubit.setSlidableDemoShown();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    slidableEnabled = mediaQuery.isHandset;
 
     return Consumer(
       builder: (context, ref, _) {
@@ -181,7 +207,7 @@ class _Slidable extends StatelessWidget {
 
         return Slidable(
           groupTag: '0',
-          enabled: mediaQuery.isHandset,
+          enabled: slidableEnabled,
           endActionPane: ActionPane(
             motion: const StretchMotion(),
             children: [
@@ -195,7 +221,15 @@ class _Slidable extends StatelessWidget {
               ),
             ],
           ),
-          child: child,
+          child: BlocBuilder<DemonstrationCubit, DemonstrationState>(
+            builder: (context, state) {
+              if (sheet.index == 0 && !state.slidableDemoShown) {
+                _demoSlidable(context);
+              }
+
+              return widget.child;
+            },
+          ),
         );
       },
     );
