@@ -89,10 +89,7 @@ class _SheetTileState extends State<SheetTile> {
                       builder: (context) {
                         final listTile = ListTile(
                           selected: isActiveSheet,
-                          title: Text(
-                            sheet.name,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          title: Text(sheet.name),
                           onTap: () {
                             if (proFeaturesDisabled) {
                               Navigator.pushNamed(context, PurchasesPage.id);
