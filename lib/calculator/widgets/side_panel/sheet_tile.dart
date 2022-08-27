@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:helpers/helpers.dart';
 
-import '../../../core/helpers/helpers.dart';
 import '../../../demonstration/cubit/demonstration_cubit.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
