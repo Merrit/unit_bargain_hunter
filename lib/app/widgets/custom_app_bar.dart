@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../calculator/widgets/widgets.dart';
@@ -20,15 +21,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
 
-    return ExcludeFocusTraversal(
-      child: AppBar(
-        centerTitle: (Platform.isAndroid) ? false : true,
-        title: const SheetNameWidget(),
-        actions: [
-          compareButton,
-          const CompareByDropdownButton(),
-        ],
-      ),
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        if (state.activeSheet == null) {
+          return AppBar();
+        }
+
+        return ExcludeFocusTraversal(
+          child: AppBar(
+            centerTitle: (Platform.isAndroid) ? false : true,
+            title: const SheetNameWidget(),
+            actions: [
+              compareButton,
+              const CompareByDropdownButton(),
+            ],
+          ),
+        );
+      },
     );
   }
 }

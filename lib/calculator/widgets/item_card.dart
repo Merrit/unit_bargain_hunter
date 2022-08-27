@@ -300,7 +300,7 @@ class _UnitChooser extends StatelessWidget {
 
         return BlocBuilder<CalculatorCubit, CalculatorState>(
           builder: (context, state) {
-            if (state.activeSheet.compareBy is ItemUnit) {
+            if (state.activeSheet!.compareBy is ItemUnit) {
               return const SizedBox();
             }
 
@@ -313,7 +313,7 @@ class _UnitChooser extends StatelessWidget {
                     item: item,
                     unit: value,
                   ),
-                  items: state.activeSheet.compareBy.subTypes
+                  items: state.activeSheet!.compareBy.subTypes
                       .map((value) => DropdownMenuItem<Unit>(
                             value: value,
                             child: Text('$value'),
@@ -381,7 +381,7 @@ class _CloseButton extends ConsumerWidget {
     final item = ref.watch(_currentItem);
 
     final shouldShowCloseButton =
-        context.watch<CalculatorCubit>().state.activeSheet.items.length > 2;
+        context.watch<CalculatorCubit>().state.activeSheet!.items.length > 2;
 
     return ExcludeFocusTraversal(
       child: (shouldShowCloseButton)
