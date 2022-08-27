@@ -11,10 +11,10 @@ class CalculatorState extends Equatable {
   final List<Sheet> sheets;
 
   /// The UUID of the active [Sheet].
-  final String activeSheetId;
+  final String? activeSheetId;
 
   /// The active [Sheet], that is displayed in the [CalculatorView].
-  final Sheet activeSheet;
+  final Sheet? activeSheet;
 
   /// Contains the cheapest items.
   /// Will only include multiple items if there was a tie.
@@ -25,8 +25,8 @@ class CalculatorState extends Equatable {
   const CalculatorState({
     required this.showSidePanel,
     required this.sheets,
-    required this.activeSheetId,
-    required this.activeSheet,
+    this.activeSheetId,
+    this.activeSheet,
     required this.result,
   });
 
@@ -47,7 +47,7 @@ class CalculatorState extends Equatable {
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       showSidePanel,
       sheets,

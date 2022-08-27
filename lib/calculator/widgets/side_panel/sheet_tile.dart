@@ -58,14 +58,13 @@ class _SheetTileState extends State<SheetTile> {
 
           List<PopupMenuItem> contextMenuItems(Sheet sheet) {
             return [
-              if (state.sheets.length > 1)
-                PopupMenuItem(
-                  child: const Text(
-                    'Remove',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  onTap: () => _showConfirmRemovalDialog(context, sheet),
+              PopupMenuItem(
+                child: const Text(
+                  'Remove',
+                  style: TextStyle(color: Colors.red),
                 ),
+                onTap: () => _showConfirmRemovalDialog(context, sheet),
+              ),
             ];
           }
 

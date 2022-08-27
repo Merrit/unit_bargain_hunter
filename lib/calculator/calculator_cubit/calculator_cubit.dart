@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../app/cubit/app_cubit.dart';
@@ -85,27 +86,31 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   /// Compare all items to find the best value.
   void compare() {
+    assert(state.activeSheet != null);
     emit(state.copyWith(result: [])); // Reset result.
-    final result = const Calculator().compare(items: state.activeSheet.items);
+    final result = const Calculator().compare(items: state.activeSheet!.items);
     emit(state.copyWith(result: result));
   }
 
   /// The user has chosen a new compare unit; weight, volume, or item.
   Future<void> updateCompareBy(Unit unit) async {
+    assert(state.activeSheet != null);
     resetResult();
-    final updatedSheet = state.activeSheet.updateCompareBy(unit);
+    final updatedSheet = state.activeSheet!.updateCompareBy(unit);
     updateActiveSheet(updatedSheet);
   }
 
   void addItem() {
+    assert(state.activeSheet != null);
     resetResult();
-    final updatedSheet = state.activeSheet.addItem();
+    final updatedSheet = state.activeSheet!.addItem();
     updateActiveSheet(updatedSheet);
   }
 
   void removeItem(String uuid) {
+    assert(state.activeSheet != null);
     resetResult();
-    final updatedSheet = state.activeSheet.removeItem(uuid);
+    final updatedSheet = state.activeSheet!.removeItem(uuid);
     updateActiveSheet(updatedSheet);
   }
 
@@ -115,6 +120,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     String? quantity,
     Unit? unit,
   }) {
+    assert(state.activeSheet != null);
     double? validatedPrice;
     double? validatedQuantity;
     if (price != null) validatedPrice = double.tryParse(price);
@@ -125,7 +131,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       unit: unit,
     );
     resetResult();
-    final updatedSheet = state.activeSheet.updateItem(updatedItem);
+    final updatedSheet = state.activeSheet!.updateItem(updatedItem);
     updateActiveSheet(updatedSheet);
   }
 
@@ -157,7 +163,8 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   /// Update the contents of the active sheet, by replacing with [sheet].
   Future<void> updateActiveSheet(Sheet sheet) async {
-    final activeSheetIndex = state.sheets.indexOf(state.activeSheet);
+    assert(state.activeSheet != null);
+    final activeSheetIndex = state.sheets.indexOf(state.activeSheet!);
     final sheets = List<Sheet>.from(state.sheets) //
       ..[activeSheetIndex] = sheet;
     emit(state.copyWith(sheets: sheets, activeSheet: sheet));
@@ -180,12 +187,19 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   Future<void> removeSheet(Sheet sheet) async {
-    assert(state.sheets.length != 1);
     List<Sheet> sheets = List<Sheet>.from(state.sheets) //
       ..remove(sheet);
     sheets = putSheetsInOrder(sheets);
-    final activeSheet = (sheet == state.activeSheet) ? sheets.first : null;
-    emit(state.copyWith(sheets: sheets, activeSheet: activeSheet));
+    final Sheet? activeSheet = (sheet == state.activeSheet) //
+        ? sheets.firstOrNull
+        : null;
+    emit(CalculatorState(
+      showSidePanel: state.showSidePanel,
+      sheets: sheets,
+      activeSheetId: activeSheet?.uuid,
+      activeSheet: activeSheet,
+      result: state.result,
+    ));
     await _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
     await _saveAllSheets();
   }
@@ -206,7 +220,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       sheets[i] = sheets[i].copyWith(index: i);
     }
     // sheets = putSheetsInOrder(sheets);
-    final activeSheetId = state.activeSheet.uuid;
+    final activeSheetId = state.activeSheet?.uuid;
     emit(state.copyWith(
       sheets: sheets,
       activeSheet: sheets.singleWhere((e) => e.uuid == activeSheetId),

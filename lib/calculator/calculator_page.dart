@@ -65,9 +65,18 @@ class CalculatorPage extends StatelessWidget {
                   CalculatorView(),
                 ],
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () => calcCubit.addItem(),
-                child: const Icon(Icons.add),
+              floatingActionButton:
+                  BlocBuilder<CalculatorCubit, CalculatorState>(
+                builder: (context, state) {
+                  if (state.activeSheet == null) {
+                    return const SizedBox();
+                  }
+
+                  return FloatingActionButton(
+                    onPressed: () => calcCubit.addItem(),
+                    child: const Icon(Icons.add),
+                  );
+                },
               ),
             ),
           ),
@@ -129,6 +138,15 @@ class ScrollingItemsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
+        if (state.activeSheet == null) {
+          return Center(
+            child: ElevatedButton(
+              onPressed: () => calcCubit.addSheet(),
+              child: const Text('New sheet'),
+            ),
+          );
+        }
+
         return SingleChildScrollView(
           controller: ScrollController(),
           child: Wrap(
@@ -136,7 +154,7 @@ class ScrollingItemsList extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: [
               const SizedBox(width: double.infinity),
-              for (var item in state.activeSheet.items)
+              for (var item in state.activeSheet!.items)
                 ItemCard(
                   item: item,
                 ),

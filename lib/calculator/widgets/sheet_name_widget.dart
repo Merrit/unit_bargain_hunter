@@ -38,11 +38,11 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
 
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        controller.text = state.activeSheet.name;
+        controller.text = state.activeSheet!.name;
 
         void _updateSheet() {
           calcCubit.updateActiveSheet(
-            state.activeSheet.copyWith(name: controller.text),
+            state.activeSheet!.copyWith(name: controller.text),
           );
           FocusManager.instance.primaryFocus?.unfocus();
         }
@@ -60,7 +60,7 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
             onSubmitted: (_) => _updateSheet(),
           );
         } else {
-          child = Text(state.activeSheet.name);
+          child = Text(state.activeSheet!.name);
         }
 
         return InkWell(
