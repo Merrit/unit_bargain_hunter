@@ -29,7 +29,7 @@ class AppTheme {
       inputDecorationTheme: inputDecorationTheme,
     );
     return theme.copyWith(
-      textTheme: GoogleFonts.montserratTextTheme(theme.textTheme),
+      textTheme: GoogleFonts.notoSansTextTheme(theme.textTheme),
     );
   }
 }
