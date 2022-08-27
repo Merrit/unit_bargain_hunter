@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helpers/helpers.dart';
 
 import '../app/app.dart';
 import '../app/widgets/widgets.dart';
-import '../core/helpers/helpers.dart';
 import '../purchases/pages/purchases_page.dart';
 import 'calculator_cubit/calculator_cubit.dart';
 import 'widgets/widgets.dart';

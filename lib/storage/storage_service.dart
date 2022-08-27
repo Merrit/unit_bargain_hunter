@@ -1,10 +1,9 @@
 import 'dart:io';
 
+import 'package:helpers/helpers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../core/helpers/helpers.dart';
 
 /// Interfaces with the host OS to store & retrieve data from disk.
 class StorageService {

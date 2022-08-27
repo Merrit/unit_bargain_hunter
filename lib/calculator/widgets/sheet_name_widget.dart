@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helpers/helpers.dart';
 
-import '../../core/helpers/helpers.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 
 /// Displays the sheet's name, and allows the user to change it.

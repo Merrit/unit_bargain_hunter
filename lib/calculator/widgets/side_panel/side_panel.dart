@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:helpers/helpers.dart';
 
 import '../../../app/app.dart';
 import '../../../app/widgets/widgets.dart';
 import '../../../core/constants.dart';
-import '../../../core/helpers/form_factor.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../../settings/cubit/settings_cubit.dart';
