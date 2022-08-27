@@ -61,8 +61,8 @@ class CalculatorPage extends StatelessWidget {
               drawer: drawer,
               body: Stack(
                 children: [
-                  sidePanelToggleButton,
                   CalculatorView(),
+                  sidePanelToggleButton,
                 ],
               ),
               floatingActionButton:
