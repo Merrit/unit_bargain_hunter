@@ -40,7 +40,7 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
       builder: (context, state) {
         controller.text = state.activeSheet!.name;
 
-        void _updateSheet() {
+        void updateSheet() {
           calcCubit.updateActiveSheet(
             state.activeSheet!.copyWith(name: controller.text),
           );
@@ -57,7 +57,7 @@ class _SheetNameWidgetState extends State<SheetNameWidget> {
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.words,
-            onSubmitted: (_) => _updateSheet(),
+            onSubmitted: (_) => updateSheet(),
           );
         } else {
           child = Text(state.activeSheet!.name);
