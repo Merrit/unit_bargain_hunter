@@ -12,7 +12,7 @@ class CustomAboutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final greyButtonStyle = ElevatedButton.styleFrom(
-      primary: Colors.grey[700],
+      backgroundColor: Colors.grey[700],
     );
 
     final String appVersion =
