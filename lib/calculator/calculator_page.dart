@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
+import 'package:multi_split_view/multi_split_view.dart';
 
 import '../app/app.dart';
 import '../app/widgets/widgets.dart';
 import '../purchases/pages/purchases_page.dart';
+import '../settings/cubit/settings_cubit.dart';
 import 'calculator_cubit/calculator_cubit.dart';
 import 'widgets/widgets.dart';
 
@@ -87,12 +89,17 @@ class CalculatorPage extends StatelessWidget {
 }
 
 class CalculatorView extends StatelessWidget {
+  CalculatorView({Key? key}) : super(key: key);
+
   final focusNode = FocusNode(
     debugLabel: 'CalculatorView node',
     skipTraversal: true,
   );
 
-  CalculatorView({Key? key}) : super(key: key);
+  final MultiSplitViewController multiSplitViewController =
+      MultiSplitViewController(
+    areas: Area.weights([settingsCubit.state.navigationAreaRatio]),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -109,19 +116,24 @@ class CalculatorView extends StatelessWidget {
 
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return MultiSplitView(
+          controller: multiSplitViewController,
+          onWeightChange: () {
+            final navigationAreaRatio = multiSplitViewController //
+                .getArea(0)
+                .weight;
+
+            if (navigationAreaRatio == null) return;
+
+            settingsCubit.updateNavigationAreaRatio(navigationAreaRatio);
+          },
           children: [
             sidePanel,
-            Expanded(
-              // GestureDetector & FocusNode allow clicking outside input areas in
-              // order to deselect them as expected on web & desktop platforms.
-              child: GestureDetector(
-                onTap: () => focusNode.requestFocus(),
-                child: Focus(
-                  focusNode: focusNode,
-                  child: const ScrollingItemsList(),
-                ),
+            GestureDetector(
+              onTap: () => focusNode.requestFocus(),
+              child: Focus(
+                focusNode: focusNode,
+                child: const ScrollingItemsList(),
               ),
             ),
           ],
