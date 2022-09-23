@@ -11,7 +11,6 @@ import 'logs/logs.dart';
 import 'platform/platform.dart';
 import 'purchases/cubit/purchases_cubit.dart';
 import 'settings/cubit/settings_cubit.dart';
-import 'settings/settings_service.dart';
 import 'setup/setup.dart';
 import 'storage/storage_service.dart';
 import 'window/window.dart';
@@ -26,14 +25,13 @@ Future<void> main() async {
   // This allows us to be certain that settings are available right away,
   // and prevents unsightly things like the theme suddenly changing when loaded.
   final storageService = await StorageService.initialize();
-  final settingsService = SettingsService(storageService);
 
   final purchasescubit = await PurchasesCubit.initialize();
   final calculatorcubit = await CalculatorCubit.initialize(
     purchasescubit,
     storageService,
   );
-  final settingscubit = await SettingsCubit.initialize(settingsService);
+  final settingscubit = await SettingsCubit.initialize(storageService);
   final demonstrationcubit = await DemonstrationCubit.initialize(
     storageService,
   );

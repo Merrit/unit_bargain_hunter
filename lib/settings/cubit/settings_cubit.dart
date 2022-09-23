@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../settings_service.dart';
+import '../../storage/storage_service.dart';
 
 part 'settings_state.dart';
 
@@ -15,22 +16,49 @@ late SettingsCubit settingsCubit;
 
 /// Controls the state of the settings for the app.
 class SettingsCubit extends Cubit<SettingsState> {
-  final SettingsService _settingsService;
+  final StorageService _storageService;
 
-  SettingsCubit(this._settingsService, {required SettingsState initialState})
+  SettingsCubit(this._storageService, {required SettingsState initialState})
       : super(initialState) {
     settingsCubit = this;
   }
 
   static Future<SettingsCubit> initialize(
-    SettingsService settingsService,
+    StorageService storageService,
   ) async {
-    final ThemeMode themeMode = await settingsService.themeMode();
-
     return SettingsCubit(
-      settingsService,
-      initialState: SettingsState(themeMode: themeMode),
+      storageService,
+      initialState: SettingsState(
+        navigationAreaRatio:
+            await storageService.getValue('navigationAreaRatio') ?? 0.25,
+        themeMode: await _getThemeMode(storageService),
+      ),
     );
+  }
+
+  static Future<ThemeMode> _getThemeMode(StorageService storageService) async {
+    final ThemeMode themeMode;
+    final theme = await storageService.getValue('ThemeMode') as String?;
+    switch (theme) {
+      case 'ThemeMode.dark':
+        themeMode = ThemeMode.dark;
+        break;
+      case 'ThemeMode.light':
+        themeMode = ThemeMode.light;
+        break;
+      default:
+        if (kIsWeb) {
+          themeMode = ThemeMode.system;
+        } else {
+          themeMode = ThemeMode.dark;
+        }
+    }
+    return themeMode;
+  }
+
+  Future<void> updateNavigationAreaRatio(double value) async {
+    emit(state.copyWith(navigationAreaRatio: value));
+    await _storageService.saveValue(key: 'navigationAreaRatio', value: value);
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
@@ -40,6 +68,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     emit(state.copyWith(themeMode: newThemeMode));
 
-    await _settingsService.updateThemeMode(newThemeMode);
+    await _storageService.saveValue(
+      key: 'ThemeMode',
+      value: newThemeMode.toString(),
+    );
   }
 }
