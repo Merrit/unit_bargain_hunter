@@ -33,7 +33,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     PurchasesCubit purchasesCubit,
     StorageService storageService,
   ) async {
-    final bool? showSidePanel = await storageService.getValue('showSidePanel');
     final storedSheets = await storageService.getStorageAreaValues('sheets');
 
     List<Sheet> sheets;
@@ -49,7 +48,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       purchasesCubit,
       storageService,
       initialState: CalculatorState(
-        showSidePanel: showSidePanel ?? true,
         sheets: sheets,
         activeSheetId: sheets.first.uuid,
         activeSheet: sheets.first,
@@ -141,13 +139,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(result: []));
   }
 
-  /// Toggle show/hide for the side panel that holds
-  /// the drawer contents on large screen devices.
-  void toggleShowSidePanel() {
-    emit(state.copyWith(showSidePanel: !state.showSidePanel));
-    _storageService.saveValue(key: 'showSidePanel', value: state.showSidePanel);
-  }
-
   Future<void> addSheet() async {
     if (state.sheets.length >= 5 && !_purchasesCubit.state.proPurchased) {
       appCubit.promptForProUpgrade();
@@ -194,7 +185,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         ? sheets.firstOrNull
         : null;
     emit(CalculatorState(
-      showSidePanel: state.showSidePanel,
       sheets: sheets,
       activeSheetId: activeSheet?.uuid,
       activeSheet: activeSheet,
