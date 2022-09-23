@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
@@ -29,22 +30,6 @@ class CalculatorPage extends StatelessWidget {
       drawer = const Drawer(child: SidePanel());
     }
 
-    final Widget sidePanelToggleButton =
-        BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        if (mediaQuery.isHandset) return const SizedBox();
-        if (state.showSidePanel) return const SizedBox();
-
-        return Opacity(
-          opacity: 0.8,
-          child: IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => calcCubit.toggleShowSidePanel(),
-          ),
-        );
-      },
-    );
-
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
         if (state.promptForProUpgrade) {
@@ -61,12 +46,7 @@ class CalculatorPage extends StatelessWidget {
             child: Scaffold(
               appBar: const CustomAppBar(),
               drawer: drawer,
-              body: Stack(
-                children: [
-                  CalculatorView(),
-                  sidePanelToggleButton,
-                ],
-              ),
+              body: CalculatorView(),
               floatingActionButton:
                   BlocBuilder<CalculatorCubit, CalculatorState>(
                 builder: (context, state) {
@@ -103,17 +83,6 @@ class CalculatorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-
-    final Widget sidePanel = BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        final bool showSidePanel = !mediaQuery.isHandset && state.showSidePanel;
-        return ExcludeFocusTraversal(
-          child: (showSidePanel) ? const SidePanel() : const SizedBox(),
-        );
-      },
-    );
-
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         return MultiSplitView(
@@ -128,7 +97,10 @@ class CalculatorView extends StatelessWidget {
             settingsCubit.updateNavigationAreaRatio(navigationAreaRatio);
           },
           children: [
-            sidePanel,
+            if (defaultTargetPlatform != TargetPlatform.android)
+              const ExcludeFocusTraversal(
+                child: SidePanel(),
+              ),
             GestureDetector(
               onTap: () => focusNode.requestFocus(),
               child: Focus(

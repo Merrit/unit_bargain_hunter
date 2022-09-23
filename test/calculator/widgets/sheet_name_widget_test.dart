@@ -21,7 +21,6 @@ late CalculatorCubit _calcCubit;
 final _defaultSheet = Sheet();
 
 final _defaultState = CalculatorState(
-  showSidePanel: true,
   sheets: [_defaultSheet],
   activeSheetId: 'activeSheetId',
   activeSheet: _defaultSheet,

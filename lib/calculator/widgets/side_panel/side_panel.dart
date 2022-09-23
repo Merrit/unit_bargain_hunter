@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,8 +12,8 @@ import '../../../settings/cubit/settings_cubit.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import 'sheet_tile_list.dart';
 
-/// Widget that on larger screens will hold the contents of the drawer, in
-/// the form of a collapsible side panel.
+/// Holds the contents of the drawer for large displays, in the form of a
+/// navigation bar.
 class SidePanel extends StatefulWidget {
   const SidePanel({Key? key}) : super(key: key);
 
@@ -24,18 +22,6 @@ class SidePanel extends StatefulWidget {
 }
 
 class _SidePanelState extends State<SidePanel> {
-  final _closePanelButton = Opacity(
-    opacity: 0.8,
-    child: IconButton(
-      onPressed: () => calcCubit.toggleShowSidePanel(),
-      icon: Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.rotationY(pi),
-        child: const Icon(Icons.exit_to_app),
-      ),
-    ),
-  );
-
   final _addSheetButton = Opacity(
     opacity: 0.8,
     child: IconButton(
@@ -76,9 +62,8 @@ class _SidePanelState extends State<SidePanel> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (!mediaQuery.isHandset) _closePanelButton,
-            // So add button is on the right.
-            if (mediaQuery.isHandset) const SizedBox(),
+            // So `add` button is on the right.
+            const SizedBox(),
             _addSheetButton,
           ],
         ),

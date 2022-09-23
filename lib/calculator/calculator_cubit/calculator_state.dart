@@ -1,10 +1,6 @@
 part of 'calculator_cubit.dart';
 
 class CalculatorState extends Equatable {
-  /// Whether to show the side panel that on large
-  /// displays that holds the drawer contents.
-  final bool showSidePanel;
-
   /// A list of sheets.
   ///
   /// Each [Sheet] contains a list of related [Item] objects for calculation.
@@ -23,7 +19,6 @@ class CalculatorState extends Equatable {
   bool get resultExists => result.isNotEmpty;
 
   const CalculatorState({
-    required this.showSidePanel,
     required this.sheets,
     this.activeSheetId,
     this.activeSheet,
@@ -38,7 +33,6 @@ class CalculatorState extends Equatable {
     List<Item>? result,
   }) {
     return CalculatorState(
-      showSidePanel: showSidePanel ?? this.showSidePanel,
       sheets: sheets ?? this.sheets,
       activeSheetId: activeSheetId ?? this.activeSheetId,
       activeSheet: activeSheet ?? this.activeSheet,
@@ -49,7 +43,6 @@ class CalculatorState extends Equatable {
   @override
   List<Object?> get props {
     return [
-      showSidePanel,
       sheets,
       activeSheetId,
       activeSheet,
