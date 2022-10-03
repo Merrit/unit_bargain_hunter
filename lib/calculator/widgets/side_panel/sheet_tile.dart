@@ -100,12 +100,6 @@ class _SheetTileState extends State<SheetTile> {
                               }
                             }
                           },
-                          trailing: isHovered
-                              ? ReorderableDragStartListener(
-                                  index: state.sheets.indexOf(sheet),
-                                  child: const Icon(Icons.drag_handle),
-                                )
-                              : null,
                         );
 
                         if (mediaQuery.isHandset) {
@@ -114,7 +108,10 @@ class _SheetTileState extends State<SheetTile> {
                             child: listTile,
                           );
                         } else {
-                          return listTile;
+                        return ReorderableDragStartListener(
+                          index: state.sheets.indexOf(sheet),
+                          child: listTile,
+                        );
                         }
                       },
                     ),
