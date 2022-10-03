@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../calculator_cubit/calculator_cubit.dart';
 import '../../models/models.dart';
@@ -20,22 +19,20 @@ class _SheetTileListState extends State<SheetTileList> {
     return Expanded(
       child: BlocBuilder<CalculatorCubit, CalculatorState>(
         builder: (context, state) {
-          return SlidableAutoCloseBehavior(
-            child: ReorderableListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              onReorder: (int oldIndex, int newIndex) {
-                calcCubit.reorderSheets(oldIndex, newIndex);
-              },
-              buildDefaultDragHandles: false,
-              itemCount: state.sheets.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Sheet sheet = state.sheets[index];
-                return SheetTile(
-                  sheet,
-                  key: ValueKey(sheet),
-                );
-              },
-            ),
+          return ReorderableListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            onReorder: (int oldIndex, int newIndex) {
+              calcCubit.reorderSheets(oldIndex, newIndex);
+            },
+            buildDefaultDragHandles: false,
+            itemCount: state.sheets.length,
+            itemBuilder: (BuildContext context, int index) {
+              final Sheet sheet = state.sheets[index];
+              return SheetTile(
+                sheet,
+                key: ValueKey(sheet),
+              );
+            },
           );
         },
       ),
