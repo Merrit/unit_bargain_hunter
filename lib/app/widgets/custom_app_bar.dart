@@ -13,14 +13,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget compareButton = Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: ElevatedButton(
-        onPressed: () => calcCubit.compare(),
-        child: const Text('Compare'),
-      ),
-    );
-
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         if (state.activeSheet == null) {
@@ -32,8 +24,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             centerTitle: (Platform.isAndroid) ? false : true,
             title: const SheetNameWidget(),
             actions: [
-              compareButton,
-              const CompareByDropdownButton(),
+              IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) {
+                      return const SheetSettingsView();
+                    },
+                  );
+                },
+              )
             ],
           ),
         );
