@@ -47,19 +47,6 @@ class CalculatorPage extends StatelessWidget {
               appBar: const CustomAppBar(),
               drawer: drawer,
               body: CalculatorView(),
-              floatingActionButton:
-                  BlocBuilder<CalculatorCubit, CalculatorState>(
-                builder: (context, state) {
-                  if (state.activeSheet == null) {
-                    return const SizedBox();
-                  }
-
-                  return FloatingActionButton(
-                    onPressed: () => calcCubit.addItem(),
-                    child: const Icon(Icons.add),
-                  );
-                },
-              ),
             ),
           ),
         ),
@@ -131,19 +118,47 @@ class ScrollingItemsList extends StatelessWidget {
           );
         }
 
-        return SingleChildScrollView(
-          controller: ScrollController(),
-          child: Wrap(
-            runSpacing: 20.0,
-            alignment: WrapAlignment.center,
-            children: [
-              const SizedBox(width: double.infinity),
-              for (var item in state.activeSheet!.items)
-                ItemCard(
-                  item: item,
+        final Widget compareButton = ElevatedButton(
+          onPressed: () => calcCubit.compare(),
+          child: const Text('Compare'),
+        );
+
+        final Widget addButton = IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => calcCubit.addItem(),
+        );
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                controller: ScrollController(),
+                child: Wrap(
+                  runSpacing: 20.0,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    const SizedBox(width: double.infinity),
+                    for (var item in state.activeSheet!.items)
+                      ItemCard(
+                        item: item,
+                      ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+            ),
+            Card(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const CompareByDropdownButton(),
+                  compareButton,
+                  addButton,
+                ],
+              ),
+            ),
+          ],
         );
       },
     );

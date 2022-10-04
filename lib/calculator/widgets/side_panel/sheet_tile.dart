@@ -54,28 +54,28 @@ class _SheetTileState extends State<SheetTile> {
               .proPurchased;
           final bool proFeaturesDisabled = !proPurchased && (index > 4);
 
-          List<PopupMenuItem> contextMenuItems(Sheet sheet) {
-            return [
-              PopupMenuItem(
-                child: const Text(
-                  'Remove',
-                  style: TextStyle(color: Colors.red),
-                ),
-                onTap: () => _showConfirmRemovalDialog(context, sheet),
-              ),
-            ];
-          }
+          // List<PopupMenuItem> buildListContextMenuItems(Sheet sheet) {
+          //   return [
+          //     PopupMenuItem(
+          //       child: const Text(
+          //         'Remove',
+          //         style: TextStyle(color: Colors.red),
+          //       ),
+          //       onTap: () => _showConfirmRemovalDialog(context, sheet),
+          //     ),
+          //   ];
+          // }
 
           return Opacity(
             opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
             child: GestureDetector(
-              onSecondaryTapUp: (TapUpDetails details) {
-                showContextMenu(
-                  context: context,
-                  offset: details.globalPosition,
-                  items: contextMenuItems(sheet),
-                );
-              },
+              // onSecondaryTapUp: (TapUpDetails details) {
+              //   showContextMenu(
+              //     context: context,
+              //     offset: details.globalPosition,
+              //     items: buildListContextMenuItems(sheet),
+              //   );
+              // },
               child: MouseRegion(
                 onEnter: (_) => setState(() => isHovered = true),
                 onExit: (_) => setState(() => isHovered = false),
@@ -120,35 +120,4 @@ class _SheetTileState extends State<SheetTile> {
       ),
     );
   }
-}
-
-/// Confirm the user really wants to remove the sheet.
-void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
-  Future.delayed(
-    const Duration(seconds: 0),
-    () => showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text('Remove sheet "${sheet.name}?"'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                calcCubit.removeSheet(sheet);
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'REMOVE',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    ),
-  );
 }
