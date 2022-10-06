@@ -232,15 +232,6 @@ class _NumericInputWidget extends StatelessWidget {
   final _controller = TextEditingController();
   final _focusNode = FocusNode(debugLabel: '_NumericInputWidget node');
 
-  /// Set the text on the [_controller].
-  void _setText(Item item) {
-    if (itemProperty == 'Price') {
-      _controller.text = item.price.toStringAsFixed(2);
-    } else {
-      _controller.text = item.quantity.toStringAsFixed(2);
-    }
-  }
-
   void _updateItem(Item item) {
     calcCubit.updateItem(
       item: item,
@@ -253,9 +244,13 @@ class _NumericInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        final item = ref.watch(_currentItem);
+        final double value = ref.watch(_currentItem.select((Item item) {
+          return (itemProperty == 'Price') //
+              ? item.price
+              : item.quantity;
+        }));
 
-        _setText(item);
+        _controller.text = value.toStringAsFixed(2);
 
         return Focus(
           skipTraversal: true,
@@ -268,7 +263,7 @@ class _NumericInputWidget extends StatelessWidget {
               // are no longer showing a winner until a new calculation.
               calcCubit.resetResult();
             } else {
-              _updateItem(item);
+              _updateItem(ref.read(_currentItem));
             }
           },
           child: TextField(
@@ -280,7 +275,7 @@ class _NumericInputWidget extends StatelessWidget {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             textInputAction: TextInputAction.next,
             onSubmitted: (_) {
-              _updateItem(item);
+              _updateItem(ref.read(_currentItem));
               calcCubit.compare();
             },
           ),
