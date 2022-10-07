@@ -35,8 +35,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> launchURL(String url) async {
-    await canLaunch(url)
-        ? await launch(url)
+    final uri = Uri.parse(url);
+    await canLaunchUrl(uri)
+        ? await launchUrl(uri)
         : throw 'Could not launch url: $url';
   }
 
