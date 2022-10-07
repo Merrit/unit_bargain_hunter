@@ -23,8 +23,8 @@ dependencies:
   hive: ^2.1.0
   hive_flutter: ^1.1.0
   http: ^0.13.3
-  in_app_purchase: ^3.0.2
-  in_app_purchase_android: ^0.2.2+6
+  in_app_purchase: ^3.0.7
+  in_app_purchase_android: ^0.2.3+5
   intl: ^0.17.0
   logging: ^1.0.2
   multi_split_view: ^2.1.0
