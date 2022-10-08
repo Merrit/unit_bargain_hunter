@@ -59,6 +59,7 @@ jobs:
       - name: Push updated recipe to Flathub
         working-directory: ${{ github.workspace }}
         env:
+          GH_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
           REPO_KEY: ${{ secrets.FLATHUB_TOKEN }}
           USERNAME: merrit
         run: |
@@ -67,6 +68,10 @@ jobs:
           cp -r ${{ github.workspace }}/code/packaging/linux/flatpak/${{ env.project-id }}.metainfo.xml .
           git config --local user.name "Kristen McWilliam"
           git config --local user.email "9575627+Merrit@users.noreply.github.com"
+          git checkout -b flathub_update
           git add -A
           git commit -m "Update flatpak for new release"
-          git push https://$USERNAME:$REPO_KEY@github.com/flathub/${{ env.project-id }}.git
+          git push -u origin flathub_update -f
+          gh pr create --fill --head flathub_update
+          gh pr merge --rebase --delete-branch
+        # git push https://$USERNAME:$REPO_KEY@github.com/flathub/${{ env.project-id }}.git
