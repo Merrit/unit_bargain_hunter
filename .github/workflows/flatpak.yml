@@ -68,7 +68,9 @@ jobs:
           cp -r ${{ github.workspace }}/code/packaging/linux/flatpak/${{ env.project-id }}.metainfo.xml .
           git config --local user.name "Kristen McWilliam"
           git config --local user.email "9575627+Merrit@users.noreply.github.com"
+          git checkout -b flathub_update
           git add -A
           git commit -m "Update flatpak for new release"
+          git push -u origin flathub_update
           gh pr create --fill
         # git push https://$USERNAME:$REPO_KEY@github.com/flathub/${{ env.project-id }}.git
