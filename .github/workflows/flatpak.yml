@@ -16,7 +16,6 @@ env:
 jobs:
   update-recipe:
     name: Update Flatpak recipe files
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -74,4 +73,5 @@ jobs:
           git commit -m "Update flatpak for new release"
           git push -u origin flathub_update -f
           gh pr create --fill --head flathub_update
+          gh pr merge --rebase --delete-branch
         # git push https://$USERNAME:$REPO_KEY@github.com/flathub/${{ env.project-id }}.git
