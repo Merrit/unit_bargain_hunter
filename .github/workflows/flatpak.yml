@@ -16,6 +16,7 @@ env:
 jobs:
   update-recipe:
     name: Update Flatpak recipe files
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
