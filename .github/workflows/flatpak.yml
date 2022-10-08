@@ -60,7 +60,7 @@ jobs:
       - name: Push updated recipe to Flathub
         working-directory: ${{ github.workspace }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
           REPO_KEY: ${{ secrets.FLATHUB_TOKEN }}
           USERNAME: merrit
         run: |
