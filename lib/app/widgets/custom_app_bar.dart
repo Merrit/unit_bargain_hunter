@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../calculator/widgets/widgets.dart';
 import '../../platform/platform.dart';
+import 'widgets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -26,15 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.more_vert),
-                onPressed: () {
-                  showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      return const SheetSettingsView();
-                    },
-                  );
-                },
+                onPressed: () => showModal(context, const SheetSettingsView()),
               )
             ],
           ),

@@ -30,67 +30,68 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
         final sheet = state.activeSheet;
         if (sheet == null) return const SizedBox();
 
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+        return Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
               children: [
+                const SizedBox(width: double.maxFinite),
                 Text(
                   'List Settings',
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      const SizedBox(height: 30),
-                      ListTile(
-                        title: TextField(
-                          controller: nameTextFieldController,
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                          ),
-                          onSubmitted: (value) {
-                            calcCubit.updateActiveSheet(
-                              state.activeSheet!.copyWith(
-                                name: nameTextFieldController.text,
-                              ),
-                            );
-                          },
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () async {
+                      final navigator = Navigator.of(context);
+
+                      await calcCubit.updateActiveSheet(
+                        state.activeSheet!.copyWith(
+                          name: nameTextFieldController.text,
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.done),
-                          onPressed: () {
-                            calcCubit.updateActiveSheet(
-                              state.activeSheet!.copyWith(
-                                name: nameTextFieldController.text,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20.0,
-                          horizontal: 50.0,
-                        ),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(30),
-                          ),
-                          onPressed: () =>
-                              _showConfirmRemovalDialog(context, sheet),
-                          child: const Text(
-                            'Delete List',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ),
-                    ],
+                      );
+
+                      navigator.pop();
+                    },
+                    child: const Text('Save'),
                   ),
                 ),
               ],
             ),
-          ),
+            Expanded(
+              child: ListView(
+                children: [
+                  const SizedBox(height: 30),
+                  ListTile(
+                    title: TextField(
+                      controller: nameTextFieldController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 50.0,
+                    ),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(30),
+                      ),
+                      onPressed: () =>
+                          _showConfirmRemovalDialog(context, sheet),
+                      child: const Text(
+                        'Delete List',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
