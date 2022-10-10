@@ -20,18 +20,37 @@ class Item extends Equatable {
   /// Cost per gram, milligram, kilogram, etc.
   final List<Cost> costPerUnit;
 
-  Item({
-    String? uuid,
+  const Item._({
+    required this.uuid,
     required this.price,
     required this.quantity,
     required this.unit,
-    this.name = 'Item',
-  })  : uuid = uuid ?? const Uuid().v1(),
-        costPerUnit = CostValidator.validate(
-          price: price,
-          quantity: quantity,
-          unit: unit,
-        );
+    required this.name,
+    required this.costPerUnit,
+  });
+
+  factory Item({
+    String? uuid,
+    required double price,
+    required double quantity,
+    required Unit unit,
+    String name = 'Item',
+  }) {
+    final costPerUnit = CostValidator.validate(
+      price: price,
+      quantity: quantity,
+      unit: unit,
+    );
+
+    return Item._(
+      uuid: uuid ?? const Uuid().v1(),
+      price: price,
+      quantity: quantity,
+      unit: unit,
+      name: name,
+      costPerUnit: costPerUnit,
+    );
+  }
 
   Item copyWith({
     String? uuid,
