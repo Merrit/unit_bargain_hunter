@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:intl/intl.dart';
 import 'package:updater/src/src.dart';
-import 'package:xml/xml.dart';
 
 Future<void> main(List<String> arguments) async {
   projectId = arguments[0];
@@ -56,29 +54,4 @@ Future<void> updateManifest(String projectId, GitHubInfo githubInfo) async {
 
   manifestJson = manifest.toJson();
   manifestFile.writeAsStringSync(manifestJson);
-}
-
-/// Update the $projectId.metainfo.xml file with the
-/// date and version of the new release.
-void updateMetainfo(String projectId, GitHubInfo githubInfo) {
-  final metainfoFile = File('$projectId.metainfo.xml');
-  final metainfo = XmlDocument.parse(metainfoFile.readAsStringSync());
-
-  final publishDate = githubInfo.latestRelease.publishedAt;
-  final date = DateFormat('yyyy-MM-dd').format(publishDate!);
-
-  metainfo.findAllElements('release').first.replace(
-        XmlElement(XmlName('release'), [
-          XmlAttribute(
-            XmlName('version'),
-            githubInfo.latestRelease.tagName!.substring(1),
-          ),
-          XmlAttribute(
-            XmlName('date'),
-            date,
-          ),
-        ]),
-      );
-
-  metainfoFile.writeAsStringSync(metainfo.toXmlString(pretty: true));
 }
