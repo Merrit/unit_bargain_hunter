@@ -140,9 +140,7 @@ class ScrollingItemsList extends StatelessWidget {
                   children: [
                     const SizedBox(width: double.infinity),
                     for (var item in state.activeSheet!.items)
-                      ItemCard(
-                        item: item,
-                      ),
+                      ItemCard(item: item),
                   ],
                 ),
               ),

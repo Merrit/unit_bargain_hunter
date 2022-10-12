@@ -59,36 +59,29 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                 ),
               ],
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  const SizedBox(height: 30),
-                  ListTile(
-                    title: TextField(
-                      controller: nameTextFieldController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 50.0,
-                    ),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(30),
-                      ),
-                      onPressed: () =>
-                          _showConfirmRemovalDialog(context, sheet),
-                      child: const Text(
-                        'Delete List',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 30),
+            ListTile(
+              title: TextField(
+                controller: nameTextFieldController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+                horizontal: 50.0,
+              ),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(30),
+                ),
+                onPressed: () => _showConfirmRemovalDialog(context, sheet),
+                child: const Text(
+                  'Delete List',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ),
           ],
