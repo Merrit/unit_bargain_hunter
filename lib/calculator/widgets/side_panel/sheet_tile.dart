@@ -66,6 +66,10 @@ class _SheetTileState extends State<SheetTile> {
           //   ];
           // }
 
+          final Widget? subtitle = (sheet.subtitle != null) //
+              ? Text(sheet.subtitle!)
+              : null;
+
           return Opacity(
             opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
             child: GestureDetector(
@@ -86,6 +90,7 @@ class _SheetTileState extends State<SheetTile> {
                       final listTile = ListTile(
                         selected: isActiveSheet,
                         title: Text(sheet.name),
+                        subtitle: subtitle,
                         onTap: () {
                           if (proFeaturesDisabled) {
                             Navigator.pushNamed(context, PurchasesPage.id);
