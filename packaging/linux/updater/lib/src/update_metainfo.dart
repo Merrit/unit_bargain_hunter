@@ -14,17 +14,38 @@ void updateMetainfo(String projectId, GitHubInfo githubInfo) {
   final publishDate = githubInfo.latestRelease.publishedAt;
   final date = DateFormat('yyyy-MM-dd').format(publishDate!);
 
+  final String releaseNotes = githubInfo.latestRelease.body ?? '';
+  final releaseNotesIterable = releaseNotes.split('\n');
+
   metainfo.findAllElements('release').first.replace(
-        XmlElement(XmlName('release'), [
-          XmlAttribute(
-            XmlName('version'),
-            githubInfo.latestRelease.tagName!.substring(1),
-          ),
-          XmlAttribute(
-            XmlName('date'),
-            date,
-          ),
-        ]),
+        XmlElement(
+          XmlName('release'),
+          [
+            XmlAttribute(
+              XmlName('version'),
+              githubInfo.latestRelease.tagName!.substring(1),
+            ),
+            XmlAttribute(
+              XmlName('date'),
+              date,
+            ),
+          ],
+          [
+            XmlElement(
+              XmlName('description'),
+              [],
+              [
+                for (var item in releaseNotesIterable)
+                  XmlElement(
+                    XmlName('p'),
+                    [],
+                    [XmlText(item)],
+                  ),
+                // XmlText(releaseNotes),
+              ],
+            ),
+          ],
+        ),
       );
 
   metainfoFile.writeAsStringSync(metainfo.toXmlString(pretty: true));
