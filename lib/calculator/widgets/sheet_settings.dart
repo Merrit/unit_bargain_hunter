@@ -14,6 +14,7 @@ class SheetSettingsView extends StatefulWidget {
 
 class _SheetSettingsViewState extends State<SheetSettingsView> {
   final nameTextFieldController = TextEditingController();
+  final subtitleTextFieldController = TextEditingController();
 
   @override
   void initState() {
@@ -21,6 +22,7 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
     final sheet = calcCubit.state.activeSheet;
     if (sheet == null) return;
     nameTextFieldController.text = sheet.name;
+    subtitleTextFieldController.text = sheet.subtitle ?? '';
   }
 
   @override
@@ -49,6 +51,7 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                       await calcCubit.updateActiveSheet(
                         state.activeSheet!.copyWith(
                           name: nameTextFieldController.text,
+                          subtitle: subtitleTextFieldController.text,
                         ),
                       );
 
@@ -65,6 +68,14 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                 controller: nameTextFieldController,
                 decoration: const InputDecoration(
                   labelText: 'Name',
+                ),
+              ),
+            ),
+            ListTile(
+              title: TextField(
+                controller: subtitleTextFieldController,
+                decoration: const InputDecoration(
+                  labelText: 'Subtitle',
                 ),
               ),
             ),

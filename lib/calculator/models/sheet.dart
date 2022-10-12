@@ -20,14 +20,19 @@ class Sheet extends Equatable {
   /// The unit type that is being used for comparisons: weight, volume, etc.
   final Unit compareBy;
 
+  /// (Optional) Additional details. Eg: brand name, type, color, etc.
+  final String? subtitle;
+
   Sheet({
-    this.index = -1,
     List<Item>? items,
-    this.name = 'Unnamed Sheet',
     String? uuid,
+    this.index = -1,
+    this.name = 'Unnamed Sheet',
     this.compareBy = const Weight(),
+    String? subtitle,
   })  : items = items ?? _defaultItems(),
-        uuid = uuid ?? const Uuid().v1();
+        uuid = uuid ?? const Uuid().v1(),
+        subtitle = (subtitle == '') ? null : subtitle;
 
   /// The [Item] objects included by default in a new sheet.
   static List<Item> _defaultItems() {
@@ -41,19 +46,31 @@ class Sheet extends Equatable {
     int? index,
     List<Item>? items,
     String? name,
+    String? uuid,
     Unit? compareBy,
+    String? subtitle,
   }) {
     return Sheet(
       index: index ?? this.index,
       items: items ?? this.items,
       name: name ?? this.name,
-      uuid: uuid,
+      uuid: uuid ?? this.uuid,
       compareBy: compareBy ?? this.compareBy,
+      subtitle: subtitle ?? this.subtitle,
     );
   }
 
   @override
-  List<Object> get props => [index, items, name, uuid, compareBy];
+  List<Object?> get props {
+    return [
+      index,
+      items,
+      name,
+      uuid,
+      compareBy,
+      subtitle,
+    ];
+  }
 
   Sheet addItem() {
     final updatedItems = List<Item>.from(items)
@@ -96,24 +113,31 @@ class Sheet extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'index': index,
-      'uuid': uuid,
       'items': items.map((x) => x.toMap()).toList(),
       'name': name,
+      'uuid': uuid,
       'compareBy': compareBy.toString(),
+      'subtitle': subtitle,
     };
   }
 
   factory Sheet.fromMap(Map<String, dynamic> map) {
     return Sheet(
-      index: map['index'] ?? -1,
-      uuid: map['uuid'],
+      index: map['index']?.toInt() ?? -1,
       items: List<Item>.from(map['items']?.map((x) => Item.fromMap(x))),
       name: map['name'] ?? '',
+      uuid: map['uuid'] ?? '',
       compareBy: Unit.fromString(map['compareBy']).unitType,
+      subtitle: map['subtitle'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory Sheet.fromJson(String source) => Sheet.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Sheet(index: $index, items: $items, name: $name, uuid: $uuid, compareBy: $compareBy, subtitle: $subtitle)';
+  }
 }
