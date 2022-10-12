@@ -112,24 +112,10 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     updateActiveSheet(updatedSheet);
   }
 
-  void updateItem({
-    required Item item,
-    String? price,
-    String? quantity,
-    Unit? unit,
-  }) {
+  void updateItem({required Item item}) {
     assert(state.activeSheet != null);
-    double? validatedPrice;
-    double? validatedQuantity;
-    if (price != null) validatedPrice = double.tryParse(price);
-    if (quantity != null) validatedQuantity = double.tryParse(quantity);
-    final updatedItem = item.copyWith(
-      price: validatedPrice,
-      quantity: validatedQuantity,
-      unit: unit,
-    );
     resetResult();
-    final updatedSheet = state.activeSheet!.updateItem(updatedItem);
+    final updatedSheet = state.activeSheet!.updateItem(item);
     updateActiveSheet(updatedSheet);
   }
 

@@ -14,8 +14,11 @@ class Item extends Equatable {
   final double quantity;
   final Unit unit;
 
-  /// A name or label the user can optionally give the item.
-  final String name;
+  /// Where the item is from, eg: "Walmart", "Amazon", "Costco".
+  final String location;
+
+  /// Further details such as brand, specific package, etc.
+  final String details;
 
   /// Cost per gram, milligram, kilogram, etc.
   final List<Cost> costPerUnit;
@@ -25,7 +28,8 @@ class Item extends Equatable {
     required this.price,
     required this.quantity,
     required this.unit,
-    required this.name,
+    required this.location,
+    required this.details,
     required this.costPerUnit,
   });
 
@@ -34,7 +38,8 @@ class Item extends Equatable {
     required double price,
     required double quantity,
     required Unit unit,
-    String name = 'Item',
+    String? location,
+    String? details,
   }) {
     final costPerUnit = CostValidator.validate(
       price: price,
@@ -47,7 +52,8 @@ class Item extends Equatable {
       price: price,
       quantity: quantity,
       unit: unit,
-      name: name,
+      location: location ?? '',
+      details: details ?? '',
       costPerUnit: costPerUnit,
     );
   }
@@ -57,16 +63,16 @@ class Item extends Equatable {
     double? price,
     double? quantity,
     Unit? unit,
-    String? name,
+    String? location,
+    String? details,
   }) {
-    final newName = _validateName(name);
-
     return Item(
       uuid: uuid ?? this.uuid,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
       unit: unit ?? this.unit,
-      name: newName ?? this.name,
+      location: location ?? this.location,
+      details: details ?? this.details,
     );
   }
 
@@ -76,7 +82,8 @@ class Item extends Equatable {
       'price: $price \n'
       'quantity: $quantity \n'
       'unit: $unit \n'
-      'name: $name \n';
+      'location: $location \n'
+      'details: $details \n';
 
   @override
   List<Object?> get props {
@@ -86,14 +93,9 @@ class Item extends Equatable {
       quantity,
       unit,
       costPerUnit,
-      name,
+      location,
+      details,
     ];
-  }
-
-  String? _validateName(String? name) {
-    if (name == null) return null;
-    if (name == '') return null;
-    return name;
   }
 
   Map<String, dynamic> toMap() {
@@ -102,17 +104,29 @@ class Item extends Equatable {
       'price': price,
       'quantity': quantity,
       'unit': unit.toString(),
-      'name': name,
+      'location': location,
+      'details': details,
     };
   }
 
   factory Item.fromMap(Map<String, dynamic> map) {
+    // Handle values from before 'name' was changed to 'location'.
+    // This check can probably be simplified after a short time has passed to
+    // allow the migration.
+    String? location;
+    if (map.containsKey('name')) {
+      location = map['name'];
+    } else {
+      location = map['location'] ?? '';
+    }
+
     return Item(
       uuid: map['uuid'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       quantity: map['quantity']?.toDouble() ?? 0.0,
       unit: Unit.fromString(map['unit']),
-      name: map['name'] ?? '',
+      location: location,
+      details: map['details'] ?? '',
     );
   }
 
