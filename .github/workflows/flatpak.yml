@@ -35,13 +35,11 @@ jobs:
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1.3
 
-      - name: pub get
-        working-directory: ${{ github.workspace }}/code/packaging/linux/updater
-        run: dart pub get
-
       - name: Update recipe files
-        working-directory: ${{ github.workspace }}/code/packaging/linux
-        run: bash update-flatpak-recipe.sh
+        working-directory: ${{ github.workspace }}/code
+        run: |
+          dart pub global activate --source git https://github.com/Merrit/linux_packaging_updater.git
+          bash packaging/linux/flatpak/update-flatpak-recipe.sh
 
       - name: Verify Flatpak builds successfully
         working-directory: ${{ github.workspace }}/code/packaging/linux/flatpak
