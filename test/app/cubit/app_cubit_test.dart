@@ -17,8 +17,10 @@ void main() {
   });
   group('AppCubit:', () {
     test('instance variable is accessible', () {
-      final _appCubit = AppCubit(appVersion);
-      final state = appCubit.state;
+      // Simulate instantiation on app run.
+      AppCubit(appVersion);
+      // Verify instance variable.
+      final state = AppCubit.instance.state;
       expect(state, isA<AppState>());
     });
   });

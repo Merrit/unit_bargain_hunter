@@ -7,14 +7,12 @@ import '../app_version.dart';
 
 part 'app_state.dart';
 
-/// Globally accessible variable for the [AppCubit].
-///
-/// There is only ever one cubit, so this eases access.
-late AppCubit appCubit;
-
 class AppCubit extends Cubit<AppState> {
+  /// Singleton instance.
+  static late AppCubit instance;
+
   AppCubit(AppVersion appVersionService) : super(AppState.initial()) {
-    appCubit = this;
+    instance = this;
     _fetchVersionData(appVersionService);
   }
 
