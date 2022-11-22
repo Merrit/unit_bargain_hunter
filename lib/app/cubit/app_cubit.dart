@@ -13,13 +13,12 @@ part 'app_state.dart';
 late AppCubit appCubit;
 
 class AppCubit extends Cubit<AppState> {
-  AppCubit() : super(AppState.initial()) {
+  AppCubit(AppVersion appVersionService) : super(AppState.initial()) {
     appCubit = this;
-    _fetchVersionData();
+    _fetchVersionData(appVersionService);
   }
 
-  Future<void> _fetchVersionData() async {
-    final versionRepo = AppVersion();
+  Future<void> _fetchVersionData(AppVersion versionRepo) async {
     final runningVersion = await versionRepo.runningVersion();
     final updateAvailable =
         (Platform.isDesktop) ? await versionRepo.updateAvailable() : false;
