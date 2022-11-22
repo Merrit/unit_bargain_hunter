@@ -37,7 +37,7 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit()),
+        BlocProvider(create: (context) => AppCubit(AppVersion())),
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),
         BlocProvider.value(value: settingscubit),
