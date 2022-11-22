@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:unit_bargain_hunter/app/app.dart';
 
-class MockAppVersion extends Mock implements AppVersion {}
+class MockAppVersion extends Mock implements VersionService {}
 
 final appVersion = MockAppVersion();
 
