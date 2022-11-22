@@ -53,7 +53,7 @@ If you find it useful, please consider buying me a coffee.
                         ),
                       ),
                       onPressed: () {
-                        appCubit.launchURL(
+                        AppCubit.instance.launchURL(
                           'https://www.buymeacoffee.com/Merritt',
                         );
                       },
@@ -73,14 +73,14 @@ Available for: Linux, Windows, Android & Web.'''),
               children: [
                 ElevatedButton(
                   style: greyButtonStyle,
-                  onPressed: () => appCubit.launchURL(websiteUrl),
+                  onPressed: () => AppCubit.instance.launchURL(websiteUrl),
                   child: const Text('Website'),
                 ),
                 Spacers.horizontalSmall,
                 ElevatedButton(
                   style: greyButtonStyle,
                   onPressed: () {
-                    appCubit.launchURL(
+                    AppCubit.instance.launchURL(
                       'https://github.com/Merrit/unit_bargain_hunter',
                     );
                   },

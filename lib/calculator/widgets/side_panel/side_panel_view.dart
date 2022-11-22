@@ -120,7 +120,9 @@ class UpdateButton extends StatelessWidget {
                             child: const Text('Close'),
                           ),
                           TextButton(
-                            onPressed: () => appCubit.launchURL(websiteUrl),
+                            onPressed: () => AppCubit //
+                                .instance
+                                .launchURL(websiteUrl),
                             child: const Text('Open'),
                           ),
                         ],

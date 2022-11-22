@@ -127,7 +127,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   Future<void> addSheet() async {
     if (state.sheets.length >= 5 && !_purchasesCubit.state.proPurchased) {
-      appCubit.promptForProUpgrade();
+      AppCubit.instance.promptForProUpgrade();
       return;
     }
 
