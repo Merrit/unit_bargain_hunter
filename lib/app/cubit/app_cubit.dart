@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../platform/platform.dart';
-import '../app_version.dart';
+import '../version_service.dart';
 
 part 'app_state.dart';
 
@@ -11,12 +11,12 @@ class AppCubit extends Cubit<AppState> {
   /// Singleton instance.
   static late AppCubit instance;
 
-  AppCubit(AppVersion appVersionService) : super(AppState.initial()) {
+  AppCubit(VersionService appVersionService) : super(AppState.initial()) {
     instance = this;
     _fetchVersionData(appVersionService);
   }
 
-  Future<void> _fetchVersionData(AppVersion versionRepo) async {
+  Future<void> _fetchVersionData(VersionService versionRepo) async {
     final runningVersion = await versionRepo.runningVersion();
     final updateAvailable =
         (Platform.isDesktop) ? await versionRepo.updateAvailable() : false;

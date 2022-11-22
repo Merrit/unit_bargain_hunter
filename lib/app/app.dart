@@ -9,8 +9,8 @@ import '../settings/cubit/settings_cubit.dart';
 import '../shortcuts/app_shortcuts.dart';
 import '../theme/app_theme.dart';
 
-export 'app_version.dart';
 export 'cubit/app_cubit.dart';
+export 'version_service.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
