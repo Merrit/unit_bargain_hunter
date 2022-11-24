@@ -54,21 +54,13 @@ class _EditItemDialogState extends State<EditItemDialog> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            const SizedBox(width: double.maxFinite),
-            Text(
-              'Edit item',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => _saveItemChanges(context),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () => _saveItemChanges(context),
             child: Text(AppLocalizations.of(context)!.save),
-              ),
-            ),
+          ),
+        ),
         Text(
           AppLocalizations.of(context)!.editItem,
           style: Theme.of(context).textTheme.headline5,
