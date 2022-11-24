@@ -66,7 +66,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () => _saveItemChanges(context),
-                child: const Text('Save'),
+            child: Text(AppLocalizations.of(context)!.save),
               ),
             ),
         Text(
