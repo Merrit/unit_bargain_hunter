@@ -1,0 +1,26 @@
+{
+  "editItem": "Edit item",
+  "@editItem": {
+    "description": "Title for the edit item modal dialog"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Label for Location text input"
+  },
+  "details": "Details",
+  "@details": {
+    "description": "Label for Details text input"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Label for Price text input"
+  },
+  "quantity": "Quantity",
+  "@quantity": {
+    "description": "Label for Quantity text input"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Capitalized string 'Save', as in 'Save my changes`"
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:helpers/helpers.dart';
 
 import '../calculator_cubit/calculator_cubit.dart';
@@ -68,24 +69,26 @@ class _EditItemDialogState extends State<EditItemDialog> {
                 child: const Text('Save'),
               ),
             ),
-          ],
+        Text(
+          AppLocalizations.of(context)!.editItem,
+          style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(height: 30),
         ListTile(
           title: TextField(
             controller: locationTextFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Location',
-              prefixIcon: Icon(Icons.location_on),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.location,
+              prefixIcon: const Icon(Icons.location_on),
             ),
           ),
         ),
         ListTile(
           title: TextField(
             controller: detailsTextFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Details',
-              prefixIcon: Icon(Icons.notes),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.details,
+              prefixIcon: const Icon(Icons.notes),
             ),
             keyboardType: TextInputType.multiline,
             maxLines: null,
@@ -94,9 +97,9 @@ class _EditItemDialogState extends State<EditItemDialog> {
         ListTile(
           title: TextField(
             controller: priceTextFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Price',
-              prefixIcon: Icon(Icons.attach_money),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.price,
+              prefixIcon: const Icon(Icons.attach_money),
             ),
             focusNode: priceTextFieldFocusNode,
           ),
@@ -104,9 +107,9 @@ class _EditItemDialogState extends State<EditItemDialog> {
         ListTile(
           title: TextField(
             controller: quantityTextFieldController,
-            decoration: const InputDecoration(
-              labelText: 'Quantity',
-              prefixIcon: Icon(Icons.numbers),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.quantity,
+              prefixIcon: const Icon(Icons.numbers),
             ),
             focusNode: quantityTextFieldFocusNode,
           ),
