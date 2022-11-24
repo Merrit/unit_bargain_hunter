@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_localizations:
+    sdk: flutter
   flutter_markdown: ^0.6.10
   flutter_riverpod: ^2.0.0-dev.9
   font_awesome_flutter: ^9.1.0
@@ -54,6 +56,7 @@ dev_dependencies:
   msix: ^3.5.1
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/icon/icon.png

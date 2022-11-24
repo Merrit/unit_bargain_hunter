@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../calculator/calculator_page.dart';
 import '../purchases/pages/purchase_successful_page.dart';
@@ -45,6 +46,8 @@ class App extends StatelessWidget {
           title: 'Unit Bargain Hunter',
           debugShowCheckedModeBanner: false,
           theme: AppTheme(brightness: brightness()).themeData,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           routes: {
             CalculatorPage.id: (context) => CalculatorPage(),
             PurchasesPage.id: (context) => const PurchasesPage(),
