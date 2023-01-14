@@ -1,0 +1,26 @@
+{
+  "editItem": "Modifica articolo",
+  "@editItem": {
+    "description": "Titolo per la finestra di dialogo modale di modifica dell'articolo"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Etichetta per l'immissione del testo sulla posizione"
+  },
+  "details": "Details",
+  "@details": {
+    "description": "Etichetta per l'immissione di testo sui dettagli"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Etichetta per l'inserimento del testo del prezzo"
+  },
+  "quantity": "Quantity",
+  "@quantity": {
+    "description": "Etichetta per l'immissione di testo sulla quantità"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Stringa in maiuscolo 'Salva', come in 'Salva le mie modifiche"
+  }
+}
