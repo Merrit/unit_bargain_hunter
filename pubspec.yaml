@@ -1,7 +1,7 @@
 name: unit_bargain_hunter
 description: "Easily compare items when shopping"
 publish_to: "none"
-version: 1.9.1+16
+version: 1.10.0+17
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
