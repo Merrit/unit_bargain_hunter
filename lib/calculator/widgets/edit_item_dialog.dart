@@ -63,7 +63,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
         ),
         Text(
           AppLocalizations.of(context)!.editItem,
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 30),
         ListTile(
