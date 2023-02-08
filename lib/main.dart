@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app.dart';
+import 'authentication/authentication.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
 import 'logs/logs.dart';
 import 'platform/platform.dart';
@@ -16,7 +17,8 @@ import 'window/window.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeLogger();
+
+  await LoggingManager.initialize(verbose: true);
   _preloadEmojis();
   setup.init();
 
@@ -24,6 +26,12 @@ Future<void> main() async {
   // This allows us to be certain that settings are available right away,
   // and prevents unsightly things like the theme suddenly changing when loaded.
   final storageService = await StorageService.initialize();
+
+  final googleAuth = GoogleAuth();
+  final authenticationCubit = await AuthenticationCubit.initialize(
+    googleAuth: googleAuth,
+    storageService: storageService,
+  );
 
   final purchasescubit = await PurchasesCubit.initialize();
   final calculatorcubit = await CalculatorCubit.initialize(
@@ -38,6 +46,7 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AppCubit(VersionService())),
+        BlocProvider.value(value: authenticationCubit),
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),
         BlocProvider.value(value: settingscubit),
