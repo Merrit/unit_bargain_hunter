@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart' as semver;
 import 'package:yaml/yaml.dart';
 import 'package:http/http.dart' as http;
 
-final _log = Logger('Versions');
+import '../logs/logs.dart';
 
 /// Check app versions.
 class VersionService {
@@ -38,11 +38,11 @@ class VersionService {
     return (current < latest) ? true : false;
   }
 
-  String _latestVersion = '';
+  String _latest = '';
 
-  /// Checks the latest GitHub tag.
+  /// Gets the latest version from the GitHub tag.
   Future<String> latestVersion() async {
-    if (_latestVersion != '') return _latestVersion;
+    if (_latest != '') return _latest;
     final uri = Uri.parse(
       'https://api.github.com/repos/merrit/unit_bargain_hunter/releases',
     );
@@ -52,15 +52,25 @@ class VersionService {
     );
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
-      final data = json[0] as Map<String, dynamic>;
-      final tag = data['tag_name'] as String;
-      // Strip the leading `v` and anything trailing.
-      // May need to be updated if we starting using postfixes like `beta`.
-      _latestVersion = tag.substring(1, 6);
+      final data = List<Map>.from(json);
+      final tag = data.firstWhere((element) => element['prerelease'] == false);
+      final tagName = tag['tag_name'] as String;
+      _latest = parseVersionTag(tagName);
     } else {
-      _log.info('Issue getting latest version info from GitHub, '
+      log.w('Issue getting latest version info from GitHub, '
           'status code: ${response.statusCode}\n');
     }
-    return _latestVersion;
+    return _latest;
+  }
+
+  /// Returns the version number without the leading `v` or any postfix.
+  ///
+  /// Examples:
+  /// `v1.2.3` becomes `1.2.3`.
+  /// `v1.2.3-beta` becomes `1.2.3`.
+  @visibleForTesting
+  String parseVersionTag(String tag) {
+    final version = tag.split('v').last.split('-').first;
+    return version;
   }
 }
