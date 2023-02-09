@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:helpers/helpers.dart';
+
 /// `FileOutput` import needed due to bug in package.
 /// https://github.com/leisim/logger/issues/94
 // ignore: implementation_imports
@@ -26,7 +28,6 @@ class LoggingManager {
   }
 
   static Future<LoggingManager> initialize({required bool verbose}) async {
-    final testing = Platform.environment.containsKey('FLUTTER_TEST');
     if (testing) {
       // Set the logger to a dummy logger during unit tests.
       log = Logger(level: Level.nothing);
