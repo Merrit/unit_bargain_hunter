@@ -1,31 +1,74 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
     "configurations": [
+        // Debug
         {
             "name": "Debug",
-            "program": "lib/main.dart",
             "request": "launch",
             "type": "dart",
-        },
-        {
-            "name": "Profile",
-            "type": "dart",
-            "request": "launch",
             "program": "lib/main.dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug",
         },
+        // Debug with verbose logging
         {
-            "name": "Web Server",
+            "name": "Debug with verbose logging",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-entrypoint-args",
+                "--verbose",
+            ],
+        },
+        // Debug with arguments
+        {
+            "name": "Debug with arguments",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart",
+            // "args": [
+            //     "--dart-entrypoint-args",
+            //     "--toggle,--verbose",
+            // ],
+        },
+        // Debug with web-server
+        {
+            "name": "Debug with web-server",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
             "args": [
                 "-d",
                 "web-server",
-                "--web-port",
-                "8000",
-                "--web-hostname",
-                "0.0.0.0",
             ],
         },
+        // Profile
+        {
+            "name": "Profile",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "profile",
+        },
+        // Release
+        {
+            "name": "Release",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "release",
+        },
+        // Test current file
+        {
+            "name": "Test current file",
+            "type": "dart",
+            "request": "launch",
+            "program": "${file}"
+        }
     ]
 }
