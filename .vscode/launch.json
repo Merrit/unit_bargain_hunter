@@ -36,6 +36,21 @@
             //     "--toggle,--verbose",
             // ],
         },
+        // Debug web with specific port (eg. testing Google authentication)
+        {
+            "name": "Debug web with specific port",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-hostname",
+                "localhost",
+                "--web-port",
+                "35475",
+            ],
+        },
         // Debug with web-server
         {
             "name": "Debug with web-server",
