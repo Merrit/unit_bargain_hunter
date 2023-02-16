@@ -24,7 +24,7 @@ class StorageService {
     /// On desktop platforms initialize to a specific directory.
     if (platformIsDesktop()) {
       final dir = await getApplicationSupportDirectory();
-      // Defaults to ~/.local/share/feeling_finder/storage
+      // Defaults to ~/.local/share/codes.merritt.bargain/storage
       Hive.init('${dir.path}/storage');
     } else {
       // On mobile and web initialize to default location.
