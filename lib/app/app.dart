@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../calculator/calculator_page.dart';
 import '../purchases/pages/purchase_successful_page.dart';
 import '../purchases/pages/purchases_page.dart';
-import '../settings/cubit/settings_cubit.dart';
+import '../settings/settings.dart';
 import '../shortcuts/app_shortcuts.dart';
 import '../theme/app_theme.dart';
 
@@ -53,6 +53,7 @@ class App extends StatelessWidget {
             PurchasesPage.id: (context) => const PurchasesPage(),
             PurchaseSuccessfulPage.id: (context) =>
                 const PurchaseSuccessfulPage(),
+            SettingsPage.id: (context) => const SettingsPage(),
           },
           home: AppShortcuts(child: CalculatorPage()),
         );

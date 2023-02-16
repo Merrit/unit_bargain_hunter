@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -29,52 +30,54 @@ class MockStorageService extends Mock implements StorageService {}
 
 final storageService = MockStorageService();
 
-late GoogleDriveSyncService service;
+final exampleData = SyncData(
+  lastSynced: DateTime(2021, 1, 1),
+  sheets: [
+    Sheet(
+      index: 0,
+      name: 'Example Sheet',
+      items: [
+        Item(
+          price: 1.00,
+          quantity: 1.00,
+          unit: Unit.gram,
+        ),
+        Item(
+          price: 2.00,
+          quantity: 2.00,
+          unit: Unit.gram,
+        ),
+      ],
+    ),
+    Sheet(
+      index: 1,
+      name: 'Example Sheet 2',
+      items: [
+        Item(
+          price: 3.00,
+          quantity: 3.00,
+          unit: Unit.kilogram,
+        ),
+        Item(
+          price: 4.00,
+          quantity: 4.00,
+          unit: Unit.milligram,
+        ),
+      ],
+    ),
+  ],
+);
+
+late GoogleDrive service;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final exampleData = SyncData(
-    lastSynced: DateTime(2021, 1, 1),
-    sheets: [
-      Sheet(
-        index: 0,
-        name: 'Example Sheet',
-        items: [
-          Item(
-            price: 1.00,
-            quantity: 1.00,
-            unit: Unit.gram,
-          ),
-          Item(
-            price: 2.00,
-            quantity: 2.00,
-            unit: Unit.gram,
-          ),
-        ],
-      ),
-      Sheet(
-        index: 1,
-        name: 'Example Sheet 2',
-        items: [
-          Item(
-            price: 3.00,
-            quantity: 3.00,
-            unit: Unit.kilogram,
-          ),
-          Item(
-            price: 4.00,
-            quantity: 4.00,
-            unit: Unit.milligram,
-          ),
-        ],
-      ),
-    ],
-  );
-
   setUpAll(() async {
     registerFallbackValue(const DownloadOptions());
     registerFallbackValue(File());
+    registerFallbackValue(ResumableUploadOptions());
+    registerFallbackValue(Media(const Stream.empty(), null));
 
     // Mock the storage service.
     StorageService.instance = storageService;
@@ -91,23 +94,23 @@ void main() {
     when(() => driveApi.files).thenReturn(filesResource);
 
     // Mock the media.
-    when(() => media.stream).thenAnswer((_) async* {
-      yield utf8.encode(exampleData.toJson());
-    });
+    // Return data from media.stream
+    when(() => media.stream)
+        .thenAnswer((_) => Stream.value(exampleData.toBytes()));
     when(() => media.contentType).thenReturn('application/json');
     when(() => media.length)
         .thenReturn(jsonEncode(exampleData.toJson()).length);
 
     // Mock the files resource.
-    when(() => filesResource.list()).thenAnswer((_) async {
+    when(() => filesResource.list(q: any(named: 'q'))).thenAnswer((_) async {
       final response = Response(
         jsonEncode({
           'files': [
             {
               'id': 'abc123',
               'name': kSyncDataFileName,
-            }
-          ]
+            },
+          ],
         }),
         200,
       );
@@ -123,8 +126,12 @@ void main() {
       );
       return File.fromJson(jsonDecode(response.body));
     });
-    when(() => filesResource.update(any(), any(),
-        uploadMedia: any(named: 'uploadMedia'))).thenAnswer((_) async {
+    when(() => filesResource.update(
+          any(),
+          any(),
+          uploadOptions: any(named: 'uploadOptions'),
+          uploadMedia: any(named: 'uploadMedia'),
+        )).thenAnswer((_) async {
       final response = Response(
         jsonEncode({
           'id': 'abc123',
@@ -134,38 +141,28 @@ void main() {
       );
       return File.fromJson(jsonDecode(response.body));
     });
-
     when(() => filesResource.get(any(),
         downloadOptions: any(named: 'downloadOptions'))).thenAnswer((_) async {
       return media;
     });
   });
 
-  setUp(() async {
-    service = GoogleDriveSyncService(driveApi);
-    await service.remoteSyncFileExists();
+  setUp(() {
+    service = GoogleDrive(driveApi);
   });
 
-  group('GoogleDriveSyncService:', () {
+  group('GoogleDrive:', () {
     test('can upload data', () async {
-      final result = await service.upload(exampleData);
-      expect(result, isNotNull);
-      expect(result!.lastSynced.isAfter(exampleData.lastSynced), isTrue);
-      expect(result.sheets.length, exampleData.sheets.length);
-      expect(result.sheets.first.name, exampleData.sheets.first.name);
+      final result = await service.upload(
+        fileName: kSyncDataFileName,
+        data: exampleData.toBytes(),
+      );
+      expect(result, true);
     });
 
     test('can download data', () async {
-      final result = await service.download();
-      expect(result, isNotNull);
-      expect(result.sheets.length, exampleData.sheets.length);
-      expect(result.sheets.first.name, exampleData.sheets.first.name);
-    });
-
-    test('can sync sheets', () async {
-      final result = await service.syncSheets(exampleData.sheets);
-      expect(result, isNotNull);
-      expect(result?.length, exampleData.sheets.length);
+      final result = await service.download(fileName: kSyncDataFileName);
+      expect(result, exampleData.toBytes());
     });
   });
 }

@@ -1,3 +1,3 @@
 export 'models/models.dart';
-export 'src/src.dart';
+export 'repository/repository.dart';
 export 'sync_service.dart';

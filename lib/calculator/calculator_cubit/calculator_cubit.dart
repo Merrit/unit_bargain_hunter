@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../app/cubit/app_cubit.dart';
+import '../../authentication/authentication.dart';
+import '../../logs/logs.dart';
 import '../../purchases/cubit/purchases_cubit.dart';
 import '../../storage/storage_service.dart';
+import '../../sync/sync.dart';
 import '../calculator.dart';
 import '../calculator_page.dart';
 import '../models/models.dart';
@@ -27,6 +32,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }) : super(initialState) {
     calcCubit = this;
     _saveAllSheets(); // In case the order was fixed on load.
+    syncData();
   }
 
   static Future<CalculatorCubit> initialize(
@@ -52,8 +58,62 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         activeSheetId: sheets.first.uuid,
         activeSheet: sheets.first,
         result: const <Item>[],
+        lastSync: DateTime.tryParse(
+          await storageService.getValue('lastSynced') ?? '',
+        ),
       ),
     );
+  }
+
+  /// Timer that will sync data with the cloud every 5 minutes.
+  Timer? _syncTimer;
+
+  /// Set the sync timer.
+  void _setSyncTimer() {
+    _syncTimer?.cancel();
+    _syncTimer = Timer.periodic(
+      const Duration(minutes: 5),
+      (_) => syncData(),
+    );
+  }
+
+  /// Sync with remote storage using the [SyncService].
+  Future<void> syncData() async {
+    if (!AuthenticationCubit.instance.state.signedIn) {
+      log.i('Not signed in, not syncing.');
+      return;
+    }
+
+    assert(SyncService.instance != null);
+    if (_syncTimer == null) _setSyncTimer();
+    emit(state.copyWith(syncing: true));
+    log.v('Syncing data...');
+
+    final List<Sheet>? sheets;
+    try {
+      sheets = await SyncService.instance?.syncSheets(state.sheets);
+    } catch (e) {
+      log.e('Error syncing', e);
+      emit(state.copyWith(syncing: false));
+      return;
+    }
+
+    emit(state.copyWith(syncing: false));
+
+    if (sheets == null) {
+      log.w('No sheets returned from sync.');
+      return;
+    }
+
+    emit(state.copyWith(lastSync: DateTime.now(), sheets: sheets));
+    log.v('Sync complete.');
+    await _saveAllSheets();
+  }
+
+  /// Reset sync status.
+  Future<void> resetSync() async {
+    await _storageService.deleteValue('lastSynced');
+    emit(state.copyWith(clearLastSync: true));
   }
 
   /// Verify's the index of the sheets and returns them in order.
@@ -202,5 +262,37 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       activeSheet: sheets.singleWhere((e) => e.uuid == activeSheetId),
     ));
     await _saveAllSheets();
+  }
+
+  Timer? _delayedSyncOnSaveTimer;
+
+  /// Sets the [_delayedSyncOnSaveTimer] to trigger after a short delay.
+  ///
+  /// This is to prevent the sync from triggering too often.
+  ///
+  /// The timer is cancelled if the user makes another change before the timer
+  /// triggers.
+  void _setDelayedSyncOnSaveTimer() {
+    _delayedSyncOnSaveTimer?.cancel();
+    _delayedSyncOnSaveTimer = Timer(const Duration(seconds: 5), () {
+      syncData();
+    });
+  }
+
+  @override
+  void onChange(Change<CalculatorState> change) {
+    if (change.nextState.sheets != change.currentState.sheets) {
+      _setDelayedSyncOnSaveTimer();
+    }
+
+    super.onChange(change);
+  }
+
+  @override
+  Future<void> close() async {
+    _syncTimer?.cancel();
+    _delayedSyncOnSaveTimer?.cancel();
+    await _saveAllSheets();
+    return super.close();
   }
 }
