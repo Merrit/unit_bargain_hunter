@@ -16,6 +16,12 @@ class CalculatorState extends Equatable {
   /// Will only include multiple items if there was a tie.
   final List<Item> result;
 
+  /// When the user data was last synced to the cloud.
+  final DateTime? lastSync;
+
+  /// Whether a sync is in progress.
+  final bool syncing;
+
   bool get resultExists => result.isNotEmpty;
 
   const CalculatorState({
@@ -23,6 +29,8 @@ class CalculatorState extends Equatable {
     this.activeSheetId,
     this.activeSheet,
     required this.result,
+    this.lastSync,
+    this.syncing = false,
   });
 
   CalculatorState copyWith({
@@ -31,12 +39,17 @@ class CalculatorState extends Equatable {
     String? activeSheetId,
     Sheet? activeSheet,
     List<Item>? result,
+    DateTime? lastSync,
+    bool? clearLastSync,
+    bool? syncing,
   }) {
     return CalculatorState(
       sheets: sheets ?? this.sheets,
       activeSheetId: activeSheetId ?? this.activeSheetId,
       activeSheet: activeSheet ?? this.activeSheet,
       result: result ?? this.result,
+      lastSync: clearLastSync == true ? null : lastSync ?? this.lastSync,
+      syncing: syncing ?? this.syncing,
     );
   }
 
@@ -47,6 +60,8 @@ class CalculatorState extends Equatable {
       activeSheetId,
       activeSheet,
       result,
+      lastSync,
+      syncing,
     ];
   }
 }

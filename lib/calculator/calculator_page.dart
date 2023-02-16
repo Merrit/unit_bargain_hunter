@@ -5,7 +5,6 @@ import 'package:helpers/helpers.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../app/app.dart';
-import '../app/widgets/widgets.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'calculator_cubit/calculator_cubit.dart';

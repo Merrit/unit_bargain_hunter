@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:googleapis_auth/googleapis_auth.dart';
 
 import '../../storage/storage_service.dart';
+import '../../sync/sync.dart';
 import '../google_auth.dart';
 
 part 'authentication_state.dart';
@@ -34,6 +35,14 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     AccessCredentials? credentials;
     if (savedCredentials != null) {
       credentials = AccessCredentials.fromJson(jsonDecode(savedCredentials));
+      final authClient = await googleAuth.getAuthClient();
+      if (authClient != null) {
+        final syncRepository = await SyncRepository.initialize(authClient);
+        await SyncService.initialize(
+          storageService: storageService,
+          syncRepository: syncRepository,
+        );
+      }
     }
 
     return AuthenticationCubit._(
@@ -47,13 +56,13 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
   }
 
-  Future<void> signIn() async {
+  Future<bool> signIn() async {
     assert(!state.signedIn);
 
     emit(state.copyWith(waitingForUserToSignIn: true));
 
     final accessCredentials = await _googleAuth.signin();
-    if (accessCredentials == null) return;
+    if (accessCredentials == null) return false;
 
     emit(state.copyWith(
       accessCredentials: accessCredentials,
@@ -65,6 +74,25 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       key: 'accessCredentials',
       value: jsonEncode(accessCredentials.toJson()),
     );
+
+    return await _initSyncService();
+  }
+
+  /// Initialize the sync service once the user has signed in.
+  ///
+  /// Returns `true` if the sync service was initialized successfully.
+  /// Returns `false` if the user is not signed in.
+  Future<bool> _initSyncService() async {
+    final authClient = await _googleAuth.getAuthClient();
+    if (authClient == null) return false;
+
+    final syncRepository = await SyncRepository.initialize(authClient);
+    await SyncService.initialize(
+      storageService: _storageService,
+      syncRepository: syncRepository,
+    );
+
+    return true;
   }
 
   /// Cancel the sign in process.

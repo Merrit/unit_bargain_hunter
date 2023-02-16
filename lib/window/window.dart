@@ -18,6 +18,8 @@ class Window {
     return instance;
   }
 
+  // TODO: Catch window close event on desktop and trigger sync before closing.
+
   static late final Window instance;
 
   void setWindowTitle(String title) => window_size.setWindowTitle(title);

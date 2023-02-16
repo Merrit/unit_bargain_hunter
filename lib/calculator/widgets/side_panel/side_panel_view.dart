@@ -8,7 +8,7 @@ import '../../../app/widgets/widgets.dart';
 import '../../../core/constants.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
-import '../../../settings/cubit/settings_cubit.dart';
+import '../../../settings/settings.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
 import 'sheet_tile_list.dart';
 
@@ -71,6 +71,10 @@ class _SidePanelState extends State<SidePanel> {
         proButton,
         const UpdateButton(),
         const Center(child: ThemeSwitch()),
+        ListTile(
+          title: const Center(child: Text('Settings')),
+          onTap: () => Navigator.pushNamed(context, SettingsPage.id),
+        ),
         ListTile(
           title: const Center(child: Text('About')),
           onTap: () => showDialog(

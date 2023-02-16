@@ -1,23 +1,59 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logger/logger.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:unit_bargain_hunter/authentication/authentication.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/calculator/models/models.dart';
+import 'package:unit_bargain_hunter/logs/logs.dart';
 import 'package:unit_bargain_hunter/purchases/cubit/purchases_cubit.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
+import 'package:unit_bargain_hunter/sync/sync.dart';
+
+class MockAuthenticationCubit extends MockCubit<AuthenticationState>
+    implements AuthenticationCubit {}
+
+class MockLogger extends Mock implements Logger {}
 
 class MockPurchasesCubit extends Mock implements PurchasesCubit {}
 
 class MockStorageService extends Mock implements StorageService {}
 
+class MockSyncRepository extends Mock implements SyncRepository {}
+
+late MockAuthenticationCubit _authenticationCubit;
 late MockPurchasesCubit _purchasesCubit;
 late MockStorageService storageService;
+late MockSyncRepository syncRepository;
+late SyncService syncService;
+
 late CalculatorCubit cubit;
 
 Future<void> main() async {
   group('CalculatorCubit: ', () {
+    setUpAll(() async {
+      await LoggingManager.initialize(verbose: false);
+    });
+
     setUp(() async {
+      // Mock the AuthenticationCubit
+      _authenticationCubit = MockAuthenticationCubit();
+      AuthenticationCubit.instance = _authenticationCubit;
+      when(() => _authenticationCubit.state).thenReturn(
+        const AuthenticationState(
+          accessCredentials: null,
+          signedIn: false,
+          waitingForUserToSignIn: false,
+        ),
+      );
+
+      // Mock the PurchasesCubit
       _purchasesCubit = MockPurchasesCubit();
+
+      // Mock the StorageService
       storageService = MockStorageService();
+      when(() => storageService.getValue('lastSynced'))
+          .thenAnswer((_) async {});
       when(() => storageService.getValue('showSidePanel'))
           .thenAnswer((_) async => true);
       when(() => storageService.getStorageAreaValues('sheets'))
@@ -31,6 +67,19 @@ Future<void> main() async {
             any(),
             storageArea: any(named: 'storageArea'),
           )).thenAnswer((_) async => Future.value());
+
+      // Mock the SyncService
+      syncRepository = MockSyncRepository();
+      SyncRepository.instance = syncRepository;
+
+      // Setup the SyncService
+      syncService = await SyncService.initialize(
+        storageService: storageService,
+        syncRepository: syncRepository,
+      );
+      SyncService.instance = syncService;
+
+      // Initialize the CalculatorCubit
       cubit = await CalculatorCubit.initialize(_purchasesCubit, storageService);
     });
 
@@ -135,6 +184,268 @@ Future<void> main() async {
       expect(sheets[0].index, 0);
       expect(sheets[1].name, 'Sugar');
       expect(sheets[1].index, 1);
+    });
+
+    group('sync:', () {
+      setUp(() {
+        // Mock the AuthenticationCubit
+        AuthenticationCubit.instance = MockAuthenticationCubit();
+        const authenticatedState = AuthenticationState(
+          accessCredentials: null,
+          signedIn: true,
+          waitingForUserToSignIn: false,
+        );
+
+        whenListen(
+          AuthenticationCubit.instance,
+          Stream.fromIterable([authenticatedState]),
+          initialState: authenticatedState,
+        );
+
+        // Mock the StorageService
+        when(() => storageService.getValue('lastSynced'))
+            .thenAnswer((_) async => null);
+
+        // Mock the SyncRepository
+        when(() => syncRepository.upload(
+              fileName: any(named: 'fileName'),
+              data: any(named: 'data'),
+            )).thenAnswer((_) async => true);
+      });
+
+      test('remote sheets are returned if there is no sync time saved locally',
+          () async {
+        // expect state to have default sheet
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Unnamed Sheet');
+
+        final remoteSheets = [
+          Sheet(name: 'Oats', index: 0),
+          Sheet(name: 'Rice', index: 1),
+          Sheet(name: 'Sugar', index: 2),
+        ];
+
+        final remoteLastSynced = DateTime //
+                .now()
+            .subtract(const Duration(hours: 2));
+
+        when(() => storageService.getValue('lastSynced'))
+            .thenAnswer((_) async => null);
+        when(() => syncRepository.download(fileName: any(named: 'fileName')))
+            .thenAnswer((_) async => SyncData(
+                  lastSynced: remoteLastSynced,
+                  sheets: remoteSheets,
+                ).toBytes());
+
+        await cubit.syncData();
+
+        expect(cubit.state.sheets.length, 3);
+        expect(cubit.state.sheets, remoteSheets);
+      });
+
+      test(
+          'local sheets are returned if there is a sync time saved locally and '
+          'the remote sync time is older', () async {
+        // expect state to have default sheet
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Unnamed Sheet');
+        expect(cubit.state.sheets.first.items.length, 2);
+
+        // Customize local sheet
+        cubit.updateActiveSheet(
+          cubit.state.activeSheet!.copyWith(name: 'Oats'),
+        );
+
+        cubit.updateItem(
+            item: cubit.state.activeSheet!.items[0].copyWith(
+          location: 'Costco',
+          price: 2,
+          quantity: 900,
+          unit: Unit.gram,
+        ));
+
+        cubit.updateItem(
+            item: cubit.state.activeSheet!.items[1].copyWith(
+          location: 'Walmart',
+          price: 4,
+          quantity: 0.2,
+          unit: Unit.kilogram,
+        ));
+
+        // Verify local sheet and items are customized
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Oats');
+        expect(cubit.state.sheets.first.items.length, 2);
+        expect(cubit.state.sheets.first.items[0].location, 'Costco');
+        expect(cubit.state.sheets.first.items[0].price, 2);
+        expect(cubit.state.sheets.first.items[0].quantity, 900);
+        expect(cubit.state.sheets.first.items[0].unit, Unit.gram);
+        expect(cubit.state.sheets.first.items[1].location, 'Walmart');
+        expect(cubit.state.sheets.first.items[1].price, 4);
+        expect(cubit.state.sheets.first.items[1].quantity, 0.2);
+        expect(cubit.state.sheets.first.items[1].unit, Unit.kilogram);
+
+        final remoteSheets = [
+          Sheet(name: 'Rice', index: 0),
+          Sheet(name: 'Sugar', index: 1),
+        ];
+
+        final remoteLastSynced = DateTime //
+                .now()
+            .subtract(const Duration(days: 20));
+
+        final localLastSynced = DateTime //
+                .now()
+            .subtract(const Duration(days: 5));
+
+        when(() => storageService.getValue('lastSynced'))
+            .thenAnswer((_) async => localLastSynced.toUtc().toIso8601String());
+        when(() => syncRepository.download(fileName: any(named: 'fileName')))
+            .thenAnswer((_) async => SyncData(
+                  lastSynced: remoteLastSynced,
+                  sheets: remoteSheets,
+                ).toBytes());
+
+        await cubit.syncData();
+
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Oats');
+        expect(cubit.state.sheets.first.items.length, 2);
+        expect(cubit.state.sheets.first.items[0].location, 'Costco');
+        expect(cubit.state.sheets.first.items[0].price, 2);
+        expect(cubit.state.sheets.first.items[0].quantity, 900);
+        expect(cubit.state.sheets.first.items[0].unit, Unit.gram);
+        expect(cubit.state.sheets.first.items[1].location, 'Walmart');
+        expect(cubit.state.sheets.first.items[1].price, 4);
+        expect(cubit.state.sheets.first.items[1].quantity, 0.2);
+        expect(cubit.state.sheets.first.items[1].unit, Unit.kilogram);
+      });
+
+      test(
+          'remote sheets are returned if there is a sync time saved locally and '
+          'the remote sync time is newer', () async {
+        // expect state to have default sheet
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Unnamed Sheet');
+        expect(cubit.state.sheets.first.items.length, 2);
+
+        // Customize local sheet
+        cubit.updateActiveSheet(
+          cubit.state.activeSheet!.copyWith(name: 'Oats'),
+        );
+
+        cubit.updateItem(
+            item: cubit.state.activeSheet!.items[0].copyWith(
+          location: 'Costco',
+          price: 2,
+          quantity: 900,
+          unit: Unit.gram,
+        ));
+
+        cubit.updateItem(
+            item: cubit.state.activeSheet!.items[1].copyWith(
+          location: 'Walmart',
+          price: 4,
+          quantity: 0.2,
+          unit: Unit.kilogram,
+        ));
+
+        // Verify local sheet and items are customized
+        expect(cubit.state.sheets.length, 1);
+        expect(cubit.state.sheets.first.name, 'Oats');
+        expect(cubit.state.sheets.first.items.length, 2);
+        expect(cubit.state.sheets.first.items[0].location, 'Costco');
+        expect(cubit.state.sheets.first.items[0].price, 2);
+        expect(cubit.state.sheets.first.items[0].quantity, 900);
+        expect(cubit.state.sheets.first.items[0].unit, Unit.gram);
+        expect(cubit.state.sheets.first.items[1].location, 'Walmart');
+        expect(cubit.state.sheets.first.items[1].price, 4);
+        expect(cubit.state.sheets.first.items[1].quantity, 0.2);
+        expect(cubit.state.sheets.first.items[1].unit, Unit.kilogram);
+
+        final remoteSheets = [
+          Sheet(
+            name: 'Rice',
+            index: 0,
+            items: [
+              Item(
+                details: 'Large bag',
+                location: 'Costco',
+                price: 2,
+                quantity: 900,
+                unit: Unit.gram,
+              ),
+              Item(
+                details: 'Box',
+                location: 'Walmart',
+                price: 4,
+                quantity: 0.2,
+                unit: Unit.kilogram,
+              ),
+            ],
+          ),
+          Sheet(
+            name: 'Sugar',
+            index: 1,
+            items: [
+              Item(
+                location: 'Costco',
+                price: 2,
+                quantity: 500,
+                unit: Unit.gram,
+              ),
+              Item(
+                location: 'Walmart',
+                price: 4,
+                quantity: 0.125,
+                unit: Unit.kilogram,
+              ),
+            ],
+          ),
+        ];
+
+        final remoteLastSynced = DateTime //
+                .now()
+            .subtract(const Duration(days: 5));
+
+        final localLastSynced = DateTime //
+                .now()
+            .subtract(const Duration(days: 20));
+
+        when(() => storageService.getValue('lastSynced'))
+            .thenAnswer((_) async => localLastSynced.toUtc().toIso8601String());
+        when(() => syncRepository.download(fileName: any(named: 'fileName')))
+            .thenAnswer((_) async => SyncData(
+                  lastSynced: remoteLastSynced,
+                  sheets: remoteSheets,
+                ).toBytes());
+
+        await cubit.syncData();
+
+        expect(cubit.state.sheets.length, 2);
+
+        expect(cubit.state.sheets.first.name, 'Rice');
+        expect(cubit.state.sheets.first.items.length, 2);
+        expect(cubit.state.sheets.first.items[0].location, 'Costco');
+        expect(cubit.state.sheets.first.items[0].price, 2);
+        expect(cubit.state.sheets.first.items[0].quantity, 900);
+        expect(cubit.state.sheets.first.items[0].unit, Unit.gram);
+        expect(cubit.state.sheets.first.items[1].location, 'Walmart');
+        expect(cubit.state.sheets.first.items[1].price, 4);
+        expect(cubit.state.sheets.first.items[1].quantity, 0.2);
+        expect(cubit.state.sheets.first.items[1].unit, Unit.kilogram);
+
+        expect(cubit.state.sheets[1].name, 'Sugar');
+        expect(cubit.state.sheets[1].items.length, 2);
+        expect(cubit.state.sheets[1].items[0].location, 'Costco');
+        expect(cubit.state.sheets[1].items[0].price, 2);
+        expect(cubit.state.sheets[1].items[0].quantity, 500);
+        expect(cubit.state.sheets[1].items[0].unit, Unit.gram);
+        expect(cubit.state.sheets[1].items[1].location, 'Walmart');
+        expect(cubit.state.sheets[1].items[1].price, 4);
+        expect(cubit.state.sheets[1].items[1].quantity, 0.125);
+        expect(cubit.state.sheets[1].items[1].unit, Unit.kilogram);
+      });
     });
   });
 }

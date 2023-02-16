@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
@@ -12,6 +13,7 @@ import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../logs/logs.dart';
+import '../storage/storage_service.dart';
 
 abstract class GoogleAuthIds {
   static const String linuxClientIdString =
@@ -32,13 +34,13 @@ abstract class GoogleAuthIds {
   static const String androidClientIdString = '';
   static final ClientId androidClientId = ClientId(androidClientIdString);
 
-  static const String webClientId = '';
-  static const String webClientSecret = '';
+  static const String webClientId =
+      '489801959946-smgnr4n23vt0ab658jdbf8q1pfefht23.apps.googleusercontent.com';
+  static const String webClientSecret = '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';
 
   static ClientId get clientId {
     if (kIsWeb) {
-      //
-      return ClientId('');
+      return ClientId(webClientId, webClientSecret);
     }
 
     switch (Platform.operatingSystem) {
@@ -88,12 +90,15 @@ class GoogleAuth {
   ///
   /// Supports Android, iOS & Web.
   Future<AccessCredentials?> _googleSignInAuth() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: GoogleAuthIds.clientId.identifier,
+      scopes: scopes,
+    );
 
     try {
       await googleSignIn.signIn();
     } on PlatformException catch (e) {
-      log.w('Failed to sign in with google_sign_in: $e');
+      log.w('Failed to sign in with google_sign_in', e);
       return null;
     }
 
@@ -129,6 +134,34 @@ class GoogleAuth {
   Future<void> launchAuthUrl(String url) async {
     final authUrl = Uri.parse(url);
     if (await canLaunchUrl(authUrl)) launchUrl(authUrl);
+  }
+
+  /// Returns an `AuthClient` that can be used to make authenticated requests.
+  Future<AuthClient?> getAuthClient() async {
+    final clientId = GoogleAuthIds.clientId;
+    final credentials = await StorageService.instance?.getValue(
+      'accessCredentials',
+    );
+
+    if (credentials == null) return null;
+
+    final accessCredentials = AccessCredentials.fromJson(
+      json.decode(credentials),
+    );
+
+    AuthClient? client;
+    // `google_sign_in` can't get us a refresh token, so.
+    if (accessCredentials.refreshToken != null) {
+      client = autoRefreshingClient(
+        clientId,
+        accessCredentials,
+        Client(),
+      );
+    } else {
+      client = await GoogleAuth.refreshAuthClient();
+    }
+
+    return client;
   }
 
   Future<void> signOut() async {
