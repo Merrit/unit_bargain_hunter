@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:logging/logging.dart';
+
+import '../../logs/logs.dart';
 
 // All of the unit types the app supports comparisons of.
-
-final _log = Logger('Unit');
 
 abstract class Unit extends Equatable {
   const Unit();
@@ -65,7 +64,7 @@ abstract class Unit extends Equatable {
       case 'item':
         return const ItemUnit();
       default:
-        _log.warning('Unable to parse Unit from map.');
+        log.w('Unable to parse Unit from map.');
         return Gram();
     }
   }

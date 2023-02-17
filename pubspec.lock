@@ -488,7 +488,7 @@ packages:
     source: hosted
     version: "1.1.0"
   logging:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: logging
       sha256: "04094f2eb032cbb06c6f6e8d3607edcfcb0455e2bb6cbc010cb01171dcb64e6d"

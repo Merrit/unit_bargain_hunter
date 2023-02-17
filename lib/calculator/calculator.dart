@@ -1,8 +1,5 @@
-import 'package:logging/logging.dart';
-
+import '../logs/logs.dart';
 import 'models/models.dart';
-
-final _log = Logger('Calculator');
 
 class Calculator {
   const Calculator();
@@ -20,7 +17,7 @@ class Calculator {
               (a.costPerUnit[0].value < b.costPerUnit[0].value) ? a : b)
           .costPerUnit;
     } on RangeError {
-      _log.warning('Issue doing compare. Was costPerUnit calculated?');
+      log.w('Issue doing compare. Was costPerUnit calculated?');
       return [];
     }
     final cheapestBaseUnit = cheapestPrice.singleWhere(

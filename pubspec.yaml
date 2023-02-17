@@ -34,7 +34,6 @@ dependencies:
   in_app_purchase_android: ^0.2.3+5
   intl: ^0.17.0
   logger: ^1.1.0
-  logging: ^1.0.2
   multi_split_view: ^2.1.0
   path_provider: ^2.0.10
   pub_semver: ^2.0.0
