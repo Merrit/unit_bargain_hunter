@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:logging/logging.dart';
 import 'package:store_checker/store_checker.dart';
 
+import '../../logs/logs.dart';
 import '../../platform/platform.dart';
 import '../../storage/storage_service.dart';
 
@@ -24,8 +24,6 @@ late final PurchasesCubit purchasesCubit;
 
 /// Keep track of the in-app purchases on Android.
 class PurchasesCubit extends Cubit<PurchasesState> {
-  static final Logger _log = Logger('PurchasesCubit');
-
   InAppPurchase? _purchaseService;
   late final StreamSubscription<List<PurchaseDetails>> _subscription;
   final StorageService _storageService;
@@ -71,7 +69,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
       (details) => _handlePurchaseUpdate(details),
       onDone: () => _subscription.cancel(),
       onError: (error) {
-        _log.warning('Error listening for InAppPurchase updates: $error');
+        log.w('Error listening for InAppPurchase updates: $error');
       },
     );
 
@@ -143,7 +141,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
     if (error.message == 'BillingResponse.itemAlreadyOwned') {
       _restorePurchases();
     } else {
-      _log.warning('IAPError message: ${error.message}');
+      log.w('IAPError message: ${error.message}');
       emit(state.copyWith(purchaseError: error.message));
       emit(state.copyWith(purchaseError: null));
     }

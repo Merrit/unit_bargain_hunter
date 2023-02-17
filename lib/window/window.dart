@@ -1,7 +1,6 @@
-import 'package:logging/logging.dart';
 import 'package:window_size/window_size.dart' as window_size;
 
-final _log = Logger('Window');
+import '../logs/logs.dart';
 
 /// Use `window_size` from `flutter-desktop-embedding` to manage the
 /// application window on desktop platforms.
@@ -12,7 +11,7 @@ class Window {
   Window._();
 
   static Future<Window> initialize() async {
-    _log.info('Initializing desktop application window.');
+    log.i('Initializing desktop application window.');
     instance = Window._();
     instance.setWindowTitle('Unit Bargain Hunter');
     return instance;
