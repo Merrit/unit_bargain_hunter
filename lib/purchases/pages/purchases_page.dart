@@ -56,6 +56,10 @@ class PurchasesPage extends StatelessWidget {
 ### The free version of Unit Bargain Hunter for Android allows creating up to 5 sheets.
 
 ### Unlock unlimited sheets so you can track all your products and save even more money. 💵 🎉
+
+The Pro version also enables the following features:
+
+- Sync your data across all your devices (EXPERIMENTAL)
 '''),
                   const SizedBox(height: 50),
                   InkWell(
