@@ -16,19 +16,13 @@ import '../logs/logs.dart';
 import '../storage/storage_service.dart';
 
 abstract class GoogleAuthIds {
-  static const String linuxClientIdString =
+  static const String desktopClientIdString =
       '489801959946-a4f66p59bl7lbhcdan9qgs0kroplc2b9.apps.googleusercontent.com';
-  static const String linuxClientSecret = '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';
-  static final ClientId linuxClientId = ClientId(
-    linuxClientIdString,
-    linuxClientSecret,
-  );
-
-  static const String windowsClientIdString = '';
-  static const String windowsClientSecret = '';
-  static final ClientId windowsClientId = ClientId(
-    windowsClientIdString,
-    windowsClientSecret,
+  static const String desktopClientSecret =
+      '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';
+  static final ClientId desktopClientId = ClientId(
+    desktopClientIdString,
+    desktopClientSecret,
   );
 
   static const String androidClientIdString =
@@ -46,9 +40,9 @@ abstract class GoogleAuthIds {
 
     switch (Platform.operatingSystem) {
       case 'linux':
-        return linuxClientId;
+      case 'macos':
       case 'windows':
-        return windowsClientId;
+        return desktopClientId;
       case 'android':
         return androidClientId;
       default:
