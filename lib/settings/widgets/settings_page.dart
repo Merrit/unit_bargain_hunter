@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
 
 import '../../authentication/authentication.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
+import '../../purchases/cubit/purchases_cubit.dart';
+import '../../purchases/pages/purchases_page.dart';
 
 class SettingsPage extends StatelessWidget {
   static const String id = '/settings';
@@ -62,6 +65,10 @@ class _EnableSyncTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool proPurchased = context.select(
+      (PurchasesCubit cubit) => cubit.state.proPurchased,
+    );
+
     return BlocListener<AuthenticationCubit, AuthenticationState>(
       listener: (context, state) {
         if (state.waitingForUserToSignIn) {
@@ -78,6 +85,12 @@ class _EnableSyncTile extends StatelessWidget {
                 secondary: const Icon(Icons.sync),
                 subtitle: const Text('Sync your data with Google Drive'),
                 onChanged: (bool value) async {
+                  // If the user hasn't purchased pro, show a prompt to do so.
+                  if (!proPurchased) {
+                    _showPurchasePrompt(context);
+                    return;
+                  }
+
                   if (value) {
                     final scaffoldMessenger = ScaffoldMessenger.of(context);
                     final success = await AuthenticationCubit.instance.signIn();
@@ -109,7 +122,27 @@ class _EnableSyncTile extends StatelessWidget {
     );
   }
 
+  /// Shows a prompt to purchase the pro version.
+  void _showPurchasePrompt(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Please purchase the pro version to use sync'),
+        action: SnackBarAction(
+          label: 'Purchase',
+          onPressed: () => Navigator.pushNamed(context, PurchasesPage.id),
+        ),
+      ),
+    );
+  }
+
   void showSigningInDialog(BuildContext context) {
+    final bool isMobile = defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android;
+
+    final String instructions = isMobile
+        ? 'Please use the dialog that opened in the app to sign in'
+        : 'Please use the opened browser to sign in';
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -122,7 +155,7 @@ class _EnableSyncTile extends StatelessWidget {
           },
           child: AlertDialog(
             title: const Text('Sign in'),
-            content: const Text('Please use the opened browser to sign in'),
+            content: Text(instructions),
             actions: [
               TextButton(
                 onPressed: () {

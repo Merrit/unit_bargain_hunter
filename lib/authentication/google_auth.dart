@@ -31,7 +31,8 @@ abstract class GoogleAuthIds {
     windowsClientSecret,
   );
 
-  static const String androidClientIdString = '';
+  static const String androidClientIdString =
+      '489801959946-jhunhbd9fogdu0qnh6lh2vse1cg87voo.apps.googleusercontent.com';
   static final ClientId androidClientId = ClientId(androidClientIdString);
 
   static const String webClientId =
@@ -90,10 +91,7 @@ class GoogleAuth {
   ///
   /// Supports Android, iOS & Web.
   Future<AccessCredentials?> _googleSignInAuth() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: GoogleAuthIds.clientId.identifier,
-      scopes: scopes,
-    );
+    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
 
     try {
       await googleSignIn.signIn();
@@ -166,7 +164,7 @@ class GoogleAuth {
 
   Future<void> signOut() async {
     // Specific signout only seems needed for the google_sign_in package.
-    if (!Platform.isAndroid) return;
+    if (defaultTargetPlatform != TargetPlatform.android) return;
 
     final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
 

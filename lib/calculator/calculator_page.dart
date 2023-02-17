@@ -5,6 +5,7 @@ import 'package:helpers/helpers.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../app/app.dart';
+import '../app/widgets/widgets.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'calculator_cubit/calculator_cubit.dart';
@@ -43,13 +44,38 @@ class CalculatorPage extends StatelessWidget {
           child: FocusableActionDetector(
             focusNode: focusNode,
             child: Scaffold(
-              appBar: const CustomAppBar(),
+              appBar: (mediaQuery.isHandset) ? const CustomAppBar() : null,
               drawer: drawer,
               body: CalculatorView(),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  final preferredSize = const Size.fromHeight(kToolbarHeight);
+
+  const CustomAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        if (state.activeSheet == null) {
+          return AppBar();
+        }
+
+        return ExcludeFocusTraversal(
+          child: AppBar(
+            centerTitle: true,
+            title: const _SheetNameWidget(),
+          ),
+        );
+      },
     );
   }
 }
@@ -106,6 +132,12 @@ class ScrollingItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    final Widget sheetNameWidget = (mediaQuery.isHandset) //
+        ? const SizedBox()
+        : const _SheetNameWidget();
+
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         if (state.activeSheet == null) {
@@ -127,35 +159,84 @@ class ScrollingItemsList extends StatelessWidget {
           onPressed: () => calcCubit.addItem(),
         );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                controller: ScrollController(),
-                child: Wrap(
-                  runSpacing: 20.0,
-                  alignment: WrapAlignment.center,
+        return Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              sheetNameWidget,
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: ScrollController(),
+                  child: Wrap(
+                    runSpacing: 20.0,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      const SizedBox(width: double.infinity),
+                      for (var item in state.activeSheet!.items)
+                        ItemCard(item: item),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const SizedBox(width: double.infinity),
-                    for (var item in state.activeSheet!.items)
-                      ItemCard(item: item),
+                    const CompareByDropdownButton(),
+                    compareButton,
+                    addButton,
                   ],
                 ),
               ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Displays the sheet's name, and allows the user to change it.
+class _SheetNameWidget extends StatelessWidget {
+  const _SheetNameWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        final nameTextWidget = Text(
+          state.activeSheet!.name,
+          style: Theme.of(context).textTheme.titleLarge,
+        );
+
+        const smallSpacer = SizedBox(width: 4);
+
+        const editIcon = Opacity(
+          opacity: 0.6,
+          child: Icon(
+            Icons.edit,
+            size: 18,
+          ),
+        );
+
+        return InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () => showModal(context, const SheetSettingsView()),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                nameTextWidget,
+                smallSpacer,
+                editIcon,
+              ],
             ),
-            Card(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const CompareByDropdownButton(),
-                  compareButton,
-                  addButton,
-                ],
-              ),
-            ),
-          ],
+          ),
         );
       },
     );
