@@ -23,13 +23,43 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         return ExcludeFocusTraversal(
           child: AppBar(
             centerTitle: (Platform.isAndroid) ? false : true,
-            title: const SheetNameWidget(),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () => showModal(context, const SheetSettingsView()),
-              )
-            ],
+            title: const _SheetNameWidget(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Displays the sheet's name, and allows the user to change it.
+class _SheetNameWidget extends StatelessWidget {
+  const _SheetNameWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        return InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () => showModal(context, const SheetSettingsView()),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(state.activeSheet!.name),
+                const SizedBox(width: 4),
+                const Opacity(
+                  opacity: 0.6,
+                  child: Icon(
+                    Icons.edit,
+                    size: 18,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
