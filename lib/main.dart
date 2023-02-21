@@ -18,7 +18,7 @@ import 'window/window.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await LoggingManager.initialize(verbose: true);
+  await LoggingManager.initialize();
   _preloadEmojis();
   setup.init();
 
