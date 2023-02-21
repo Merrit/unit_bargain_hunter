@@ -13,6 +13,7 @@ import 'purchases/cubit/purchases_cubit.dart';
 import 'settings/cubit/settings_cubit.dart';
 import 'setup/setup.dart';
 import 'storage/storage_service.dart';
+import 'updates/updates.dart';
 import 'window/window.dart';
 
 Future<void> main() async {
@@ -52,7 +53,7 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit()),
+        BlocProvider(create: (context) => AppCubit(UpdateService())),
         BlocProvider.value(value: authenticationCubit),
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),
