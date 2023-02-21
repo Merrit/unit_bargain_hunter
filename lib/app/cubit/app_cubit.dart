@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../platform/platform.dart';
-import '../version_service.dart';
+import '../../updates/update_service.dart';
 
 part 'app_state.dart';
 
@@ -11,23 +11,18 @@ class AppCubit extends Cubit<AppState> {
   /// Singleton instance.
   static late AppCubit instance;
 
-  AppCubit(VersionService appVersionService) : super(AppState.initial()) {
+  AppCubit() : super(AppState.initial()) {
     instance = this;
-    _fetchVersionData(appVersionService);
+    _fetchVersionData();
   }
 
-  Future<void> _fetchVersionData(VersionService versionRepo) async {
-    final runningVersion = await versionRepo.runningVersion();
-    final updateAvailable =
-        (Platform.isDesktop) ? await versionRepo.updateAvailable() : false;
-    final latestVersion =
-        (Platform.isDesktop) ? await versionRepo.latestVersion() : '';
-    final showUpdateButton = (Platform.isDesktop && updateAvailable);
+  Future<void> _fetchVersionData() async {
+    final versionInfo = await getVersionInfo();
     emit(state.copyWith(
-      runningVersion: runningVersion,
-      updateVersion: latestVersion,
-      updateAvailable: updateAvailable,
-      showUpdateButton: showUpdateButton,
+      runningVersion: versionInfo.currentVersion,
+      updateVersion: versionInfo.latestVersion,
+      updateAvailable: versionInfo.updateAvailable,
+      showUpdateButton: (Platform.isDesktop && versionInfo.updateAvailable),
     ));
   }
 

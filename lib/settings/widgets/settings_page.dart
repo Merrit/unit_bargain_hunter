@@ -1,10 +1,13 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
 
+import '../../app/app.dart';
 import '../../authentication/authentication.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
+import '../../core/constants.dart';
 import '../../purchases/cubit/purchases_cubit.dart';
 import '../../purchases/pages/purchases_page.dart';
 
@@ -38,9 +41,17 @@ class SettingsView extends StatelessWidget {
           horizontalPadding = (constraints.maxWidth - 600) / 2;
         }
 
-        return ListView(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          children: const [
+        const versionSection = _SectionCard(
+          title: 'Version',
+          children: [
+            _CurrentVersionTile(),
+            _UpdateTile(),
+          ],
+        );
+
+        const syncSection = _SectionCard(
+          title: 'Sync',
+          children: [
             // Warning that sync is experimental
             Padding(
               padding: EdgeInsets.all(16),
@@ -55,6 +66,111 @@ class SettingsView extends StatelessWidget {
             _SignOutTile(),
           ],
         );
+
+        return ListView(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: 16,
+          ),
+          children: const [
+            versionSection,
+            syncSection,
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// A card with a title and a list of tiles related to that section.
+class _SectionCard extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+
+  const _SectionCard({
+    Key? key,
+    required this.title,
+    required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          ...children,
+        ],
+      ),
+    );
+  }
+}
+
+/// A tile that shows the current version of the app.
+class _CurrentVersionTile extends StatelessWidget {
+  const _CurrentVersionTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Current version: ${state.runningVersion}'),
+        );
+      },
+    );
+  }
+}
+
+/// A tile that shows the latest version of the app, and a button to
+/// open the download url in the browser (only on desktop).
+///
+/// If an update is available, a badge is shown on the tile to match the
+/// badge on the Settings button in the side bar.
+class _UpdateTile extends StatelessWidget {
+  const _UpdateTile();
+
+  @override
+  Widget build(BuildContext context) {
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        kIsWeb) {
+      return const SizedBox();
+    }
+
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        if (state.updateAvailable) {
+          return ListTile(
+            title: badges.Badge(
+              showBadge: state.showUpdateButton,
+              position: badges.BadgePosition.topStart(),
+              badgeStyle: const badges.BadgeStyle(
+                badgeColor: Colors.lightBlue,
+              ),
+              child: Text('Update available: ${state.updateVersion}'),
+            ),
+            trailing: kIsWeb
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.open_in_browser),
+                    onPressed: () {
+                      AppCubit.instance.launchURL(websiteUrl);
+                    },
+                  ),
+          );
+        } else {
+          return const ListTile(
+            title: Text('Up to date'),
+          );
+        }
       },
     );
   }

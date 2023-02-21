@@ -1,11 +1,10 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:helpers/helpers.dart';
 
 import '../../../app/app.dart';
 import '../../../app/widgets/widgets.dart';
-import '../../../core/constants.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../../settings/settings.dart';
@@ -69,12 +68,8 @@ class _SidePanelState extends State<SidePanel> {
         ),
         const SheetTileList(),
         proButton,
-        const UpdateButton(),
         const Center(child: ThemeSwitch()),
-        ListTile(
-          title: const Center(child: Text('Settings')),
-          onTap: () => Navigator.pushNamed(context, SettingsPage.id),
-        ),
+        const _SettingsTile(),
         ListTile(
           title: const Center(child: Text('About')),
           onTap: () => showDialog(
@@ -95,51 +90,25 @@ class _SidePanelState extends State<SidePanel> {
   }
 }
 
-class UpdateButton extends StatelessWidget {
-  const UpdateButton({
-    Key? key,
-  }) : super(key: key);
+class _SettingsTile extends StatelessWidget {
+  const _SettingsTile();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
-        return (state.showUpdateButton)
-            ? IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('An update is available'),
-                        content: Text(
-                          'Current version: ${state.runningVersion}\n'
-                          'Update version: ${state.updateVersion}\n'
-                          '\n'
-                          'Would you like to open the downloads page?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Close'),
-                          ),
-                          TextButton(
-                            onPressed: () => AppCubit //
-                                .instance
-                                .launchURL(websiteUrl),
-                            child: const Text('Open'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                icon: const FaIcon(
-                  FontAwesomeIcons.arrowCircleUp,
-                  color: Colors.greenAccent,
-                ),
-              )
-            : const SizedBox();
+        return ListTile(
+          title: Center(
+            child: badges.Badge(
+              showBadge: state.showUpdateButton,
+              badgeStyle: const badges.BadgeStyle(
+                badgeColor: Colors.lightBlue,
+              ),
+              child: const Text('Settings'),
+            ),
+          ),
+          onTap: () => Navigator.pushNamed(context, SettingsPage.id),
+        );
       },
     );
   }
