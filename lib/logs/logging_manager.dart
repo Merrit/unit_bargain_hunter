@@ -28,7 +28,7 @@ class LoggingManager {
     instance = this;
   }
 
-  static Future<LoggingManager> initialize({required bool verbose}) async {
+  static Future<LoggingManager> initialize({bool verbose = false}) async {
     if (testing) {
       // Set the logger to a dummy logger during unit tests.
       log = Logger(level: Level.nothing);
