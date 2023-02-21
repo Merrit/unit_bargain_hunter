@@ -11,13 +11,13 @@ class AppCubit extends Cubit<AppState> {
   /// Singleton instance.
   static late AppCubit instance;
 
-  AppCubit() : super(AppState.initial()) {
+  AppCubit(UpdateService updateService) : super(AppState.initial()) {
     instance = this;
-    _fetchVersionData();
+    _fetchVersionData(updateService);
   }
 
-  Future<void> _fetchVersionData() async {
-    final versionInfo = await getVersionInfo();
+  Future<void> _fetchVersionData(UpdateService updateService) async {
+    final versionInfo = await updateService.getVersionInfo();
     emit(state.copyWith(
       runningVersion: versionInfo.currentVersion,
       updateVersion: versionInfo.latestVersion,
