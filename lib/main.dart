@@ -19,6 +19,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await LoggingManager.initialize();
+
+  // Handle platform errors not caught by Flutter.
+  PlatformDispatcher.instance.onError = (error, stack) {
+    log.e('Uncaught platform error', error, stack);
+    return true;
+  };
+
   _preloadEmojis();
   setup.init();
 
