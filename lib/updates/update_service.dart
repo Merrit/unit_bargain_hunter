@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import '../logs/logs.dart';
 import 'updates.dart';
@@ -13,21 +14,34 @@ class UpdateService {
     final currentVersion = await _getCurrentVersion();
     final latestVersion = await _getLatestVersion();
 
+    // If the latest version is null, then we couldn't get the info from GitHub.
+    // In this case, we'll just assume there is no update available.
+    // If the latest version is a prerelease, then we'll also assume there is no
+    // update available.
+    bool updateAvailable;
+    if (latestVersion == null) {
+      updateAvailable = false;
+    } else if (latestVersion.isPreRelease) {
+      updateAvailable = false;
+    } else {
+      updateAvailable = currentVersion < latestVersion;
+    }
+
     return VersionInfo(
-      currentVersion: currentVersion,
-      latestVersion: latestVersion,
-      updateAvailable: latestVersion != null && latestVersion != currentVersion,
+      currentVersion: currentVersion.toString(),
+      latestVersion: latestVersion?.toString(),
+      updateAvailable: updateAvailable,
     );
   }
 
   /// Gets the current version of the app.
-  Future<String> _getCurrentVersion() async {
+  Future<Version> _getCurrentVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
-    return packageInfo.version;
+    return Version.parse(packageInfo.version);
   }
 
   /// Gets the latest version of the app.
-  Future<String?> _getLatestVersion() async {
+  Future<Version?> _getLatestVersion() async {
     final uri = Uri.parse(
       'https://api.github.com/repos/merrit/unit_bargain_hunter/releases',
     );
@@ -42,7 +56,8 @@ class UpdateService {
       final data = List<Map>.from(json);
       final tag = data.firstWhere((element) => element['prerelease'] == false);
       final tagName = tag['tag_name'] as String;
-      return _parseVersionTag(tagName);
+      final version = _parseVersionTag(tagName);
+      return Version.parse(version);
     } else {
       log.w('Issue getting latest version info from GitHub, '
           'status code: ${response.statusCode}\n');
