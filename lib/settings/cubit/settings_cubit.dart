@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:system_theme/system_theme.dart';
 
 import '../../storage/storage_service.dart';
+import '../../theme/app_theme.dart';
 
 part 'settings_state.dart';
 
@@ -31,29 +32,41 @@ class SettingsCubit extends Cubit<SettingsState> {
       initialState: SettingsState(
         navigationAreaRatio:
             await storageService.getValue('navigationAreaRatio') ?? 0.25,
-        themeMode: await _getThemeMode(storageService),
+        theme: await _getTheme(),
       ),
     );
   }
 
-  static Future<ThemeMode> _getThemeMode(StorageService storageService) async {
-    final ThemeMode themeMode;
-    final theme = await storageService.getValue('ThemeMode') as String?;
-    switch (theme) {
-      case 'ThemeMode.dark':
-        themeMode = ThemeMode.dark;
-        break;
-      case 'ThemeMode.light':
-        themeMode = ThemeMode.light;
-        break;
+  /// Returns the [ThemeData] based on the user's choice of desired [ThemeMode].
+  static Future<ThemeData> _getTheme() async {
+    final themeMode = await _getThemeMode();
+    switch (themeMode) {
+      case ThemeMode.light:
+        return AppTheme.light;
+      case ThemeMode.dark:
       default:
-        if (kIsWeb) {
-          themeMode = ThemeMode.system;
-        } else {
-          themeMode = ThemeMode.dark;
-        }
+        return AppTheme.dark;
     }
-    return themeMode;
+  }
+
+  /// Returns the [ThemeMode] based on the user's choice of desired [ThemeMode].
+  ///
+  /// If the user has not made a choice, the system's theme is used.
+  static Future<ThemeMode> _getThemeMode() async {
+    final String? savedThemePreference =
+        await StorageService.instance?.getValue(
+      'ThemeMode',
+    );
+
+    switch (savedThemePreference) {
+      case 'ThemeMode.dark':
+        return ThemeMode.dark;
+      case 'ThemeMode.light':
+        return ThemeMode.light;
+      case null:
+      default:
+        return (SystemTheme.isDarkMode) ? ThemeMode.dark : ThemeMode.light;
+    }
   }
 
   Future<void> updateNavigationAreaRatio(double value) async {
@@ -64,9 +77,12 @@ class SettingsCubit extends Cubit<SettingsState> {
   /// Update and persist the ThemeMode based on the user's selection.
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
     if (newThemeMode == null) return;
-    if (newThemeMode == state.themeMode) return;
 
-    emit(state.copyWith(themeMode: newThemeMode));
+    final newTheme = (newThemeMode == ThemeMode.light) //
+        ? AppTheme.light
+        : AppTheme.dark;
+
+    emit(state.copyWith(theme: newTheme));
 
     await _storageService.saveValue(
       key: 'ThemeMode',

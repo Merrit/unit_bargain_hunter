@@ -40,6 +40,7 @@ dependencies:
   path_provider: ^2.0.10
   pub_semver: ^2.0.0
   store_checker: ^1.0.0
+  system_theme: ^2.1.0
   url_launcher: ^6.0.20
   uuid: ^3.0.6
   window_size:
@@ -67,7 +68,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/icon.png
-    - assets/images/theme_switch/
     - pubspec.yaml
 
 flutter_icons:

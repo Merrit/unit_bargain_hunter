@@ -10,6 +10,8 @@ import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../core/constants.dart';
 import '../../purchases/cubit/purchases_cubit.dart';
 import '../../purchases/pages/purchases_page.dart';
+import '../../theme/theme.dart';
+import '../settings.dart';
 
 class SettingsPage extends StatelessWidget {
   static const String id = '/settings';
@@ -49,6 +51,13 @@ class SettingsView extends StatelessWidget {
           ],
         );
 
+        const appearanceSection = _SectionCard(
+          title: 'Appearance',
+          children: [
+            _ThemeTile(),
+          ],
+        );
+
         const syncSection = _SectionCard(
           title: 'Sync',
           children: [
@@ -74,6 +83,7 @@ class SettingsView extends StatelessWidget {
           ),
           children: const [
             versionSection,
+            appearanceSection,
             syncSection,
           ],
         );
@@ -171,6 +181,29 @@ class _UpdateTile extends StatelessWidget {
             title: Text('Up to date'),
           );
         }
+      },
+    );
+  }
+}
+
+/// A tile that shows the current theme, and a switch to toggle between
+/// light and dark mode.
+class _ThemeTile extends StatelessWidget {
+  const _ThemeTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return SwitchListTile(
+          value: state.theme == AppTheme.dark,
+          title: const Text('Dark mode'),
+          secondary: const Icon(Icons.brightness_4),
+          onChanged: (bool value) {
+            settingsCubit
+                .updateThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+          },
+        );
       },
     );
   }
