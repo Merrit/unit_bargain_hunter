@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app/app.dart';
+import 'app/app_widget.dart';
 import 'authentication/authentication.dart';
 import 'calculator/calculator_cubit/calculator_cubit.dart';
 import 'logs/logs.dart';
@@ -60,7 +60,7 @@ Future<void> main() async {
         BlocProvider.value(value: settingscubit),
       ],
       child: const ProviderScope(
-        child: App(),
+        child: AppWidget(),
       ),
     ),
   );
