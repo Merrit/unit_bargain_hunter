@@ -1,35 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'styles.dart';
+/// Contains the app's theme data.
+abstract class AppTheme {
+  /// Primary app color.
+  static const primaryColor = Color.fromRGBO(0, 179, 255, 1);
 
-class AppTheme {
-  final Brightness brightness;
-
-  AppTheme({
-    required this.brightness,
-  });
-
-  final CardTheme cardTheme = CardTheme(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadii.gentlyRounded,
-    ),
+  /// Dark app theme.
+  static final ThemeData dark = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorSchemeSeed: primaryColor,
   );
 
-  final InputDecorationTheme inputDecorationTheme = const InputDecorationTheme(
-    border: OutlineInputBorder(),
-    isDense: true,
+  /// Light app theme.
+  static final ThemeData light = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorSchemeSeed: primaryColor,
   );
-
-  ThemeData get themeData {
-    final theme = ThemeData(
-      brightness: brightness,
-      cardTheme: cardTheme,
-      fontFamily: 'Montserrat',
-      inputDecorationTheme: inputDecorationTheme,
-    );
-    return theme.copyWith(
-      textTheme: GoogleFonts.notoSansTextTheme(theme.textTheme),
-    );
-  }
 }
