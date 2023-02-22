@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/constants.dart';
 import '../../theme/styles.dart';
-import '../app.dart';
+import '../app_widget.dart';
 import 'widgets.dart';
 
 class CustomAboutDialog extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:unit_bargain_hunter/app/app.dart';
+import 'package:unit_bargain_hunter/app/app_widget.dart';
 import 'package:unit_bargain_hunter/updates/updates.dart';
 
 class MockUpdateService extends Mock implements UpdateService {}

@@ -12,8 +12,8 @@ import '../theme/app_theme.dart';
 
 export 'cubit/app_cubit.dart';
 
-class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+class AppWidget extends StatelessWidget {
+  const AppWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

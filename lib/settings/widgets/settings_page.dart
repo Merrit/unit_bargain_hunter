@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
 
-import '../../app/app.dart';
+import '../../app/app_widget.dart';
 import '../../authentication/authentication.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../core/constants.dart';
