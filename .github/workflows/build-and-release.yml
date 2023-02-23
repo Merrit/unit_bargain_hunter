@@ -16,19 +16,6 @@ env:
   msix-icon-path: "assets\\icon\\icon.png"
 
 jobs:
-  create-draft-release:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create draft release if semver tag was pushed
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN }}
-          VERSION: ${{ github.ref_name }}
-        run: gh release create ${{ env.VERSION }} --draft --generate-notes
-
   # --------------------------------- Configure -------------------------------- #
   create-build:
     name: Create ${{ matrix.target }} build
@@ -114,3 +101,12 @@ jobs:
         with:
           name: artifacts
           path: output/*
+
+      - name: Create Draft Release & Upload artifacts
+        uses: marvinpinto/action-automatic-releases@v1.2.1
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          draft: true
+          prerelease: false
+          files: |
+            output/*
