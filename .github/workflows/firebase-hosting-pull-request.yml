@@ -23,6 +23,9 @@ jobs:
           flutter upgrade
           flutter pub get
 
+      - name: Run build_runner
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Run build script for non-Windows platforms
         run: flutter build web
 
