@@ -48,6 +48,12 @@ void main() {
     );
   });
 
+  setUp(() {
+    // Reset the StorageService.
+    when(() => storageService.getValue('firstRun'))
+        .thenAnswer((_) async => false);
+  });
+
   group('AppCubit:', () {
     test('instance variable is accessible', () {
       AppCubit(
@@ -67,6 +73,7 @@ void main() {
       ),
       expect: () => [
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -85,6 +92,7 @@ void main() {
       ),
       act: (cubit) => cubit.promptForProUpgrade(),
       seed: () => const AppState(
+        firstRun: false,
         runningVersion: '1.0.0',
         updateVersion: '1.0.0',
         updateAvailable: false,
@@ -94,6 +102,7 @@ void main() {
       ),
       expect: () => [
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -102,6 +111,7 @@ void main() {
           releaseNotes: null,
         ),
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -113,7 +123,7 @@ void main() {
     );
 
     blocTest<AppCubit, AppState>(
-      'release notes are not fetched if shown for the current version',
+      'release notes are not fetched if they have been previously shown for the current version',
       build: () {
         when(() => storageService.getValue('lastReleaseNotesVersionShown'))
             .thenAnswer((_) => Future.value('1.0.0'));
@@ -124,6 +134,51 @@ void main() {
       },
       expect: () => [
         const AppState(
+          firstRun: false,
+          runningVersion: '1.0.0',
+          updateVersion: '1.0.0',
+          updateAvailable: false,
+          showUpdateButton: false,
+          promptForProUpgrade: false,
+          releaseNotes: null,
+        ),
+      ],
+    );
+
+    blocTest<AppCubit, AppState>(
+      'release notes are not shown the first time the app is run',
+      build: () {
+        when(() => storageService.getValue('firstRun'))
+            .thenAnswer((_) => Future.value(null));
+        when(() => storageService.getValue('lastReleaseNotesVersionShown'))
+            .thenAnswer((_) => Future.value(null));
+        when(() => releaseNotesService.getReleaseNotes('v1.0.0'))
+            .thenAnswer((_) => Future.value(
+                  const ReleaseNotes(
+                    version: '1.0.0',
+                    date: '2023-01-31T20:36:20Z',
+                    notes: 'Release notes',
+                    fullChangeLogUrl:
+                        'https://github.com/owner/repo/releases/tag/v1.0.0',
+                  ),
+                ));
+        return AppCubit(
+          releaseNotesService: releaseNotesService,
+          updateService: updateService,
+        );
+      },
+      expect: () => [
+        const AppState(
+          firstRun: true,
+          runningVersion: '',
+          updateVersion: null,
+          updateAvailable: false,
+          showUpdateButton: false,
+          promptForProUpgrade: false,
+          releaseNotes: null,
+        ),
+        const AppState(
+          firstRun: true,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -157,6 +212,7 @@ void main() {
       },
       expect: () => [
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -165,6 +221,7 @@ void main() {
           releaseNotes: null,
         ),
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -179,6 +236,7 @@ void main() {
           ),
         ),
         const AppState(
+          firstRun: false,
           runningVersion: '1.0.0',
           updateVersion: '1.0.0',
           updateAvailable: false,
@@ -222,6 +280,7 @@ void main() {
       },
       expect: () => [
         const AppState(
+          firstRun: false,
           runningVersion: '1.4.1',
           updateVersion: '1.4.1',
           updateAvailable: false,
@@ -230,6 +289,7 @@ void main() {
           releaseNotes: null,
         ),
         const AppState(
+          firstRun: false,
           runningVersion: '1.4.1',
           updateVersion: '1.4.1',
           updateAvailable: false,
@@ -244,6 +304,7 @@ void main() {
           ),
         ),
         const AppState(
+          firstRun: false,
           runningVersion: '1.4.1',
           updateVersion: '1.4.1',
           updateAvailable: false,
