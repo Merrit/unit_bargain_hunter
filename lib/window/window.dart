@@ -1,3 +1,4 @@
+import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
 
 import '../logs/logs.dart';
@@ -12,12 +13,12 @@ class Window {
 
   static Future<Window> initialize() async {
     log.i('Initializing desktop application window.');
+    await windowManager.ensureInitialized();
+    await windowManager.setPreventClose(true);
     instance = Window._();
     instance.setWindowTitle('Unit Bargain Hunter');
     return instance;
   }
-
-  // TODO: Catch window close event on desktop and trigger sync before closing.
 
   static late final Window instance;
 

@@ -45,6 +45,7 @@ dependencies:
   system_theme: ^2.1.0
   url_launcher: ^6.0.20
   uuid: ^3.0.6
+  window_manager: ^0.3.0
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
