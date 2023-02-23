@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:helpers/helpers.dart';
+import 'package:http/http.dart' as http;
 
 import 'app/app_widget.dart';
 import 'authentication/authentication.dart';
@@ -53,7 +55,14 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit(UpdateService())),
+        BlocProvider(
+          create: (context) => AppCubit(
+            releaseNotesService: ReleaseNotesService(
+                client: http.Client(),
+                repository: 'merrit/unit_bargain_hunter'),
+            updateService: UpdateService(),
+          ),
+        ),
         BlocProvider.value(value: authenticationCubit),
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),
