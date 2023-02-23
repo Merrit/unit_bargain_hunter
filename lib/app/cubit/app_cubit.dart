@@ -35,8 +35,18 @@ class AppCubit extends Cubit<AppState> {
   /// Lazy loading is used instead of awaiting on a constructor to avoid
   /// blocking the UI, since none of the data fetched here is critical.
   Future<void> _init() async {
+    await _checkForFirstRun();
     await _fetchVersionData();
     await _fetchReleaseNotes();
+  }
+
+  /// Checks if this is the first run of the app.
+  Future<void> _checkForFirstRun() async {
+    final firstRun = await StorageService.instance?.getValue('firstRun');
+    if (firstRun == null) {
+      emit(state.copyWith(firstRun: true));
+      StorageService.instance?.saveValue(key: 'firstRun', value: false);
+    }
   }
 
   /// Fetches version data from the update service.
@@ -52,6 +62,8 @@ class AppCubit extends Cubit<AppState> {
 
   /// Fetches release notes from the release notes service.
   Future<void> _fetchReleaseNotes() async {
+    if (state.firstRun) return;
+
     final String? lastReleaseNotesVersionShown = await StorageService //
         .instance
         ?.getValue('lastReleaseNotesVersionShown');
