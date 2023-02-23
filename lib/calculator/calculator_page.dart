@@ -6,6 +6,7 @@ import 'package:multi_split_view/multi_split_view.dart';
 
 import '../app/app_widget.dart';
 import '../app/widgets/widgets.dart';
+import '../core/constants.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'calculator_cubit/calculator_cubit.dart';
@@ -32,6 +33,10 @@ class CalculatorPage extends StatelessWidget {
 
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
+        if (state.releaseNotes != null) {
+          _showReleaseNotesDialog(context, state.releaseNotes!);
+        }
+
         if (state.promptForProUpgrade) {
           Navigator.pushNamed(context, PurchasesPage.id);
         }
@@ -50,6 +55,21 @@ class CalculatorPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _showReleaseNotesDialog(
+    BuildContext context,
+    ReleaseNotes releaseNotes,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (context) => ReleaseNotesDialog(
+        releaseNotes: releaseNotes,
+        donateCallback: () => AppCubit.instance.launchURL(donateUrl),
+        launchURL: (url) => AppCubit.instance.launchURL(url),
+        onClose: () => Navigator.pop(context),
       ),
     );
   }

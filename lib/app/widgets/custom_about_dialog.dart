@@ -31,7 +31,7 @@ class CustomAboutDialog extends StatelessWidget {
 Hello! 👋
 
 I hope you are enjoying Unit Bargain Hunter.
-If you find it useful, please consider buying me a coffee.
+If you find this app useful, please consider donating to support its development.
 '''),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,22 +41,8 @@ If you find it useful, please consider buying me a coffee.
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton(
-                      child: const Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '☕',
-                              style: TextStyle(fontFamily: 'Emoji'),
-                            ),
-                            TextSpan(text: ' Buy me a coffee'),
-                          ],
-                        ),
-                      ),
-                      onPressed: () {
-                        AppCubit.instance.launchURL(
-                          'https://www.buymeacoffee.com/Merritt',
-                        );
-                      },
+                      child: const Text('Donate'),
+                      onPressed: () => AppCubit.instance.launchURL(donateUrl),
                     ),
                   ),
                 ),
