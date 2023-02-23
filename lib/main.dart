@@ -18,10 +18,11 @@ import 'storage/storage_service.dart';
 import 'updates/updates.dart';
 import 'window/window.dart';
 
-Future<void> main() async {
+Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await LoggingManager.initialize();
+  final verbose = args.contains('--verbose');
+  await LoggingManager.initialize(verbose: verbose);
 
   // Handle platform errors not caught by Flutter.
   PlatformDispatcher.instance.onError = (error, stack) {
