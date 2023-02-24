@@ -102,6 +102,10 @@ jobs:
           name: artifacts
           path: output/*
 
+      # MSIX is only for publishing to the Windows Store.
+      - name: Remove Windows Store artifact from release files
+        run: rm output/*.msix
+
       - name: Create Draft Release & Upload artifacts
         if: startsWith(github.ref, 'refs/tags/v')
         uses: marvinpinto/action-automatic-releases@v1.2.1
