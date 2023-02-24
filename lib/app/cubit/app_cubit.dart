@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:helpers/helpers.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
+import '../../logs/logging_manager.dart';
 import '../../platform/platform.dart';
 import '../../storage/storage_service.dart';
 import '../../updates/update_service.dart';
@@ -85,11 +87,21 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
-  Future<void> launchURL(String url) async {
-    final uri = Uri.parse(url);
-    await canLaunchUrl(uri)
-        ? await launchUrl(uri)
-        : throw 'Could not launch url: $url';
+  /// Launch the requested [url] in the default browser.
+  Future<bool> launchURL(String url) async {
+    final uri = Uri.tryParse(url);
+
+    if (uri == null) {
+      log.e('Unable to parse url: $url');
+      return false;
+    }
+
+    try {
+      return await url_launcher.launchUrl(uri);
+    } on PlatformException catch (e) {
+      log.e('Could not launch url: $url', e);
+      return false;
+    }
   }
 
   void promptForProUpgrade() {

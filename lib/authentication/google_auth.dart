@@ -9,8 +9,7 @@ import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
-
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import '../logs/logs.dart';
 import '../storage/storage_service.dart';
@@ -123,9 +122,20 @@ class GoogleAuth {
     return client;
   }
 
-  Future<void> launchAuthUrl(String url) async {
-    final authUrl = Uri.parse(url);
-    if (await canLaunchUrl(authUrl)) launchUrl(authUrl);
+  Future<bool> launchAuthUrl(String url) async {
+    final uri = Uri.tryParse(url);
+
+    if (uri == null) {
+      log.e('Unable to parse url: $url');
+      return false;
+    }
+
+    try {
+      return await url_launcher.launchUrl(uri);
+    } on PlatformException catch (e) {
+      log.e('Could not launch url: $url', e);
+      return false;
+    }
   }
 
   /// Returns an `AuthClient` that can be used to make authenticated requests.
