@@ -17,6 +17,17 @@
     <control>keyboard</control>
     <control>touch</control>
   </supports>
+  <keywords>
+    <keyword>compare</keyword>
+    <keyword>shopping</keyword>
+    <keyword>price</keyword>
+    <keyword>comparison</keyword>
+    <keyword>unit</keyword>
+    <keyword>bargain</keyword>
+    <keyword>hunter</keyword>
+    <keyword>save</keyword>
+    <keyword>money</keyword>
+  </keywords>
   <description>
     <p>Save money: Unit Bargain Hunter helps you figure out and keep track of the best value for products.</p>
     <p>Is that family-sized pack really a better value?</p>
