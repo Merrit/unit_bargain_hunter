@@ -14,10 +14,7 @@ class GoogleDrive implements SyncRepository {
   @override
   Future<List<int>?> download({required String fileName}) async {
     final fileId = await _getFileId(fileName);
-
-    if (fileId == null) {
-      throw SyncException('File does not exist.');
-    }
+    if (fileId == null) return null;
 
     final Media media;
     try {
@@ -26,9 +23,7 @@ class GoogleDrive implements SyncRepository {
         downloadOptions: DownloadOptions.fullMedia,
       ) as Media;
     } on DetailedApiRequestError catch (e) {
-      if (e.status == io.HttpStatus.notFound) {
-        throw SyncException('File does not exist.');
-      }
+      log.e('Failed to download file', e);
       return null;
     }
 

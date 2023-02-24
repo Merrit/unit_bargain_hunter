@@ -78,18 +78,12 @@ class SyncService {
   ///
   /// Throws a [SyncException] if an error occurs.
   Future<SyncData?> _downloadSyncData() async {
-    try {
-      final cloudSyncDataBytes = await _syncRepository.download(
-        fileName: kSyncDataFileName,
-      );
+    final cloudSyncDataBytes = await _syncRepository.download(
+      fileName: kSyncDataFileName,
+    );
 
-      if (cloudSyncDataBytes != null) {
-        return SyncData.fromBytes(cloudSyncDataBytes);
-      }
-    } on SyncException catch (e) {
-      throw SyncException(
-        'Failed to download sync data from cloud service: ${e.message}',
-      );
+    if (cloudSyncDataBytes != null) {
+      return SyncData.fromBytes(cloudSyncDataBytes);
     }
 
     return null;
