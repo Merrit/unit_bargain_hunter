@@ -5,7 +5,7 @@ Type=Application
 Name=Unit Bargain Hunter
 Comment=Easily compare items when shopping
 Categories=Utility;
-
+Keywords=compare;shopping;price;comparison;unit;bargain;hunter;save;money;
 Icon=codes.merritt.bargain
 Exec=unit_bargain_hunter
 Terminal=false
