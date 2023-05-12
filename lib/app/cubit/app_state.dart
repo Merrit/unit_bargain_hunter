@@ -18,8 +18,6 @@ class AppState with _$AppState {
     required ReleaseNotes? releaseNotes,
   }) = _AppState;
 
-  const AppState._();
-
   factory AppState.initial() {
     return const AppState(
       firstRun: false,
