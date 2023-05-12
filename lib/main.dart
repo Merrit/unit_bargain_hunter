@@ -80,7 +80,7 @@ Future<void> main(List<String> args) async {
 ///
 /// https://github.com/flutter/flutter/issues/42586#issuecomment-541870382
 void _preloadEmojis() {
-  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
   pb.addText('\ud83d\ude01'); // smiley face emoji
   pb.build().layout(const ParagraphConstraints(width: 100));
 }

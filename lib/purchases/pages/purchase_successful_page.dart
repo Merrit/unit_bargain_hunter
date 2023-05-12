@@ -17,11 +17,11 @@ class PurchaseSuccessfulPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               const Spacer(),
-              Column(
+              const Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   SizedBox(width: double.infinity),
                   Icon(
                     Icons.check_circle_outline,

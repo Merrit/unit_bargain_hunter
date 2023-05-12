@@ -53,9 +53,9 @@ class ItemCard extends StatelessWidget {
         width: 190,
         decoration: itemBorder,
         // Stack is used so the close button doesn't push down the contents.
-        child: Stack(
+        child: const Stack(
           alignment: AlignmentDirectional.topEnd,
-          children: const [
+          children: [
             _ItemContents(),
             _CloseButton(),
           ],
