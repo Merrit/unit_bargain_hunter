@@ -63,12 +63,14 @@ class CalculatorPage extends StatelessWidget {
     BuildContext context,
     ReleaseNotes releaseNotes,
   ) {
+    final appCubit = context.read<AppCubit>();
+
     return showDialog(
       context: context,
       builder: (context) => ReleaseNotesDialog(
         releaseNotes: releaseNotes,
-        donateCallback: () => AppCubit.instance.launchURL(donateUrl),
-        launchURL: (url) => AppCubit.instance.launchURL(url),
+        donateCallback: () => appCubit.launchURL(donateUrl),
+        launchURL: (url) => appCubit.launchURL(url),
         onClose: () => Navigator.pop(context),
       ),
     );

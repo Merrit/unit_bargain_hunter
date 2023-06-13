@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:unit_bargain_hunter/app/cubit/app_cubit.dart';
 import 'package:unit_bargain_hunter/authentication/authentication.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/calculator/models/models.dart';
@@ -9,6 +10,8 @@ import 'package:unit_bargain_hunter/logs/logs.dart';
 import 'package:unit_bargain_hunter/purchases/cubit/purchases_cubit.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
 import 'package:unit_bargain_hunter/sync/sync.dart';
+
+class MockAppCubit extends MockCubit<AppState> implements AppCubit {}
 
 class MockAuthenticationCubit extends MockCubit<AuthenticationState>
     implements AuthenticationCubit {}
@@ -21,6 +24,7 @@ class MockStorageService extends Mock implements StorageService {}
 
 class MockSyncRepository extends Mock implements SyncRepository {}
 
+late MockAppCubit appCubit;
 late MockAuthenticationCubit authCubit;
 late MockPurchasesCubit _purchasesCubit;
 late MockStorageService storageService;
@@ -36,6 +40,20 @@ Future<void> main() async {
     });
 
     setUp(() async {
+      // Mock the AppCubit
+      appCubit = MockAppCubit();
+      when(() => appCubit.state).thenReturn(
+        const AppState(
+          firstRun: false,
+          runningVersion: '1.0.0',
+          updateVersion: '1.0.0',
+          updateAvailable: false,
+          showUpdateButton: false,
+          promptForProUpgrade: false,
+          releaseNotes: null,
+        ),
+      );
+
       // Mock the AuthenticationCubit
       authCubit = MockAuthenticationCubit();
       when(() => authCubit.state).thenReturn(
@@ -80,6 +98,7 @@ Future<void> main() async {
 
       // Initialize the CalculatorCubit
       cubit = await CalculatorCubit.initialize(
+        appCubit,
         authCubit,
         _purchasesCubit,
         storageService,

@@ -56,12 +56,12 @@ void main() {
 
   group('AppCubit:', () {
     test('instance variable is accessible', () {
-      AppCubit(
+      final appCubit = AppCubit(
         releaseNotesService: releaseNotesService,
         updateService: updateService,
       );
-      expect(AppCubit.instance, isA<AppCubit>());
-      final state = AppCubit.instance.state;
+      expect(appCubit, isA<AppCubit>());
+      final state = appCubit.state;
       expect(state, isA<AppState>());
     });
 

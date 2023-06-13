@@ -158,6 +158,8 @@ class _UpdateTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appCubit = context.read<AppCubit>();
+
     if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS ||
         kIsWeb) {
@@ -181,7 +183,7 @@ class _UpdateTile extends StatelessWidget {
                 : IconButton(
                     icon: const Icon(Icons.open_in_browser),
                     onPressed: () {
-                      AppCubit.instance.launchURL(websiteUrl);
+                      appCubit.launchURL(websiteUrl);
                     },
                   ),
           );

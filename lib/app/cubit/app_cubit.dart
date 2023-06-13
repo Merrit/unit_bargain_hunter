@@ -19,16 +19,12 @@ class AppCubit extends Cubit<AppState> {
   /// Service for fetching version info.
   final UpdateService _updateService;
 
-  /// Singleton instance.
-  static late AppCubit instance;
-
   AppCubit({
     required ReleaseNotesService releaseNotesService,
     required UpdateService updateService,
   })  : _updateService = updateService,
         _releaseNotesService = releaseNotesService,
         super(AppState.initial()) {
-    instance = this;
     _init();
   }
 
