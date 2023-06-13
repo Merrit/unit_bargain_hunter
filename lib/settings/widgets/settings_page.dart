@@ -204,6 +204,8 @@ class _ThemeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsCubit = context.read<SettingsCubit>();
+
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return SwitchListTile(
@@ -266,10 +268,13 @@ class _TaxDialog extends StatefulWidget {
 
 class _TaxDialogState extends State<_TaxDialog> {
   late TextEditingController _controller;
+  late SettingsCubit settingsCubit;
 
   @override
   void initState() {
     super.initState();
+
+    settingsCubit = context.read<SettingsCubit>();
 
     _controller = TextEditingController(
       text: settingsCubit.state.taxRate.toString(),

@@ -8,21 +8,12 @@ import '../../theme/app_theme.dart';
 
 part 'settings_state.dart';
 
-/// Convenient global access to the SettingsCubit.
-///
-/// There is only ever 1 instance of this cubit, and having this variable
-/// means not having to do `context.read<SettingsCubit>()` to access it every
-/// time, as well as making it available without a BuildContext.
-late SettingsCubit settingsCubit;
-
 /// Controls the state of the settings for the app.
 class SettingsCubit extends Cubit<SettingsState> {
   final StorageService _storageService;
 
   SettingsCubit(this._storageService, {required SettingsState initialState})
-      : super(initialState) {
-    settingsCubit = this;
-  }
+      : super(initialState);
 
   static Future<SettingsCubit> initialize(
     StorageService storageService,
