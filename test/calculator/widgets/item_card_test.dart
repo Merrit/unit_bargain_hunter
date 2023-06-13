@@ -21,7 +21,7 @@ import 'package:unit_bargain_hunter/storage/storage_service.dart';
 ])
 import 'item_card_test.mocks.dart';
 
-late MockAuthenticationCubit authenticationCubit;
+late MockAuthenticationCubit authCubit;
 late MockPurchasesCubit _purchasesCubit;
 late MockSettingsCubit settingsCubit;
 late MockStorageService storageService;
@@ -35,10 +35,8 @@ void main() {
     });
 
     setUp(() {
-      authenticationCubit = MockAuthenticationCubit();
-      // TODO: Remove AuthenticationCubit instance variable.
-      AuthenticationCubit.instance = authenticationCubit;
-      when(authenticationCubit.state).thenReturn(
+      authCubit = MockAuthenticationCubit();
+      when(authCubit.state).thenReturn(
         const AuthenticationState(
           accessCredentials: null,
           signedIn: false,
@@ -62,6 +60,7 @@ void main() {
       final sheet = Sheet(uuid: '1');
 
       calculatorCubit = CalculatorCubit(
+        authCubit,
         _purchasesCubit,
         storageService,
         initialState: CalculatorState(
@@ -87,6 +86,7 @@ void main() {
       );
 
       calculatorCubit = CalculatorCubit(
+        authCubit,
         _purchasesCubit,
         storageService,
         initialState: CalculatorState(
@@ -132,6 +132,7 @@ void main() {
       );
 
       calculatorCubit = CalculatorCubit(
+        authCubit,
         _purchasesCubit,
         storageService,
         initialState: CalculatorState(

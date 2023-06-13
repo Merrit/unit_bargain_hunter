@@ -22,10 +22,12 @@ part 'calculator_state.dart';
 late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
+  final AuthenticationCubit _authCubit;
   final PurchasesCubit _purchasesCubit;
   final StorageService _storageService;
 
   CalculatorCubit(
+    this._authCubit,
     this._purchasesCubit,
     this._storageService, {
     required CalculatorState initialState,
@@ -36,6 +38,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   static Future<CalculatorCubit> initialize(
+    AuthenticationCubit authCubit,
     PurchasesCubit purchasesCubit,
     StorageService storageService,
   ) async {
@@ -51,6 +54,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     sheets = putSheetsInOrder(sheets);
 
     return CalculatorCubit(
+      authCubit,
       purchasesCubit,
       storageService,
       initialState: CalculatorState(
@@ -79,7 +83,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   /// Sync with remote storage using the [SyncService].
   Future<void> syncData() async {
-    if (!AuthenticationCubit.instance.state.signedIn) {
+    if (!_authCubit.state.signedIn) {
       log.i('Not signed in, not syncing.');
       return;
     }

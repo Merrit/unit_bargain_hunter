@@ -14,15 +14,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   final GoogleAuth _googleAuth;
   final StorageService _storageService;
 
-  static late AuthenticationCubit instance;
-
   AuthenticationCubit._(
     this._googleAuth,
     this._storageService, {
     required AuthenticationState initialState,
-  }) : super(initialState) {
-    instance = this;
-  }
+  }) : super(initialState);
 
   static Future<AuthenticationCubit> initialize({
     required GoogleAuth googleAuth,
