@@ -30,6 +30,8 @@ class _EditItemDialogState extends State<EditItemDialog> {
   final priceTextFieldFocusNode = FocusNode();
   final quantityTextFieldFocusNode = FocusNode();
 
+  late SettingsCubit settingsCubit;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,8 @@ class _EditItemDialogState extends State<EditItemDialog> {
         quantityTextFieldController.selectAll();
       }
     });
+
+    settingsCubit = context.read<SettingsCubit>();
   }
 
   @override

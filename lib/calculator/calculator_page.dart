@@ -51,7 +51,7 @@ class CalculatorPage extends StatelessWidget {
             child: Scaffold(
               appBar: (mediaQuery.isHandset) ? const CustomAppBar() : null,
               drawer: drawer,
-              body: CalculatorView(),
+              body: const CalculatorView(),
             ),
           ),
         ),
@@ -102,18 +102,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class CalculatorView extends StatelessWidget {
-  CalculatorView({Key? key}) : super(key: key);
+class CalculatorView extends StatefulWidget {
+  const CalculatorView({Key? key}) : super(key: key);
 
+  @override
+  State<CalculatorView> createState() => _CalculatorViewState();
+}
+
+class _CalculatorViewState extends State<CalculatorView> {
   final focusNode = FocusNode(
     debugLabel: 'CalculatorView node',
     skipTraversal: true,
   );
 
-  final MultiSplitViewController multiSplitViewController =
-      MultiSplitViewController(
-    areas: Area.weights([settingsCubit.state.navigationAreaRatio]),
-  );
+  late MultiSplitViewController multiSplitViewController;
+  late SettingsCubit settingsCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    settingsCubit = context.read<SettingsCubit>();
+    multiSplitViewController = MultiSplitViewController(
+      areas: Area.weights([settingsCubit.state.navigationAreaRatio]),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
