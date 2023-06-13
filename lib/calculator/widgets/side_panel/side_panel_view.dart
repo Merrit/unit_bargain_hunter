@@ -21,17 +21,18 @@ class SidePanel extends StatefulWidget {
 }
 
 class _SidePanelState extends State<SidePanel> {
-  final _addSheetButton = Opacity(
-    opacity: 0.8,
-    child: IconButton(
-      icon: const Icon(Icons.add),
-      onPressed: () => calcCubit.addSheet(),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
     final mediaQuery = MediaQuery.of(context);
+
+    final addSheetButton = Opacity(
+      opacity: 0.8,
+      child: IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () => calcCubit.addSheet(),
+      ),
+    );
 
     final Widget proButton = BlocBuilder<PurchasesCubit, PurchasesState>(
       builder: (context, state) {
@@ -63,7 +64,7 @@ class _SidePanelState extends State<SidePanel> {
           children: [
             // So `add` button is on the right.
             const SizedBox(),
-            _addSheetButton,
+            addSheetButton,
           ],
         ),
         const SheetTileList(),

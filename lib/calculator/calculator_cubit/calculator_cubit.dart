@@ -16,11 +16,6 @@ import '../models/models.dart';
 
 part 'calculator_state.dart';
 
-/// Globally accessible variable for the [CalculatorCubit].
-///
-/// There is only ever one cubit, so this eases access.
-late CalculatorCubit calcCubit;
-
 class CalculatorCubit extends Cubit<CalculatorState> {
   final AppCubit _appCubit;
   final AuthenticationCubit _authCubit;
@@ -34,7 +29,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     this._storageService, {
     required CalculatorState initialState,
   }) : super(initialState) {
-    calcCubit = this;
     _saveAllSheets(); // In case the order was fixed on load.
     syncData();
   }

@@ -11,6 +11,8 @@ class CompareByDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
+
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
         return DropdownButton<Unit>(

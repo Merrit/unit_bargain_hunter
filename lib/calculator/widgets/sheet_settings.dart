@@ -13,12 +13,14 @@ class SheetSettingsView extends StatefulWidget {
 }
 
 class _SheetSettingsViewState extends State<SheetSettingsView> {
+  late CalculatorCubit calcCubit;
   final nameTextFieldController = TextEditingController();
   final subtitleTextFieldController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    calcCubit = context.read<CalculatorCubit>();
     final sheet = calcCubit.state.activeSheet;
     if (sheet == null) return;
     nameTextFieldController.text = sheet.name;
@@ -100,39 +102,39 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
       },
     );
   }
-}
 
-/// Confirm the user really wants to remove the sheet.
-void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
-  Future.delayed(
-    const Duration(seconds: 0),
-    () => showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text('Remove sheet "${sheet.name}?"'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                calcCubit.removeSheet(sheet);
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  CalculatorPage.id,
-                  (route) => false,
-                );
-              },
-              child: const Text(
-                'REMOVE',
-                style: TextStyle(color: Colors.red),
+  /// Confirm the user really wants to remove the sheet.
+  void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
+    Future.delayed(
+      const Duration(seconds: 0),
+      () => showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Remove sheet "${sheet.name}?"'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  calcCubit.removeSheet(sheet);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    CalculatorPage.id,
+                    (route) => false,
+                  );
+                },
+                child: const Text(
+                  'REMOVE',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    ),
-  );
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('CLOSE'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

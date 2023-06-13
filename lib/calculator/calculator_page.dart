@@ -154,6 +154,7 @@ class ScrollingItemsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
     final mediaQuery = MediaQuery.of(context);
 
     final Widget sheetNameWidget = (mediaQuery.isHandset) //
