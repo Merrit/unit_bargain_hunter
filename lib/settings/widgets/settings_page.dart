@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
@@ -58,6 +59,13 @@ class SettingsView extends StatelessWidget {
           ],
         );
 
+        final taxSection = _SectionCard(
+          title: AppLocalizations.of(context)!.tax,
+          children: const [
+            _TaxTile(),
+          ],
+        );
+
         const syncSection = _SectionCard(
           title: 'Sync',
           children: [
@@ -81,9 +89,10 @@ class SettingsView extends StatelessWidget {
             horizontal: horizontalPadding,
             vertical: 16,
           ),
-          children: const [
+          children: [
             versionSection,
             appearanceSection,
+            taxSection,
             syncSection,
           ],
         );
@@ -206,6 +215,106 @@ class _ThemeTile extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+/// A tile that shows the current tax rate, and a button to change it.
+class _TaxTile extends StatelessWidget {
+  const _TaxTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Row(
+            children: [
+              Text(AppLocalizations.of(context)!.taxRate),
+              const SizedBox(width: 8),
+              Tooltip(
+                message: AppLocalizations.of(context)!.taxRateTooltip,
+                child: const Icon(Icons.info_outline),
+              ),
+            ],
+          ),
+          trailing: Text(
+            '${state.taxRate}%',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          leading: const Icon(Icons.attach_money),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => const _TaxDialog(),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+/// A dialog that allows the user to change the tax rate.
+class _TaxDialog extends StatefulWidget {
+  const _TaxDialog();
+
+  @override
+  _TaxDialogState createState() => _TaxDialogState();
+}
+
+class _TaxDialogState extends State<_TaxDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = TextEditingController(
+      text: settingsCubit.state.taxRate.toString(),
+    );
+
+    // Select the text in the text field.
+    _controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: _controller.text.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Tax rate'),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        keyboardType: TextInputType.number,
+        decoration: const InputDecoration(
+          labelText: 'Tax rate',
+          hintText: '0',
+        ),
+        onSubmitted: (_) => _updateTaxRate(context),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => _updateTaxRate(context),
+          child: const Text('Save'),
+        ),
+      ],
+    );
+  }
+
+  void _updateTaxRate(BuildContext context) {
+    final double? taxRate = double.tryParse(_controller.text);
+    if (taxRate != null) {
+      settingsCubit.updateTaxRate(taxRate);
+    }
+    Navigator.of(context).pop();
   }
 }
 

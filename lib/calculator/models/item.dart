@@ -20,6 +20,9 @@ class Item extends Equatable {
   /// Further details such as brand, specific package, etc.
   final String details;
 
+  /// Whether the price includes tax.
+  final bool taxIncluded;
+
   /// Cost per gram, milligram, kilogram, etc.
   final List<Cost> costPerUnit;
 
@@ -30,6 +33,7 @@ class Item extends Equatable {
     required this.unit,
     required this.location,
     required this.details,
+    required this.taxIncluded,
     required this.costPerUnit,
   });
 
@@ -40,6 +44,7 @@ class Item extends Equatable {
     required Unit unit,
     String? location,
     String? details,
+    bool? taxIncluded,
   }) {
     final costPerUnit = CostValidator.validate(
       price: price,
@@ -54,6 +59,7 @@ class Item extends Equatable {
       unit: unit,
       location: location ?? '',
       details: details ?? '',
+      taxIncluded: taxIncluded ?? true,
       costPerUnit: costPerUnit,
     );
   }
@@ -65,6 +71,7 @@ class Item extends Equatable {
     Unit? unit,
     String? location,
     String? details,
+    bool? taxIncluded,
   }) {
     return Item(
       uuid: uuid ?? this.uuid,
@@ -73,6 +80,7 @@ class Item extends Equatable {
       unit: unit ?? this.unit,
       location: location ?? this.location,
       details: details ?? this.details,
+      taxIncluded: taxIncluded ?? this.taxIncluded,
     );
   }
 
@@ -83,7 +91,9 @@ class Item extends Equatable {
       'quantity: $quantity \n'
       'unit: $unit \n'
       'location: $location \n'
-      'details: $details \n';
+      'details: $details \n'
+      'taxIncluded: $taxIncluded \n'
+      'costPerUnit: $costPerUnit \n';
 
   @override
   List<Object?> get props {
@@ -95,6 +105,7 @@ class Item extends Equatable {
       costPerUnit,
       location,
       details,
+      taxIncluded,
     ];
   }
 
@@ -106,6 +117,7 @@ class Item extends Equatable {
       'unit': unit.toString(),
       'location': location,
       'details': details,
+      'taxIncluded': taxIncluded,
     };
   }
 
@@ -127,10 +139,18 @@ class Item extends Equatable {
       unit: Unit.fromString(map['unit']),
       location: location,
       details: map['details'] ?? '',
+      taxIncluded: map['taxIncluded'] ?? true,
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory Item.fromJson(String source) => Item.fromMap(json.decode(source));
+
+  /// Returns the cost per base unit, eg: gram, millilitre, etc.
+  double costPerBaseUnit() {
+    final baseUnit = unit.baseUnit;
+    final cost = costPerUnit.firstWhere((cost) => cost.unit == baseUnit);
+    return cost.value;
+  }
 }

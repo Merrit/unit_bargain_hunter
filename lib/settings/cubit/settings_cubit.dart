@@ -32,6 +32,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       initialState: SettingsState(
         navigationAreaRatio:
             await storageService.getValue('navigationAreaRatio') ?? 0.25,
+        taxRate: await storageService.getValue('taxRate') ?? 0.0,
         theme: await _getTheme(),
       ),
     );
@@ -72,6 +73,11 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> updateNavigationAreaRatio(double value) async {
     emit(state.copyWith(navigationAreaRatio: value));
     await _storageService.saveValue(key: 'navigationAreaRatio', value: value);
+  }
+
+  Future<void> updateTaxRate(double value) async {
+    emit(state.copyWith(taxRate: value));
+    await _storageService.saveValue(key: 'taxRate', value: value);
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
