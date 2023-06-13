@@ -323,6 +323,8 @@ class _EnableSyncTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthenticationCubit>();
+
     bool proPurchased = context.select(
       (PurchasesCubit cubit) => cubit.state.proPurchased,
     );
@@ -351,7 +353,7 @@ class _EnableSyncTile extends StatelessWidget {
 
                   if (value) {
                     final scaffoldMessenger = ScaffoldMessenger.of(context);
-                    final success = await AuthenticationCubit.instance.signIn();
+                    final success = await authCubit.signIn();
                     if (success) {
                       scaffoldMessenger.showSnackBar(
                         const SnackBar(
@@ -368,7 +370,7 @@ class _EnableSyncTile extends StatelessWidget {
                       );
                     }
                   } else {
-                    await AuthenticationCubit.instance.signOut();
+                    await authCubit.signOut();
                     calcCubit.resetSync();
                   }
                 },
@@ -394,6 +396,8 @@ class _EnableSyncTile extends StatelessWidget {
   }
 
   void showSigningInDialog(BuildContext context) {
+    final authCubit = context.read<AuthenticationCubit>();
+
     final bool isMobile = defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.android;
 
@@ -417,7 +421,7 @@ class _EnableSyncTile extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  AuthenticationCubit.instance.cancelSignIn();
+                  authCubit.cancelSignIn();
                 },
                 child: const Text('Cancel'),
               ),
@@ -466,6 +470,8 @@ class _SignOutTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = context.read<AuthenticationCubit>();
+
     return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (context, authState) {
         if (!authState.signedIn) {
@@ -477,7 +483,7 @@ class _SignOutTile extends StatelessWidget {
           leading: const Icon(Icons.logout),
           onTap: authState.signedIn
               ? () {
-                  AuthenticationCubit.instance.signOut();
+                  authCubit.signOut();
                   calcCubit.resetSync();
                 }
               : null,

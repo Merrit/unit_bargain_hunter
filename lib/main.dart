@@ -46,6 +46,7 @@ Future<void> main(List<String> args) async {
 
   final purchasescubit = await PurchasesCubit.initialize();
   final calculatorcubit = await CalculatorCubit.initialize(
+    authenticationCubit,
     purchasescubit,
     storageService,
   );

@@ -21,7 +21,7 @@ class MockStorageService extends Mock implements StorageService {}
 
 class MockSyncRepository extends Mock implements SyncRepository {}
 
-late MockAuthenticationCubit _authenticationCubit;
+late MockAuthenticationCubit authCubit;
 late MockPurchasesCubit _purchasesCubit;
 late MockStorageService storageService;
 late MockSyncRepository syncRepository;
@@ -37,9 +37,8 @@ Future<void> main() async {
 
     setUp(() async {
       // Mock the AuthenticationCubit
-      _authenticationCubit = MockAuthenticationCubit();
-      AuthenticationCubit.instance = _authenticationCubit;
-      when(() => _authenticationCubit.state).thenReturn(
+      authCubit = MockAuthenticationCubit();
+      when(() => authCubit.state).thenReturn(
         const AuthenticationState(
           accessCredentials: null,
           signedIn: false,
@@ -80,7 +79,11 @@ Future<void> main() async {
       SyncService.instance = syncService;
 
       // Initialize the CalculatorCubit
-      cubit = await CalculatorCubit.initialize(_purchasesCubit, storageService);
+      cubit = await CalculatorCubit.initialize(
+        authCubit,
+        _purchasesCubit,
+        storageService,
+      );
     });
 
     test('initializes with 2 items', () {
@@ -189,7 +192,6 @@ Future<void> main() async {
     group('sync:', () {
       setUp(() {
         // Mock the AuthenticationCubit
-        AuthenticationCubit.instance = MockAuthenticationCubit();
         const authenticatedState = AuthenticationState(
           accessCredentials: null,
           signedIn: true,
@@ -197,7 +199,7 @@ Future<void> main() async {
         );
 
         whenListen(
-          AuthenticationCubit.instance,
+          authCubit,
           Stream.fromIterable([authenticatedState]),
           initialState: authenticatedState,
         );
