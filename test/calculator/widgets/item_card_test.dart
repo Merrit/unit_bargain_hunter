@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:unit_bargain_hunter/app/cubit/app_cubit.dart';
 import 'package:unit_bargain_hunter/authentication/authentication.dart';
 import 'package:unit_bargain_hunter/calculator/calculator_cubit/calculator_cubit.dart';
 import 'package:unit_bargain_hunter/calculator/models/models.dart';
@@ -14,6 +15,7 @@ import 'package:unit_bargain_hunter/settings/settings.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
 
 @GenerateNiceMocks([
+  MockSpec<AppCubit>(),
   MockSpec<AuthenticationCubit>(),
   MockSpec<PurchasesCubit>(),
   MockSpec<SettingsCubit>(),
@@ -21,6 +23,7 @@ import 'package:unit_bargain_hunter/storage/storage_service.dart';
 ])
 import 'item_card_test.mocks.dart';
 
+late MockAppCubit appCubit;
 late MockAuthenticationCubit authCubit;
 late MockPurchasesCubit _purchasesCubit;
 late MockSettingsCubit settingsCubit;
@@ -35,6 +38,11 @@ void main() {
     });
 
     setUp(() {
+      appCubit = MockAppCubit();
+      when(appCubit.state).thenReturn(
+        AppState.initial(),
+      );
+
       authCubit = MockAuthenticationCubit();
       when(authCubit.state).thenReturn(
         const AuthenticationState(
@@ -60,6 +68,7 @@ void main() {
       final sheet = Sheet(uuid: '1');
 
       calculatorCubit = CalculatorCubit(
+        appCubit,
         authCubit,
         _purchasesCubit,
         storageService,
@@ -86,6 +95,7 @@ void main() {
       );
 
       calculatorCubit = CalculatorCubit(
+        appCubit,
         authCubit,
         _purchasesCubit,
         storageService,
@@ -132,6 +142,7 @@ void main() {
       );
 
       calculatorCubit = CalculatorCubit(
+        appCubit,
         authCubit,
         _purchasesCubit,
         storageService,

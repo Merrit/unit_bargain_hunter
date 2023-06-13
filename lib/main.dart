@@ -44,12 +44,23 @@ Future<void> main(List<String> args) async {
     storageService: storageService,
   );
 
+  final appCubit = AppCubit(
+    releaseNotesService: ReleaseNotesService(
+      client: http.Client(),
+      repository: 'merrit/unit_bargain_hunter',
+    ),
+    updateService: UpdateService(),
+  );
+
   final purchasescubit = await PurchasesCubit.initialize();
+
   final calculatorcubit = await CalculatorCubit.initialize(
+    appCubit,
     authenticationCubit,
     purchasescubit,
     storageService,
   );
+
   final settingscubit = await SettingsCubit.initialize(storageService);
 
   if (Platform.isDesktop) await Window.initialize();
@@ -57,14 +68,7 @@ Future<void> main(List<String> args) async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => AppCubit(
-            releaseNotesService: ReleaseNotesService(
-                client: http.Client(),
-                repository: 'merrit/unit_bargain_hunter'),
-            updateService: UpdateService(),
-          ),
-        ),
+        BlocProvider.value(value: appCubit),
         BlocProvider.value(value: authenticationCubit),
         BlocProvider.value(value: calculatorcubit),
         BlocProvider.value(value: purchasescubit),

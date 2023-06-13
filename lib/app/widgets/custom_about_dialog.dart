@@ -11,6 +11,8 @@ class CustomAboutDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appCubit = context.read<AppCubit>();
+
     final greyButtonStyle = ElevatedButton.styleFrom(
       backgroundColor: Colors.grey[700],
     );
@@ -42,7 +44,7 @@ If you find this app useful, please consider donating to support its development
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton(
                       child: const Text('Donate'),
-                      onPressed: () => AppCubit.instance.launchURL(donateUrl),
+                      onPressed: () => appCubit.launchURL(donateUrl),
                     ),
                   ),
                 ),
@@ -59,14 +61,14 @@ Available for: Linux, Windows, Android & Web.'''),
               children: [
                 ElevatedButton(
                   style: greyButtonStyle,
-                  onPressed: () => AppCubit.instance.launchURL(websiteUrl),
+                  onPressed: () => appCubit.launchURL(websiteUrl),
                   child: const Text('Website'),
                 ),
                 Spacers.horizontalSmall,
                 ElevatedButton(
                   style: greyButtonStyle,
                   onPressed: () {
-                    AppCubit.instance.launchURL(
+                    appCubit.launchURL(
                       'https://github.com/Merrit/unit_bargain_hunter',
                     );
                   },

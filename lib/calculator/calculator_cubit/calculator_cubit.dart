@@ -22,11 +22,13 @@ part 'calculator_state.dart';
 late CalculatorCubit calcCubit;
 
 class CalculatorCubit extends Cubit<CalculatorState> {
+  final AppCubit _appCubit;
   final AuthenticationCubit _authCubit;
   final PurchasesCubit _purchasesCubit;
   final StorageService _storageService;
 
   CalculatorCubit(
+    this._appCubit,
     this._authCubit,
     this._purchasesCubit,
     this._storageService, {
@@ -38,6 +40,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   static Future<CalculatorCubit> initialize(
+    AppCubit appCubit,
     AuthenticationCubit authCubit,
     PurchasesCubit purchasesCubit,
     StorageService storageService,
@@ -54,6 +57,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     sheets = putSheetsInOrder(sheets);
 
     return CalculatorCubit(
+      appCubit,
       authCubit,
       purchasesCubit,
       storageService,
@@ -194,7 +198,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   Future<void> addSheet() async {
     if (state.sheets.length >= 5 && !_purchasesCubit.state.proPurchased) {
-      AppCubit.instance.promptForProUpgrade();
+      _appCubit.promptForProUpgrade();
       return;
     }
 
