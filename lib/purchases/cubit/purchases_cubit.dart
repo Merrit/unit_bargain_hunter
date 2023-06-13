@@ -20,8 +20,6 @@ const List<String> _kProductIds = [
   kProUnlockId,
 ];
 
-late final PurchasesCubit purchasesCubit;
-
 /// Keep track of the in-app purchases on Android.
 class PurchasesCubit extends Cubit<PurchasesState> {
   InAppPurchase? _purchaseService;
@@ -32,9 +30,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
     this._purchaseService,
     this._storageService, {
     required PurchasesState initialState,
-  }) : super(initialState) {
-    purchasesCubit = this;
-  }
+  }) : super(initialState);
 
   static Future<PurchasesCubit> initialize({
     InAppPurchase? purchaseService,

@@ -63,7 +63,7 @@ The Pro version also enables the following features:
 '''),
                   const SizedBox(height: 50),
                   InkWell(
-                    onTap: () => purchasesCubit.purchasePro(),
+                    onTap: () => context.read<PurchasesCubit>().purchasePro(),
                     child: Column(
                       children: [
                         const Icon(
