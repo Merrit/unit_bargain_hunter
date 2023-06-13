@@ -326,6 +326,7 @@ class _EnableSyncTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthenticationCubit>();
+    final calcCubit = context.read<CalculatorCubit>();
 
     bool proPurchased = context.select(
       (PurchasesCubit cubit) => cubit.state.proPurchased,
@@ -440,6 +441,8 @@ class _SyncNowTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
+
     return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (context, authState) {
         if (!authState.signedIn) {
@@ -473,6 +476,7 @@ class _SignOutTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthenticationCubit>();
+    final calcCubit = context.read<CalculatorCubit>();
 
     return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (context, authState) {

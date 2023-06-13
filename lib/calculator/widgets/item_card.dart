@@ -131,6 +131,7 @@ class _CloseButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final calcCubit = context.read<CalculatorCubit>();
     final item = ref.watch(_currentItem);
 
     final shouldShowCloseButton =

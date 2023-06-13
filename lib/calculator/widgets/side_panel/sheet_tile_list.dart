@@ -16,6 +16,8 @@ class SheetTileList extends StatefulWidget {
 class _SheetTileListState extends State<SheetTileList> {
   @override
   Widget build(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
+
     return Expanded(
       child: BlocBuilder<CalculatorCubit, CalculatorState>(
         builder: (context, state) {

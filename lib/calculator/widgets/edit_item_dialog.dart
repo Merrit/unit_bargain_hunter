@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:helpers/helpers.dart';
 
@@ -164,6 +165,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
   }
 
   void _saveItemChanges(BuildContext context) {
+    final calcCubit = context.read<CalculatorCubit>();
     final navigator = Navigator.of(context);
 
     calcCubit.updateItem(

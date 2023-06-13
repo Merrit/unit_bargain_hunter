@@ -26,10 +26,12 @@ class SheetTile extends StatefulWidget {
 }
 
 class _SheetTileState extends State<SheetTile> {
+  late CalculatorCubit calcCubit;
   late final Sheet sheet;
 
   @override
   void initState() {
+    calcCubit = context.read<CalculatorCubit>();
     sheet = widget.sheet;
     super.initState();
   }
