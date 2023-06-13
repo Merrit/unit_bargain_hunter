@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:helpers/helpers.dart';
 
+import '../../settings/settings.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
 
@@ -95,6 +96,46 @@ class _EditItemDialogState extends State<EditItemDialog> {
             ),
             focusNode: priceTextFieldFocusNode,
           ),
+        ),
+        SwitchListTile(
+          title: Row(
+            children: [
+              Text(AppLocalizations.of(context)!.taxIncluded),
+              const SizedBox(width: 10),
+              Tooltip(
+                message: AppLocalizations.of(context)!.taxIncludedTooltip,
+                child: const Icon(Icons.info_outline),
+              ),
+            ],
+          ),
+          value: item.taxIncluded,
+          onChanged: (value) {
+            final taxRate = settingsCubit.state.taxRate;
+            if (taxRate == 0.0) {
+              // Prompt user to set tax rate.
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(AppLocalizations.of(context)!.taxRateNotSet),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(AppLocalizations.of(context)!.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamed('/settings');
+                      },
+                      child: Text(AppLocalizations.of(context)!.set),
+                    ),
+                  ],
+                ),
+              );
+              return;
+            }
+            setState(() => item = item.copyWith(taxIncluded: value));
+          },
         ),
         ListTile(
           title: TextField(

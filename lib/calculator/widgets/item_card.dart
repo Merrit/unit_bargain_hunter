@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/widgets/widgets.dart';
+import '../../settings/settings.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
 import 'edit_item_dialog.dart';
@@ -76,6 +78,21 @@ class _ItemContents extends StatelessWidget {
         final price = item.price.toStringAsFixed(2);
         final quantity = item.quantity.toString();
 
+        final priceWidget = Row(
+          children: [
+            Text('\$ $price'),
+            const SizedBox(width: 6),
+            if (!item.taxIncluded)
+              Text(
+                // ignore: prefer_interpolation_to_compose_strings
+                '+' + AppLocalizations.of(context)!.tax.toLowerCase(),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.greenAccent,
+                    ),
+              ),
+          ],
+        );
+
         return SizedBox(
           width: 200,
           child: Card(
@@ -92,7 +109,7 @@ class _ItemContents extends StatelessWidget {
                       child: Center(child: Text(item.details)),
                     ),
                     const SizedBox(height: 10),
-                    Text('\$ $price'),
+                    priceWidget,
                     Text('$quantity ${item.unit}s'),
                     const _UnitCalculations(),
                   ],
@@ -154,6 +171,8 @@ class _UnitCalculations extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         final Item item = ref.watch(_currentItem);
+        final settingsCubit = context.read<SettingsCubit>();
+        final double taxRate = 1 + (settingsCubit.state.taxRate / 100);
 
         return BlocBuilder<CalculatorCubit, CalculatorState>(
           builder: (context, state) {
@@ -164,7 +183,14 @@ class _UnitCalculations extends StatelessWidget {
                     children: [
                       const Divider(),
                       ...item.costPerUnit.map((cost) {
-                        String stringValue = cost.value.toStringAsFixed(3);
+                        final double value;
+                        if (item.taxIncluded) {
+                          value = cost.value;
+                        } else {
+                          value = cost.value * taxRate;
+                        }
+
+                        String stringValue = value.toStringAsFixed(3);
                         if (stringValue == '0.000') {
                           // Calculated value too small to show within 3 decimal points.
                           stringValue = '--.--';
