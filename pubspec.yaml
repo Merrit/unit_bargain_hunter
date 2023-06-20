@@ -21,24 +21,24 @@ dependencies:
   flutter_riverpod: ^2.0.0-dev.9
   font_awesome_flutter: ^9.1.0
   freezed_annotation: ^2.2.0
-  google_fonts: ^3.0.1
+  google_fonts: ^5.1.0
   google_sign_in: ^5.4.4
-  googleapis: ^10.0.0
+  googleapis: ^11.2.0
   googleapis_auth: ^1.3.1
   helpers:
     git:
       url: https://github.com/Merrit/helpers.git
-      ref: 74d56651f83995bd4a8a5805ef1ea4e2a44c9ead
+      ref: 3b8b7acebb96f43932579f15dcf136e282f6602c
   hive: ^2.1.0
   hive_flutter: ^1.1.0
-  http: ^0.13.3
+  http: ^1.0.0
   in_app_purchase: ^3.0.7
   in_app_purchase_android: ^0.2.3+5
   intl: ^0.18.0
   json_annotation: ^4.8.0
   logger: ^1.1.0
   multi_split_view: ^2.1.0
-  package_info_plus: ^3.0.3
+  package_info_plus: ^4.0.2
   path_provider: ^2.0.10
   pub_semver: ^2.0.0
   store_checker: ^1.0.0
