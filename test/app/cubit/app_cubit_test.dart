@@ -235,15 +235,6 @@ void main() {
                 'https://github.com/owner/repo/releases/tag/v1.0.0',
           ),
         ),
-        const AppState(
-          firstRun: false,
-          runningVersion: '1.0.0',
-          updateVersion: '1.0.0',
-          updateAvailable: false,
-          showUpdateButton: false,
-          promptForProUpgrade: false,
-          releaseNotes: null,
-        ),
       ],
     );
 
@@ -302,15 +293,6 @@ void main() {
             fullChangeLogUrl:
                 'https://github.com/owner/repo/releases/tag/v1.4.1',
           ),
-        ),
-        const AppState(
-          firstRun: false,
-          runningVersion: '1.4.1',
-          updateVersion: '1.4.1',
-          updateAvailable: false,
-          showUpdateButton: false,
-          promptForProUpgrade: false,
-          releaseNotes: null,
         ),
       ],
     );
