@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
 import 'package:multi_split_view/multi_split_view.dart';
@@ -33,28 +34,34 @@ class CalculatorPage extends StatelessWidget {
 
     return BlocListener<AppCubit, AppState>(
       listener: (context, state) {
-        if (state.releaseNotes != null) {
-          _showReleaseNotesDialog(context, state.releaseNotes!);
-        }
-
         if (state.promptForProUpgrade) {
           Navigator.pushNamed(context, PurchasesPage.id);
         }
       },
-      child: SafeArea(
-        // GestureDetector & FocusNode allow clicking outside input areas in
-        // order to deselect them as expected on web & desktop platforms.
-        child: GestureDetector(
-          onTap: () => focusNode.requestFocus(),
-          child: FocusableActionDetector(
-            focusNode: focusNode,
-            child: Scaffold(
-              appBar: (mediaQuery.isHandset) ? const CustomAppBar() : null,
-              drawer: drawer,
-              body: const CalculatorView(),
+      child: BlocBuilder<AppCubit, AppState>(
+        builder: (context, state) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            if (state.releaseNotes != null) {
+              _showReleaseNotesDialog(context, state.releaseNotes!);
+            }
+          });
+
+          return SafeArea(
+            // GestureDetector & FocusNode allow clicking outside input areas in
+            // order to deselect them as expected on web & desktop platforms.
+            child: GestureDetector(
+              onTap: () => focusNode.requestFocus(),
+              child: FocusableActionDetector(
+                focusNode: focusNode,
+                child: Scaffold(
+                  appBar: (mediaQuery.isHandset) ? const CustomAppBar() : null,
+                  drawer: drawer,
+                  body: const CalculatorView(),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -71,7 +78,10 @@ class CalculatorPage extends StatelessWidget {
         releaseNotes: releaseNotes,
         donateCallback: () => appCubit.launchURL(donateUrl),
         launchURL: (url) => appCubit.launchURL(url),
-        onClose: () => Navigator.pop(context),
+        onClose: () {
+          appCubit.dismissReleaseNotesDialog();
+          Navigator.pop(context);
+        },
       ),
     );
   }
