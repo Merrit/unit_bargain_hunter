@@ -1,6 +1,5 @@
 #define MyAppName "Unit Bargain Hunter"
 #define MyAppNameNoSpaces "UnitBargainHunter"
-#define MyAppVersion "1.11.0"
 #define MyAppPublisher "Merritt Codes"
 #define MyAppURL "https://merritt.codes/bargain/"
 #define MyAppExeName "unit_bargain_hunter.exe"
@@ -10,7 +9,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{FC5310B9-2BE1-42E0-9E6B-208CB6F06AA1}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppVersion={#AppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
