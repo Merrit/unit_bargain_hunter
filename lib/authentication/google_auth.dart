@@ -89,7 +89,7 @@ class GoogleAuth {
     try {
       await googleSignIn.signIn();
     } on PlatformException catch (e) {
-      log.w('Failed to sign in with google_sign_in', e);
+      log.w('Failed to sign in with google_sign_in', error: e);
       return null;
     }
 
@@ -133,7 +133,7 @@ class GoogleAuth {
     try {
       return await url_launcher.launchUrl(uri);
     } on PlatformException catch (e) {
-      log.e('Could not launch url: $url', e);
+      log.e('Could not launch url: $url', error: e);
       return false;
     }
   }
