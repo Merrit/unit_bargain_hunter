@@ -49,11 +49,11 @@ class _AppWidgetState extends State<AppWidget> with WindowListener {
   Future<void> onWindowClose() async {
     if (_exitingApp) return;
     _exitingApp = true;
-    log.v('Caught window close event. Hiding window and syncing data.');
+    log.t('Caught window close event. Hiding window and syncing data.');
     final calcCubit = context.read<CalculatorCubit>();
     await windowManager.hide();
     await calcCubit.syncData();
-    log.v('Sync complete. Exiting application.');
+    log.t('Sync complete. Exiting application.');
     await windowManager.destroy();
   }
 

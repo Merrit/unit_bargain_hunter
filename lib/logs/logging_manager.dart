@@ -2,12 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:helpers/helpers.dart';
-
-/// `FileOutput` import needed due to bug in package.
-/// https://github.com/leisim/logger/issues/94
-// ignore: implementation_imports
-import 'package:logger/src/outputs/file_output.dart';
-
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -31,7 +25,7 @@ class LoggingManager {
   static Future<LoggingManager> initialize({bool verbose = false}) async {
     if (testing) {
       // Set the logger to a dummy logger during unit tests.
-      log = Logger(level: Level.nothing);
+      log = Logger(level: Level.off);
       return LoggingManager._(File(''));
     }
 
@@ -51,13 +45,13 @@ class LoggingManager {
 
     log = Logger(
       filter: ProductionFilter(),
-      level: (verbose) ? Level.verbose : Level.warning,
+      level: (verbose) ? Level.trace : Level.warning,
       output: MultiOutput(outputs),
       // Colors false because it outputs ugly escape characters to log file.
       printer: PrefixPrinter(PrettyPrinter(colors: false)),
     );
 
-    log.v('Logger initialized.');
+    log.t('Logger initialized.');
 
     return LoggingManager._(
       logFile,

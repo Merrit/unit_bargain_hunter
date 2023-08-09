@@ -23,7 +23,7 @@ class GoogleDrive implements SyncRepository {
         downloadOptions: DownloadOptions.fullMedia,
       ) as Media;
     } on DetailedApiRequestError catch (e) {
-      log.e('Failed to download file', e);
+      log.e('Failed to download file', error: e);
       return null;
     }
 
@@ -71,7 +71,7 @@ class GoogleDrive implements SyncRepository {
           ),
         );
       } on DetailedApiRequestError catch (e) {
-        log.e('Failed to upload file', e);
+        log.e('Failed to upload file', error: e);
         return false;
       }
     }

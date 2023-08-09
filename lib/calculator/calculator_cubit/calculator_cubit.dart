@@ -89,13 +89,13 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     assert(SyncService.instance != null);
     if (_syncTimer == null) _setSyncTimer();
     emit(state.copyWith(syncing: true));
-    log.v('Syncing data...');
+    log.t('Syncing data...');
 
     final List<Sheet>? sheets;
     try {
       sheets = await SyncService.instance?.syncSheets(state.sheets);
     } catch (e) {
-      log.e('Error syncing', e);
+      log.e('Error syncing', error: e);
       emit(state.copyWith(syncing: false));
       return;
     }
@@ -108,7 +108,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     emit(state.copyWith(lastSync: DateTime.now(), sheets: sheets));
-    log.v('Sync complete.');
+    log.t('Sync complete.');
     await _saveAllSheets();
   }
 
