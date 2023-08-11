@@ -130,7 +130,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   /// Verify's the index of the sheets and returns them in order.
   static List<Sheet> putSheetsInOrder(List<Sheet> sheets) {
-    List<Sheet> unorderedSheets = [];
+    final List<Sheet> unorderedSheets = [];
     List<Sheet> orderedSheets = List.filled(sheets.length, Sheet());
 
     for (var sheet in sheets) {
@@ -280,7 +280,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   /// Called when the user is reordering the list of sheets.
   Future<void> reorderSheets(int oldIndex, int newIndex) async {
     if (oldIndex < newIndex) newIndex -= 1;
-    List<Sheet> sheets = List<Sheet>.from(state.sheets)
+    final List<Sheet> sheets = List<Sheet>.from(state.sheets)
       ..removeAt(oldIndex)
       ..insert(newIndex, state.sheets[oldIndex]);
     for (var i = 0; i < sheets.length; i++) {

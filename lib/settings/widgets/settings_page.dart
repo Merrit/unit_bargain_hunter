@@ -333,7 +333,7 @@ class _EnableSyncTile extends StatelessWidget {
     final authCubit = context.read<AuthenticationCubit>();
     final calcCubit = context.read<CalculatorCubit>();
 
-    bool proPurchased = context.select(
+    final bool proPurchased = context.select(
       (PurchasesCubit cubit) => cubit.state.proPurchased,
     );
 

@@ -3,7 +3,7 @@ import 'package:helpers/helpers.dart';
 
 Future showModal(BuildContext context, Widget contents) {
   final mediaQuery = MediaQuery.of(context);
-  BoxConstraints? constraints = (mediaQuery.isHandset) //
+  final BoxConstraints? constraints = (mediaQuery.isHandset) //
       ? null
       : const BoxConstraints(maxWidth: 350);
 
