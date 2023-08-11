@@ -69,6 +69,12 @@ Future<void> main() async {
 
       // Mock the StorageService
       storageService = MockStorageService();
+      when(() => storageService.getValue('activeSheetId'))
+          .thenAnswer((_) async => '1');
+      when(() => storageService.saveValue(
+            key: 'activeSheetId',
+            value: any(named: 'value'),
+          )).thenAnswer((_) async => Future.value());
       when(() => storageService.getValue('lastSynced'))
           .thenAnswer((_) async {});
       when(() => storageService.getValue('showSidePanel'))
