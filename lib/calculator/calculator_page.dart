@@ -10,6 +10,7 @@ import '../app/widgets/widgets.dart';
 import '../core/constants.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
+import '../settings/settings.dart';
 import 'calculator_cubit/calculator_cubit.dart';
 import 'widgets/widgets.dart';
 
@@ -46,6 +47,13 @@ class CalculatorPage extends StatelessWidget {
             }
           });
 
+          final PreferredSizeWidget? appBar;
+          if (mediaQuery.isHandset) {
+            appBar = const CustomAppBar();
+          } else {
+            appBar = null;
+          }
+
           return SafeArea(
             // GestureDetector & FocusNode allow clicking outside input areas in
             // order to deselect them as expected on web & desktop platforms.
@@ -54,9 +62,12 @@ class CalculatorPage extends StatelessWidget {
               child: FocusableActionDetector(
                 focusNode: focusNode,
                 child: Scaffold(
-                  appBar: (mediaQuery.isHandset) ? const CustomAppBar() : null,
+                  appBar: appBar,
                   drawer: drawer,
                   body: const CalculatorView(),
+                  floatingActionButton: const _FloatingActionButton(),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endTop,
                 ),
               ),
             ),
@@ -284,6 +295,48 @@ class _SheetNameWidget extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _FloatingActionButton extends StatelessWidget {
+  const _FloatingActionButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.small(
+      onPressed: () {
+        // Show a dialog to confirm the user wants to reset the sheet.
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Reset sheet?'),
+            content: const Text(
+              'This will remove all items from the sheet.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<CalculatorCubit>().resetActiveSheet();
+                  Navigator.pop(context);
+                },
+                child: const Text('Reset'),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Transform.flip(
+        flipX: true,
+        child: const Icon(
+          Icons.refresh,
+          color: Colors.orange,
+        ),
+      ),
     );
   }
 }
