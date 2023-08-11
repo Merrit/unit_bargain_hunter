@@ -51,6 +51,14 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
     sheets = putSheetsInOrder(sheets);
 
+    String? activeSheetId = await storageService.getValue('activeSheetId');
+    activeSheetId ??= sheets.first.uuid;
+
+    final activeSheet = sheets.firstWhere(
+      (sheet) => sheet.uuid == activeSheetId,
+      orElse: () => sheets.first,
+    );
+
     return CalculatorCubit(
       appCubit,
       authCubit,
@@ -58,8 +66,8 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       storageService,
       initialState: CalculatorState(
         sheets: sheets,
-        activeSheetId: sheets.first.uuid,
-        activeSheet: sheets.first,
+        activeSheetId: activeSheetId,
+        activeSheet: activeSheet,
         result: const <Item>[],
         lastSync: DateTime.tryParse(
           await storageService.getValue('lastSynced') ?? '',
@@ -248,9 +256,14 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   /// Set [sheet] as the active sheet that is seen in the [CalculatorView].
-  void selectSheet(Sheet sheet) {
+  Future<void> selectSheet(Sheet sheet) async {
+    if (sheet.uuid == state.activeSheet?.uuid) return;
     emit(state.copyWith(activeSheet: sheet));
-    compare();
+
+    await _storageService.saveValue(
+      key: 'activeSheetId',
+      value: sheet.uuid,
+    );
   }
 
   /// Called when the user is reordering the list of sheets.
