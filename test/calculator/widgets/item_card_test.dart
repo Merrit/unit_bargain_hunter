@@ -77,6 +77,7 @@ void main() {
           activeSheetId: sheet.uuid,
           activeSheet: sheet,
           result: const <Item>[],
+          syncing: false,
         ),
       );
     });
@@ -104,6 +105,7 @@ void main() {
           activeSheetId: sheet.uuid,
           activeSheet: sheet,
           result: const <Item>[],
+          syncing: false,
         ),
       );
 
@@ -151,6 +153,7 @@ void main() {
           activeSheetId: sheet.uuid,
           activeSheet: sheet,
           result: const <Item>[],
+          syncing: false,
         ),
       );
 
