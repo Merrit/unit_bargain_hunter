@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../app/cubit/app_cubit.dart';
 import '../../authentication/authentication.dart';
@@ -15,6 +15,7 @@ import '../calculator_page.dart';
 import '../models/models.dart';
 
 part 'calculator_state.dart';
+part 'calculator_cubit.freezed.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
   final AppCubit _appCubit;
@@ -63,6 +64,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         lastSync: DateTime.tryParse(
           await storageService.getValue('lastSynced') ?? '',
         ),
+        syncing: false,
       ),
     );
   }
@@ -115,7 +117,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   /// Reset sync status.
   Future<void> resetSync() async {
     await _storageService.deleteValue('lastSynced');
-    emit(state.copyWith(clearLastSync: true));
+    emit(state.copyWith(lastSync: null));
   }
 
   /// Verify's the index of the sheets and returns them in order.
@@ -235,10 +237,10 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     final Sheet? activeSheet = (sheet == state.activeSheet) //
         ? sheets.firstOrNull
         : null;
-    emit(CalculatorState(
+    emit(state.copyWith(
       sheets: sheets,
-      activeSheetId: activeSheet?.uuid,
       activeSheet: activeSheet,
+      activeSheetId: activeSheet?.uuid,
       result: state.result,
     ));
     await _storageService.deleteValue(sheet.uuid, storageArea: 'sheets');
