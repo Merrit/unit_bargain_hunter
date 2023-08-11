@@ -64,6 +64,14 @@ class Item extends Equatable {
     );
   }
 
+  factory Item.initial() {
+    return Item(
+      price: 0,
+      quantity: 0,
+      unit: Unit.gram,
+    );
+  }
+
   Item copyWith({
     String? uuid,
     double? price,
