@@ -2,9 +2,12 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "dart",
-			"command": "dart",
+			"label": "build_runner watch",
+			"detail": "Code generation (continuous)",
+			"type": "flutter",
+			"command": "flutter",
 			"args": [
+				"pub",
 				"run",
 				"build_runner",
 				"watch",
@@ -13,9 +16,13 @@
 			"problemMatcher": [
 				"$dart-build_runner"
 			],
-			"group": "build",
-			"label": "build_runner watch",
-			"detail": ""
-		}
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"panel": "dedicated"
+			}
+		},
 	]
 }
