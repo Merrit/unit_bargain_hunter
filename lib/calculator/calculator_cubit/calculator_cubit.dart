@@ -200,6 +200,17 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     emit(state.copyWith(result: []));
   }
 
+  /// Reset the active sheet.
+  ///
+  /// This will reset the active sheet's items to the initial state.
+  Future<void> resetActiveSheet() async {
+    assert(state.activeSheet != null);
+    final updatedSheet = state.activeSheet!.copyWith(
+      items: [Item.initial(), Item.initial()],
+    );
+    await updateActiveSheet(updatedSheet);
+  }
+
   Future<void> addSheet() async {
     if (state.sheets.length >= 5 && !_purchasesCubit.state.proPurchased) {
       _appCubit.promptForProUpgrade();
