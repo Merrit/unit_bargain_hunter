@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:system_theme/system_theme.dart';
 
 import '../../storage/storage_service.dart';
 import '../../theme/app_theme.dart';
@@ -50,6 +49,11 @@ class SettingsCubit extends Cubit<SettingsState> {
       'ThemeMode',
     );
 
+    final Brightness systemBrightness = WidgetsBinding //
+        .instance
+        .platformDispatcher
+        .platformBrightness;
+
     switch (savedThemePreference) {
       case 'ThemeMode.dark':
         return ThemeMode.dark;
@@ -57,7 +61,9 @@ class SettingsCubit extends Cubit<SettingsState> {
         return ThemeMode.light;
       case null:
       default:
-        return (SystemTheme.isDarkMode) ? ThemeMode.dark : ThemeMode.light;
+        return (systemBrightness == Brightness.dark)
+            ? ThemeMode.dark
+            : ThemeMode.light;
     }
   }
 
