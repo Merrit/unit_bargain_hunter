@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../storage/storage_service.dart';
 import '../../theme/app_theme.dart';
 
 part 'settings_state.dart';
+part 'settings_cubit.freezed.dart';
 
 /// Controls the state of the settings for the app.
 class SettingsCubit extends Cubit<SettingsState> {
