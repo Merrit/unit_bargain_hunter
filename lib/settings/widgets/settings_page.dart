@@ -90,10 +90,10 @@ class SettingsView extends StatelessWidget {
             vertical: 16,
           ),
           children: [
-            versionSection,
             appearanceSection,
             taxSection,
             syncSection,
+            versionSection,
           ],
         );
       },
@@ -128,71 +128,6 @@ class _SectionCard extends StatelessWidget {
           ...children,
         ],
       ),
-    );
-  }
-}
-
-/// A tile that shows the current version of the app.
-class _CurrentVersionTile extends StatelessWidget {
-  const _CurrentVersionTile();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return ListTile(
-          title: Text('Current version: ${state.runningVersion}'),
-        );
-      },
-    );
-  }
-}
-
-/// A tile that shows the latest version of the app, and a button to
-/// open the download url in the browser (only on desktop).
-///
-/// If an update is available, a badge is shown on the tile to match the
-/// badge on the Settings button in the side bar.
-class _UpdateTile extends StatelessWidget {
-  const _UpdateTile();
-
-  @override
-  Widget build(BuildContext context) {
-    final appCubit = context.read<AppCubit>();
-
-    if (defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS ||
-        kIsWeb) {
-      return const SizedBox();
-    }
-
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        if (state.updateAvailable) {
-          return ListTile(
-            title: badges.Badge(
-              showBadge: state.showUpdateButton,
-              position: badges.BadgePosition.topStart(),
-              badgeStyle: const badges.BadgeStyle(
-                badgeColor: Colors.lightBlue,
-              ),
-              child: Text('Update available: ${state.updateVersion}'),
-            ),
-            trailing: kIsWeb
-                ? null
-                : IconButton(
-                    icon: const Icon(Icons.open_in_browser),
-                    onPressed: () {
-                      appCubit.launchURL(websiteUrl);
-                    },
-                  ),
-          );
-        } else {
-          return const ListTile(
-            title: Text('Up to date'),
-          );
-        }
-      },
     );
   }
 }
@@ -499,6 +434,71 @@ class _SignOutTile extends StatelessWidget {
                 }
               : null,
         );
+      },
+    );
+  }
+}
+
+/// A tile that shows the current version of the app.
+class _CurrentVersionTile extends StatelessWidget {
+  const _CurrentVersionTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Current version: ${state.runningVersion}'),
+        );
+      },
+    );
+  }
+}
+
+/// A tile that shows the latest version of the app, and a button to
+/// open the download url in the browser (only on desktop).
+///
+/// If an update is available, a badge is shown on the tile to match the
+/// badge on the Settings button in the side bar.
+class _UpdateTile extends StatelessWidget {
+  const _UpdateTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final appCubit = context.read<AppCubit>();
+
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        kIsWeb) {
+      return const SizedBox();
+    }
+
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        if (state.updateAvailable) {
+          return ListTile(
+            title: badges.Badge(
+              showBadge: state.showUpdateButton,
+              position: badges.BadgePosition.topStart(),
+              badgeStyle: const badges.BadgeStyle(
+                badgeColor: Colors.lightBlue,
+              ),
+              child: Text('Update available: ${state.updateVersion}'),
+            ),
+            trailing: kIsWeb
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.open_in_browser),
+                    onPressed: () {
+                      appCubit.launchURL(websiteUrl);
+                    },
+                  ),
+          );
+        } else {
+          return const ListTile(
+            title: Text('Up to date'),
+          );
+        }
       },
     );
   }
