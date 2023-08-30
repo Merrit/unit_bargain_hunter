@@ -59,7 +59,7 @@ dev_dependencies:
     git:
       url: https://github.com/Merrit/flutter_app_builder.git
       ref: 6fb79239f99bc06fe16b95af3ec6bcc5cc1eb9e7
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
@@ -76,10 +76,8 @@ flutter:
     - assets/icon/icon.png
     - pubspec.yaml
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
-  ios: true
-  remove_alpha_ios: true
   image_path: "assets/icon/icon.png"
 
 flutter_app_builder:
