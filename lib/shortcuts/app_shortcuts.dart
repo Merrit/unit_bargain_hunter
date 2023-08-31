@@ -5,7 +5,7 @@ import 'shortcuts.dart';
 
 /// Shortcuts that are available everywhere in the app.
 ///
-/// This widget is to be wrapped around the widget intended as a route.
+/// This widget is to be wrapped around the app widget.
 class AppShortcuts extends StatelessWidget {
   final Widget child;
 
