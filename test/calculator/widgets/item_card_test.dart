@@ -59,6 +59,7 @@ void main() {
         SettingsState(
           enabledUnits: Unit.all,
           navigationAreaRatio: 0.3,
+          showCostPerHundred: true,
           taxRate: 0.0,
           theme: ThemeData.dark(),
         ),
@@ -126,7 +127,7 @@ void main() {
 
       expect(find.text('Item 1'), findsOneWidget);
       expect(find.text(r'$ 1.00'), findsOneWidget);
-      expect(find.text('1.0 grams'), findsOneWidget);
+      expect(find.text('1.0 g'), findsOneWidget);
       expect(find.text('+tax'), findsNothing);
     });
 
@@ -174,7 +175,7 @@ void main() {
 
       expect(find.text('Item 1'), findsOneWidget);
       expect(find.text(r'$ 1.00'), findsOneWidget);
-      expect(find.text('1.0 grams'), findsOneWidget);
+      expect(find.text('1.0 g'), findsOneWidget);
       expect(find.text('+tax'), findsOneWidget);
     });
   });
