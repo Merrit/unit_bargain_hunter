@@ -304,37 +304,46 @@ class _FloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-      onPressed: () {
-        // Show a dialog to confirm the user wants to reset the sheet.
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Reset sheet?'),
-            content: const Text(
-              'This will remove all items from the sheet.',
+    final mediaQuery = MediaQuery.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(
+        // On desktop the FAB is getting placed directly against the top of the
+        // screen, so we need to add some padding to make it look nicer.
+        top: (mediaQuery.isHandset) ? 0 : 16.0,
+      ),
+      child: FloatingActionButton.small(
+        onPressed: () {
+          // Show a dialog to confirm the user wants to reset the sheet.
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Reset sheet?'),
+              content: const Text(
+                'This will remove all items from the sheet.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<CalculatorCubit>().resetActiveSheet();
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Reset'),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<CalculatorCubit>().resetActiveSheet();
-                  Navigator.pop(context);
-                },
-                child: const Text('Reset'),
-              ),
-            ],
+          );
+        },
+        child: Transform.flip(
+          flipX: true,
+          child: const Icon(
+            Icons.refresh,
+            color: Colors.orange,
           ),
-        );
-      },
-      child: Transform.flip(
-        flipX: true,
-        child: const Icon(
-          Icons.refresh,
-          color: Colors.orange,
         ),
       ),
     );
