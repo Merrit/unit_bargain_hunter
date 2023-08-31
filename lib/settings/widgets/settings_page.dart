@@ -230,6 +230,31 @@ class _UnitFilterSettingsState extends State<_UnitFilterSettings> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
+        final List<CheckboxListTile> unitCheckboxWidgets = [
+          CheckboxListTile(
+            value: state.showCostPerHundred,
+            title: const Text('Cost per 100 g or ml'),
+            onChanged: (bool? value) {
+              if (value == null) return;
+
+              settingsCubit.toggleCostPerHundred();
+            },
+          ),
+          ...Unit.all.map(
+            (unit) {
+              return CheckboxListTile(
+                value: state.enabledUnits.contains(unit),
+                title: Text(unit.toString().capitalized()),
+                onChanged: (bool? value) {
+                  if (value == null) return;
+
+                  settingsCubit.toggleUnit(unit);
+                },
+              );
+            },
+          ).toList()
+        ];
+
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -238,19 +263,7 @@ class _UnitFilterSettingsState extends State<_UnitFilterSettings> {
                 'Enabled units appear (if appropriate) after a calculation',
               ),
               const SizedBox(height: 16),
-              ...Unit.all.map(
-                (unit) {
-                  return CheckboxListTile(
-                    value: state.enabledUnits.contains(unit),
-                    title: Text(unit.toString().capitalized()),
-                    onChanged: (bool? value) {
-                      if (value == null) return;
-
-                      settingsCubit.toggleUnit(unit);
-                    },
-                  );
-                },
-              ),
+              ...unitCheckboxWidgets,
             ],
           ),
         );

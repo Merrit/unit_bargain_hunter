@@ -158,7 +158,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   Future<void> compare() async {
     assert(state.activeSheet != null);
     emit(state.copyWith(result: [])); // Reset result.
-    final result = const Calculator().compare(
+    final List<Item> result = const Calculator().compare(
       items: state.activeSheet!.items,
       taxRate: await _storageService.getValue('taxRate') ?? 0.0,
     );

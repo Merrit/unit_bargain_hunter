@@ -31,12 +31,16 @@ class SettingsCubit extends Cubit<SettingsState> {
           .toList();
     }
 
+    final bool showCostPerHundred =
+        await storageService.getValue('showCostPerHundred') ?? true;
+
     return SettingsCubit(
       storageService,
       initialState: SettingsState(
         enabledUnits: enabledUnits,
         navigationAreaRatio:
             await storageService.getValue('navigationAreaRatio') ?? 0.25,
+        showCostPerHundred: showCostPerHundred,
         taxRate: await storageService.getValue('taxRate') ?? 0.0,
         theme: await _getTheme(),
       ),
@@ -80,6 +84,15 @@ class SettingsCubit extends Cubit<SettingsState> {
             ? ThemeMode.dark
             : ThemeMode.light;
     }
+  }
+
+  /// Toggle whether to show the cost per hundred grams or millilitres.
+  Future<void> toggleCostPerHundred() async {
+    emit(state.copyWith(showCostPerHundred: !state.showCostPerHundred));
+    await _storageService.saveValue(
+      key: 'showCostPerHundred',
+      value: state.showCostPerHundred,
+    );
   }
 
   /// Toggle the enabled state of the given [unit].

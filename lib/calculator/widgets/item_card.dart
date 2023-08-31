@@ -184,39 +184,28 @@ class _UnitCalculations extends StatelessWidget {
                 costsPerUnit.removeWhere(
                     (cost) => !settingsState.enabledUnits.contains(cost.unit));
 
-                return (costsPerUnit.isEmpty || !calcState.resultExists)
-                    ? const SizedBox()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Divider(),
-                          ...costsPerUnit.map((cost) {
-                            final double value;
-                            if (item.taxIncluded) {
-                              value = cost.value;
-                            } else {
-                              value = cost.value * taxRate;
-                            }
+                if (costsPerUnit.isEmpty || !calcState.resultExists) {
+                  return const SizedBox();
+                }
 
-                            String stringValue = value.toStringAsFixed(3);
-                            if (stringValue == '0.000') {
-                              // Calculated value too small to show within 3 decimal points.
-                              stringValue = '--.--';
-                            }
-                            if (stringValue.endsWith('0')) {
-                              // Only show 2 decimal places when ending with a 0, for example:
-                              // 77.50 instead of 77.500
-                              final lastIndex = stringValue.length - 1;
-                              stringValue = stringValue.substring(0, lastIndex);
-                            }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(),
+                    const _CostPerHundredWidget(),
+                    ...costsPerUnit.map((cost) {
+                      final double value =
+                          _valueWithTax(item.taxIncluded, cost.value, taxRate);
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('\$$stringValue per ${cost.unit}'),
-                            );
-                          }).toList(),
-                        ],
+                      final valueString = _valueAsString(value);
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Text('\$$valueString per ${cost.unit}'),
                       );
+                    }).toList(),
+                  ],
+                );
               },
             );
           },
@@ -224,4 +213,86 @@ class _UnitCalculations extends StatelessWidget {
       },
     );
   }
+}
+
+/// If the comparison type is weight or volume, show the cost per 100 grams or
+/// millilitres.
+class _CostPerHundredWidget extends StatelessWidget {
+  const _CostPerHundredWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, settingsState) {
+        if (settingsState.showCostPerHundred == false) {
+          return const SizedBox();
+        }
+
+        return Consumer(
+          builder: (context, ref, child) {
+            final Item item = ref.watch(_currentItem);
+            final double taxRate = 1 + (settingsState.taxRate / 100);
+
+            return BlocBuilder<CalculatorCubit, CalculatorState>(
+              builder: (context, calcCubit) {
+                final comparisonType = calcCubit.activeSheet!.compareBy;
+
+                if (comparisonType is Weight || comparisonType is Volume) {
+                  final costPerHundredValue = item.costPerUnit.firstWhere(
+                    (cost) => cost.unit == comparisonType.baseUnit,
+                    orElse: () => Cost(
+                      unit: comparisonType.baseUnit,
+                      value: 0,
+                    ),
+                  );
+
+                  final value = _valueWithTax(
+                    item.taxIncluded,
+                    costPerHundredValue.value * 100,
+                    taxRate,
+                  );
+
+                  // Round to 2 decimal places.
+                  final roundedValue = (value * 100).round() / 100;
+                  final String valueString = _valueAsString(roundedValue);
+
+                  return Text(
+                    '\$$valueString per 100 ${comparisonType.baseUnit}s',
+                  );
+                }
+
+                return const SizedBox();
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+double _valueWithTax(bool taxIncluded, double value, double taxRate) {
+  if (taxIncluded) {
+    return value;
+  } else {
+    return value * taxRate;
+  }
+}
+
+String _valueAsString(double value) {
+  String valueString = value.toStringAsFixed(3);
+
+  if (valueString == '0.000') {
+    // Calculated value too small to show within 3 decimal points.
+    valueString = '--.--';
+  }
+
+  if (valueString.endsWith('0')) {
+    // Only show 2 decimal places when ending with a 0, for example:
+    // 77.50 instead of 77.500
+    final lastIndex = valueString.length - 1;
+    valueString = valueString.substring(0, lastIndex);
+  }
+
+  return valueString;
 }
