@@ -233,7 +233,10 @@ class _UnitFilterSettingsState extends State<_UnitFilterSettings> {
         final List<CheckboxListTile> unitCheckboxWidgets = [
           CheckboxListTile(
             value: state.showCostPerHundred,
-            title: const Text('Cost per 100 g or ml'),
+            title: const Align(
+              alignment: Alignment.centerRight,
+              child: Text('Cost per 100 g or ml'),
+            ),
             onChanged: (bool? value) {
               if (value == null) return;
 
@@ -244,7 +247,10 @@ class _UnitFilterSettingsState extends State<_UnitFilterSettings> {
             (unit) {
               return CheckboxListTile(
                 value: state.enabledUnits.contains(unit),
-                title: Text(unit.toString().capitalized()),
+                title: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(unit.toString()),
+                ),
                 onChanged: (bool? value) {
                   if (value == null) return;
 

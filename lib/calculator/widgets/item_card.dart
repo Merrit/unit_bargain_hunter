@@ -110,7 +110,7 @@ class _ItemContents extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     priceWidget,
-                    Text('$quantity ${item.unit}s'),
+                    Text('$quantity ${item.unit}'),
                     const _UnitCalculations(),
                   ],
                 ),
@@ -201,7 +201,7 @@ class _UnitCalculations extends StatelessWidget {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Text('\$$valueString per ${cost.unit}'),
+                        child: Text('\$$valueString/${cost.unit}'),
                       );
                     }).toList(),
                   ],
@@ -257,7 +257,7 @@ class _CostPerHundredWidget extends StatelessWidget {
                   final String valueString = _valueAsString(roundedValue);
 
                   return Text(
-                    '\$$valueString per 100 ${comparisonType.baseUnit}s',
+                    '\$$valueString/100 ${comparisonType.baseUnit}',
                   );
                 }
 
