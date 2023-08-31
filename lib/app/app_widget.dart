@@ -59,24 +59,26 @@ class _AppWidgetState extends State<AppWidget> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsCubit, SettingsState>(
-      builder: (context, state) {
-        return MaterialApp(
-          title: 'Unit Bargain Hunter',
-          debugShowCheckedModeBanner: false,
-          theme: state.theme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          routes: {
-            CalculatorPage.id: (context) => CalculatorPage(),
-            PurchasesPage.id: (context) => const PurchasesPage(),
-            PurchaseSuccessfulPage.id: (context) =>
-                const PurchaseSuccessfulPage(),
-            SettingsPage.id: (context) => const SettingsPage(),
-          },
-          home: AppShortcuts(child: CalculatorPage()),
-        );
-      },
+    return AppShortcuts(
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Unit Bargain Hunter',
+            debugShowCheckedModeBanner: false,
+            theme: state.theme,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            routes: {
+              CalculatorPage.id: (context) => CalculatorPage(),
+              PurchasesPage.id: (context) => const PurchasesPage(),
+              PurchaseSuccessfulPage.id: (context) =>
+                  const PurchaseSuccessfulPage(),
+              SettingsPage.id: (context) => const SettingsPage(),
+            },
+            home: CalculatorPage(),
+          );
+        },
+      ),
     );
   }
 }
