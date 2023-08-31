@@ -175,41 +175,50 @@ class _UnitCalculations extends StatelessWidget {
         final settingsCubit = context.read<SettingsCubit>();
         final double taxRate = 1 + (settingsCubit.state.taxRate / 100);
 
-        return BlocBuilder<CalculatorCubit, CalculatorState>(
-          builder: (context, state) {
-            return (item.costPerUnit.isEmpty || !state.resultExists)
-                ? const SizedBox()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Divider(),
-                      ...item.costPerUnit.map((cost) {
-                        final double value;
-                        if (item.taxIncluded) {
-                          value = cost.value;
-                        } else {
-                          value = cost.value * taxRate;
-                        }
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            return BlocBuilder<CalculatorCubit, CalculatorState>(
+              builder: (context, calcState) {
+                final List<Cost> costsPerUnit = [...item.costPerUnit];
 
-                        String stringValue = value.toStringAsFixed(3);
-                        if (stringValue == '0.000') {
-                          // Calculated value too small to show within 3 decimal points.
-                          stringValue = '--.--';
-                        }
-                        if (stringValue.endsWith('0')) {
-                          // Only show 2 decimal places when ending with a 0, for example:
-                          // 77.50 instead of 77.500
-                          final lastIndex = stringValue.length - 1;
-                          stringValue = stringValue.substring(0, lastIndex);
-                        }
+                costsPerUnit.removeWhere(
+                    (cost) => !settingsState.enabledUnits.contains(cost.unit));
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Text('\$$stringValue per ${cost.unit}'),
-                        );
-                      }).toList(),
-                    ],
-                  );
+                return (costsPerUnit.isEmpty || !calcState.resultExists)
+                    ? const SizedBox()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Divider(),
+                          ...costsPerUnit.map((cost) {
+                            final double value;
+                            if (item.taxIncluded) {
+                              value = cost.value;
+                            } else {
+                              value = cost.value * taxRate;
+                            }
+
+                            String stringValue = value.toStringAsFixed(3);
+                            if (stringValue == '0.000') {
+                              // Calculated value too small to show within 3 decimal points.
+                              stringValue = '--.--';
+                            }
+                            if (stringValue.endsWith('0')) {
+                              // Only show 2 decimal places when ending with a 0, for example:
+                              // 77.50 instead of 77.500
+                              final lastIndex = stringValue.length - 1;
+                              stringValue = stringValue.substring(0, lastIndex);
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Text('\$$stringValue per ${cost.unit}'),
+                            );
+                          }).toList(),
+                        ],
+                      );
+              },
+            );
           },
         );
       },

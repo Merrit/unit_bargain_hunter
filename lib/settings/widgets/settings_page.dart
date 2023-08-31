@@ -8,6 +8,7 @@ import 'package:helpers/helpers.dart';
 import '../../app/app_widget.dart';
 import '../../authentication/authentication.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
+import '../../calculator/models/models.dart';
 import '../../core/constants.dart';
 import '../../purchases/cubit/purchases_cubit.dart';
 import '../../purchases/pages/purchases_page.dart';
@@ -56,6 +57,7 @@ class SettingsView extends StatelessWidget {
           title: 'Appearance',
           children: [
             _ThemeTile(),
+            _UnitFilterTile(),
           ],
         );
 
@@ -151,6 +153,106 @@ class _ThemeTile extends StatelessWidget {
             settingsCubit
                 .updateThemeMode(value ? ThemeMode.dark : ThemeMode.light);
           },
+        );
+      },
+    );
+  }
+}
+
+/// A tile that when clicked will show a dialog to change which units are
+/// displayed after a calculation.
+class _UnitFilterTile extends StatelessWidget {
+  const _UnitFilterTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    return ListTile(
+      title: const Text('Unit filter'),
+      leading: const Icon(Icons.filter_list),
+      onTap: () {
+        if (mediaQuery.isHandset) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  title: const Text('Unit filter'),
+                ),
+                body: const SafeArea(
+                  child: _UnitFilterSettings(),
+                ),
+              ),
+            ),
+          );
+          return;
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Unit filter'),
+              content: const _UnitFilterSettings(),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+/// A dialog that allows the user to change which units are displayed after
+/// a calculation.
+class _UnitFilterSettings extends StatefulWidget {
+  const _UnitFilterSettings();
+
+  @override
+  _UnitFilterSettingsState createState() => _UnitFilterSettingsState();
+}
+
+class _UnitFilterSettingsState extends State<_UnitFilterSettings> {
+  late SettingsCubit settingsCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    settingsCubit = context.read<SettingsCubit>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Enabled units appear (if appropriate) after a calculation',
+              ),
+              const SizedBox(height: 16),
+              ...Unit.all.map(
+                (unit) {
+                  return CheckboxListTile(
+                    value: state.enabledUnits.contains(unit),
+                    title: Text(unit.toString().capitalized()),
+                    onChanged: (bool? value) {
+                      if (value == null) return;
+
+                      settingsCubit.toggleUnit(unit);
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );
