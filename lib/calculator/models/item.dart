@@ -46,7 +46,7 @@ class Item extends Equatable {
     String? details,
     bool? taxIncluded,
   }) {
-    final costPerUnit = CostValidator.validate(
+    final List<Cost> costPerUnit = CostValidator.validate(
       price: price,
       quantity: quantity,
       unit: unit,
