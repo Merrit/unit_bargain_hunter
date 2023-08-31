@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import '../../logs/logs.dart';
 
 // All of the unit types the app supports comparisons of.
-
 abstract class Unit extends Equatable {
   const Unit();
 
@@ -11,6 +10,13 @@ abstract class Unit extends Equatable {
   Unit get unitType;
 
   List<Unit> get subTypes => [const Weight(), const Volume(), const ItemUnit()];
+
+  /// A list of all the units that can be used for calculations.
+  static List<Unit> get all => [
+        ...const Weight().subTypes,
+        ...const Volume().subTypes,
+        const ItemUnit(),
+      ];
 
   // Weight-based units.
   static Unit get milligram => Milligram();
@@ -93,7 +99,13 @@ class Weight extends Unit {
   Unit get unitType => const Weight();
 
   @override
-  List<Unit> get subTypes => [Gram(), Kilogram(), Ounce(), Pound()];
+  List<Unit> get subTypes => [
+        Milligram(),
+        Gram(),
+        Kilogram(),
+        Ounce(),
+        Pound(),
+      ];
 
   @override
   String toString() => 'weight';

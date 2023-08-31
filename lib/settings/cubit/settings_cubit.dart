@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../calculator/models/models.dart';
 import '../../storage/storage_service.dart';
 import '../../theme/app_theme.dart';
 
@@ -18,9 +19,22 @@ class SettingsCubit extends Cubit<SettingsState> {
   static Future<SettingsCubit> initialize(
     StorageService storageService,
   ) async {
+    final List<dynamic>? savedEnabledUnitStrings =
+        await storageService.getValue('enabledUnits');
+
+    final List<Unit> enabledUnits;
+    if (savedEnabledUnitStrings == null) {
+      enabledUnits = Unit.all;
+    } else {
+      enabledUnits = savedEnabledUnitStrings //
+          .map((dynamic unit) => Unit.fromString(unit))
+          .toList();
+    }
+
     return SettingsCubit(
       storageService,
       initialState: SettingsState(
+        enabledUnits: enabledUnits,
         navigationAreaRatio:
             await storageService.getValue('navigationAreaRatio') ?? 0.25,
         taxRate: await storageService.getValue('taxRate') ?? 0.0,
@@ -66,6 +80,28 @@ class SettingsCubit extends Cubit<SettingsState> {
             ? ThemeMode.dark
             : ThemeMode.light;
     }
+  }
+
+  /// Toggle the enabled state of the given [unit].
+  Future<void> toggleUnit(Unit unit) async {
+    final List<Unit> enabledUnits = [...state.enabledUnits];
+
+    if (enabledUnits.contains(unit)) {
+      enabledUnits.remove(unit);
+    } else {
+      enabledUnits.add(unit);
+    }
+
+    emit(state.copyWith(enabledUnits: enabledUnits));
+
+    final List<String> enabledUnitsStrings = enabledUnits //
+        .map((Unit unit) => unit.toString())
+        .toList();
+
+    await _storageService.saveValue(
+      key: 'enabledUnits',
+      value: enabledUnitsStrings,
+    );
   }
 
   Future<void> updateNavigationAreaRatio(double value) async {

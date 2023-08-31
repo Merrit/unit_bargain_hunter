@@ -57,6 +57,7 @@ void main() {
       settingsCubit = MockSettingsCubit();
       when(settingsCubit.state).thenReturn(
         SettingsState(
+          enabledUnits: Unit.all,
           navigationAreaRatio: 0.3,
           taxRate: 0.0,
           theme: ThemeData.dark(),
