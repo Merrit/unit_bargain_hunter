@@ -42,25 +42,34 @@ abstract class Unit extends Equatable {
   /// Accepts `Object` in order to accomodate the old Map values that were used.
   factory Unit.fromString(Object source) {
     // Handle old map values.
-    if (source.runtimeType != String) source = 'gram';
+    if (source.runtimeType != String) source = 'g';
 
     switch (source as String) {
+      case 'mg':
       case 'milligram':
         return Milligram();
+      case 'g':
       case 'gram':
         return Gram();
+      case 'kg':
       case 'kilogram':
         return Kilogram();
+      case 'oz':
       case 'ounce':
         return Ounce();
+      case 'lb':
       case 'pound':
         return Pound();
+      case 'ml':
       case 'millilitre':
         return Millilitre();
+      case 'l':
       case 'litre':
         return Litre();
+      case 'fl oz':
       case 'fluid ounce':
         return FluidOunce();
+      case 'qt':
       case 'quart':
         return Quart();
       case 'weight':
@@ -113,27 +122,27 @@ class Weight extends Unit {
 
 class Milligram extends Weight {
   @override
-  String toString() => 'milligram';
+  String toString() => 'mg';
 }
 
 class Gram extends Weight {
   @override
-  String toString() => 'gram';
+  String toString() => 'g';
 }
 
 class Kilogram extends Weight {
   @override
-  String toString() => 'kilogram';
+  String toString() => 'kg';
 }
 
 class Ounce extends Weight {
   @override
-  String toString() => 'ounce';
+  String toString() => 'oz';
 }
 
 class Pound extends Weight {
   @override
-  String toString() => 'pound';
+  String toString() => 'lb';
 }
 
 /* --------------------------- Volume-based units --------------------------- */
@@ -157,22 +166,22 @@ class Volume extends Unit {
 
 class Millilitre extends Volume {
   @override
-  String toString() => 'millilitre';
+  String toString() => 'ml';
 }
 
 class Litre extends Volume {
   @override
-  String toString() => 'litre';
+  String toString() => 'l';
 }
 
 class FluidOunce extends Volume {
   @override
-  String toString() => 'fluid ounce';
+  String toString() => 'fl oz';
 }
 
 class Quart extends Volume {
   @override
-  String toString() => 'quart';
+  String toString() => 'qt';
 }
 
 /* ----------------------------- Item-based unit ---------------------------- */
