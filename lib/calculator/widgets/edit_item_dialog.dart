@@ -91,6 +91,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
                 labelText: AppLocalizations.of(context)!.location,
                 prefixIcon: const Icon(Icons.location_on),
               ),
+              textCapitalization: TextCapitalization.sentences,
             ),
           ),
           ListTile(
@@ -102,6 +103,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
               ),
               keyboardType: TextInputType.multiline,
               maxLines: null,
+              textCapitalization: TextCapitalization.sentences,
             ),
           ),
           ListTile(
