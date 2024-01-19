@@ -71,6 +71,7 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                 decoration: const InputDecoration(
                   labelText: 'Name',
                 ),
+                textCapitalization: TextCapitalization.sentences,
               ),
             ),
             ListTile(
@@ -79,6 +80,7 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                 decoration: const InputDecoration(
                   labelText: 'Subtitle',
                 ),
+                textCapitalization: TextCapitalization.sentences,
               ),
             ),
             Padding(
