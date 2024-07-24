@@ -323,10 +323,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04
+      sha256: "3f41d009ba7172d5ff9be5f6e6e6abb4300e263aab8866d2a0842ed2a70f8f0c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "4.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -362,10 +362,10 @@ packages:
     dependency: "direct main"
     description:
       name: font_awesome_flutter
-      sha256: "1f93e5799f0e6c882819e8393a05c6ca5226010f289190f2242ec19f3f0fdba5"
+      sha256: "275ff26905134bcb59417cf60ad979136f1f8257f2f449914b2c3e05bbb4cd6f"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.0"
+    version: "10.7.0"
   freezed:
     dependency: "direct dev"
     description:
@@ -410,10 +410,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: e20ff62b158b96f392bfc8afe29dee1503c94fbea2cbe8186fd59b756b8ae982
+      sha256: b1ac0fe2832c9cc95e5e88b57d627c5e68c223b9657f4b96e1487aa9098c7b82
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "6.2.1"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -426,10 +426,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_sign_in
-      sha256: "821f354c053d51a2d417b02d42532a19a6ea8057d2f9ebb8863c07d81c98aaf9"
+      sha256: "0b8787cb9c1a68ad398e8010e8c8766bfa33556d2ab97c439fb4137756d7308f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.4"
+    version: "6.2.1"
   google_sign_in_android:
     dependency: transitive
     description:
@@ -458,18 +458,18 @@ packages:
     dependency: transitive
     description:
       name: google_sign_in_web
-      sha256: "75cc41ebc53b1756320ee14d9c3018ad3e6cea298147dbcd86e9d0c8d6720b40"
+      sha256: d606264c7a1a526a3aa79d938b85a601d8589731a478bd4a3dcbdeb14a572228
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.2+1"
+    version: "0.12.4+1"
   googleapis:
     dependency: "direct main"
     description:
       name: googleapis
-      sha256: c2f311bcd1b3e4052234162edc6b626a9013a7e1385d6aad37e9e6a6c5f89908
+      sha256: "4eefba93b5f714d6c2bcc1695ff6fb09d36684d2a06912285d3981069796da10"
       url: "https://pub.dev"
     source: hosted
-    version: "11.4.0"
+    version: "13.1.0"
   googleapis_auth:
     dependency: "direct main"
     description:
@@ -547,18 +547,18 @@ packages:
     dependency: "direct main"
     description:
       name: in_app_purchase
-      sha256: af00db44f0314eda24f5e7ff18a6b445ab95e11fcf49c53e4b7c6bef005eeecf
+      sha256: "960f26a08d9351fb8f89f08901f8a829d41b04d45a694b8f776121d9e41dcad6"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.5"
+    version: "3.2.0"
   in_app_purchase_android:
     dependency: "direct main"
     description:
       name: in_app_purchase_android
-      sha256: "8d24e7141d5da4e239045438cb990b98fe8fd3e8de6884fbc76ff4ecec30caf5"
+      sha256: "3d84d1a001fa138bed09e0cd95e9dbce268dce8b6f63bda7cf69cbf9135fbfbb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.5+4"
+    version: "0.3.6"
   in_app_purchase_platform_interface:
     dependency: transitive
     description:
@@ -643,10 +643,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
+      sha256: "976c774dd944a42e83e2467f4cc670daef7eed6295b10b36ae8c85bcbf828235"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "4.0.0"
   logger:
     dependency: "direct main"
     description:
@@ -715,10 +715,10 @@ packages:
     dependency: "direct dev"
     description:
       name: mocktail
-      sha256: "80a996cd9a69284b3dc521ce185ffe9150cde69767c2d3a0720147d93c0cef53"
+      sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "1.0.4"
   msix:
     dependency: "direct dev"
     description:
@@ -763,18 +763,18 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "7e76fad405b3e4016cd39d08f455a4eb5199723cf594cd1b8916d47140d93017"
+      sha256: b93d8b4d624b4ea19b0a5a208b2d6eff06004bc3ce74c06040b120eeadd00ce0
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "8.0.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
       name: package_info_plus_platform_interface
-      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
+      sha256: f49918f3433a3146047372f9d4f1f847511f2acd5cd030e1f44fe5a50036b70e
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "3.0.0"
   path:
     dependency: transitive
     description:
@@ -980,6 +980,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1144,10 +1152,10 @@ packages:
     dependency: "direct main"
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.4.2"
   vector_math:
     dependency: transitive
     description:
@@ -1247,4 +1255,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  flutter: ">=3.19.2"
