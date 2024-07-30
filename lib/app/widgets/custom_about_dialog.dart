@@ -7,7 +7,7 @@ import '../app_widget.dart';
 import 'widgets.dart';
 
 class CustomAboutDialog extends StatelessWidget {
-  const CustomAboutDialog({Key? key}) : super(key: key);
+  const CustomAboutDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

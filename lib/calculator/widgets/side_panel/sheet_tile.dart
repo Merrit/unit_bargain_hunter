@@ -18,8 +18,8 @@ class SheetTile extends StatefulWidget {
 
   const SheetTile(
     this.sheet, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SheetTile> createState() => _SheetTileState();

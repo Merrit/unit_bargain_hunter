@@ -17,7 +17,7 @@ import 'widgets/widgets.dart';
 class CalculatorPage extends StatelessWidget {
   static const id = 'calculator_page';
 
-  CalculatorPage({Key? key}) : super(key: key);
+  CalculatorPage({super.key});
 
   final focusNode = FocusNode(
     debugLabel: 'Background node',
@@ -102,7 +102,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final preferredSize = const Size.fromHeight(kToolbarHeight);
 
-  const CustomAppBar({Key? key}) : super(key: key);
+  const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class CalculatorView extends StatefulWidget {
-  const CalculatorView({Key? key}) : super(key: key);
+  const CalculatorView({super.key});
 
   @override
   State<CalculatorView> createState() => _CalculatorViewState();
@@ -183,7 +183,7 @@ class _CalculatorViewState extends State<CalculatorView> {
 }
 
 class ScrollingItemsList extends StatelessWidget {
-  const ScrollingItemsList({Key? key}) : super(key: key);
+  const ScrollingItemsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -256,9 +256,7 @@ class ScrollingItemsList extends StatelessWidget {
 
 /// Displays the sheet's name, and allows the user to change it.
 class _SheetNameWidget extends StatelessWidget {
-  const _SheetNameWidget({
-    Key? key,
-  }) : super(key: key);
+  const _SheetNameWidget();
 
   @override
   Widget build(BuildContext context) {

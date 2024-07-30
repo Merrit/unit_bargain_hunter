@@ -7,7 +7,7 @@ import 'sheet_tile.dart';
 
 /// The scrolling list of tiles in the drawer for each calculator sheet.
 class SheetTileList extends StatefulWidget {
-  const SheetTileList({Key? key}) : super(key: key);
+  const SheetTileList({super.key});
 
   @override
   State<SheetTileList> createState() => _SheetTileListState();
