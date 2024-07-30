@@ -52,15 +52,15 @@ class _CostByWeightValidator {
   // Convert to grams as the base unit for comparisons.
   static double _getUnitAsGrams(Unit unit, double quantity) {
     switch (unit.runtimeType) {
-      case Milligram:
+      case const (Milligram):
         return quantity / 1000;
-      case Gram:
+      case const (Gram):
         return quantity;
-      case Kilogram:
+      case const (Kilogram):
         return quantity * 1000;
-      case Ounce:
+      case const (Ounce):
         return quantity * 28.35;
-      case Pound:
+      case const (Pound):
         return quantity * 454;
       default:
         throw Exception('Error converting weight type');
@@ -123,13 +123,13 @@ class _CostByVolumeValidator {
   // Convert to Millilitres as the base unit for comparisons.
   static double _getUnitAsMilliletres(Unit unit, double quantity) {
     switch (unit.runtimeType) {
-      case Millilitre:
+      case const (Millilitre):
         return quantity;
-      case Litre:
+      case const (Litre):
         return quantity * 1000;
-      case FluidOunce:
+      case const (FluidOunce):
         return quantity * 29.574;
-      case Quart:
+      case const (Quart):
         return quantity * 946;
       default:
         throw Exception('Error converting volume type');
