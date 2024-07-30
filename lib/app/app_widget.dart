@@ -14,7 +14,7 @@ import '../shortcuts/app_shortcuts.dart';
 export 'cubit/app_cubit.dart';
 
 class AppWidget extends StatefulWidget {
-  const AppWidget({Key? key}) : super(key: key);
+  const AppWidget({super.key});
 
   @override
   State<AppWidget> createState() => _AppWidgetState();

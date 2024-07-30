@@ -5,7 +5,7 @@ import '../../calculator/calculator_page.dart';
 class PurchaseSuccessfulPage extends StatelessWidget {
   static const id = 'purchase_successful_page';
 
-  const PurchaseSuccessfulPage({Key? key}) : super(key: key);
+  const PurchaseSuccessfulPage({super.key});
 
   @override
   Widget build(BuildContext context) {

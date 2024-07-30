@@ -8,7 +8,7 @@ import 'purchase_successful_page.dart';
 class PurchasesPage extends StatelessWidget {
   static const id = 'purchases_page';
 
-  const PurchasesPage({Key? key}) : super(key: key);
+  const PurchasesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

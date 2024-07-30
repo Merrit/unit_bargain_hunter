@@ -14,7 +14,7 @@ import 'sheet_tile_list.dart';
 /// Holds the contents of the drawer for large displays, in the form of a
 /// navigation bar.
 class SidePanel extends StatefulWidget {
-  const SidePanel({Key? key}) : super(key: key);
+  const SidePanel({super.key});
 
   @override
   State<SidePanel> createState() => _SidePanelState();

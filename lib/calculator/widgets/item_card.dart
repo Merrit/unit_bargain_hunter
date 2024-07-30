@@ -18,9 +18,9 @@ class ItemCard extends StatelessWidget {
   final Item item;
 
   const ItemCard({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class ItemCard extends StatelessWidget {
 }
 
 class _ItemContents extends StatelessWidget {
-  const _ItemContents({Key? key}) : super(key: key);
+  const _ItemContents();
 
   @override
   Widget build(BuildContext context) {
@@ -125,9 +125,7 @@ class _ItemContents extends StatelessWidget {
 
 /// Only shown when there are more than 2 item cards.
 class _CloseButton extends ConsumerWidget {
-  const _CloseButton({
-    Key? key,
-  }) : super(key: key);
+  const _CloseButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -163,9 +161,7 @@ class _CloseButton extends ConsumerWidget {
 ///
 /// Lists the item's cost per gram, millilitre, etc.
 class _UnitCalculations extends StatelessWidget {
-  const _UnitCalculations({
-    Key? key,
-  }) : super(key: key);
+  const _UnitCalculations();
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +199,7 @@ class _UnitCalculations extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: Text('\$$valueString/${cost.unit}'),
                       );
-                    }).toList(),
+                    }),
                   ],
                 );
               },

@@ -9,10 +9,10 @@ class EmojiText extends StatelessWidget {
   final TextStyle? textStyle;
 
   const EmojiText({
-    Key? key,
+    super.key,
     required this.text,
     this.textStyle,
-  }) : super(key: key);
+  });
 
   bool shouldBreak(bool isEmoji, int value) {
     if (isEmoji) {
