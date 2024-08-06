@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:helpers/helpers.dart';
+import 'package:super_context_menu/super_context_menu.dart';
 
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
@@ -56,32 +58,27 @@ class _SheetTileState extends State<SheetTile> {
               .proPurchased;
           final bool proFeaturesDisabled = !proPurchased && (index > 4);
 
-          // List<PopupMenuItem> buildListContextMenuItems(Sheet sheet) {
-          //   return [
-          //     PopupMenuItem(
-          //       child: const Text(
-          //         'Remove',
-          //         style: TextStyle(color: Colors.red),
-          //       ),
-          //       onTap: () => _showConfirmRemovalDialog(context, sheet),
-          //     ),
-          //   ];
-          // }
-
           final Widget? subtitle = (sheet.subtitle != null) //
               ? Text(sheet.subtitle!)
               : null;
 
-          return Opacity(
-            opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
-            child: GestureDetector(
-              // onSecondaryTapUp: (TapUpDetails details) {
-              //   showContextMenu(
-              //     context: context,
-              //     offset: details.globalPosition,
-              //     items: buildListContextMenuItems(sheet),
-              //   );
-              // },
+          return ContextMenuWidget(
+            // Context menu is disabled on mobile, as it conflicts with the long
+            // press to reorder sheets.
+            // Instead, users can access such settings via the app bar.
+            contextMenuIsAllowed: (_) => !defaultTargetPlatform.isMobile,
+            menuProvider: (_) {
+              return Menu(
+                children: [
+                  MenuAction(
+                    title: 'Remove',
+                    callback: () => _showConfirmRemovalDialog(context, sheet),
+                  ),
+                ],
+              );
+            },
+            child: Opacity(
+              opacity: (proFeaturesDisabled) ? 0.4 : 1.0,
               child: MouseRegion(
                 onEnter: (_) => setState(() => isHovered = true),
                 onExit: (_) => setState(() => isHovered = false),
@@ -126,5 +123,36 @@ class _SheetTileState extends State<SheetTile> {
         },
       ),
     );
+  }
+
+  /// Shows a dialog to confirm the removal of a [Sheet].
+  Future<void> _showConfirmRemovalDialog(
+    BuildContext context,
+    Sheet sheet,
+  ) async {
+    final bool? result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Remove sheet?'),
+          content: Text(
+              'Are you sure you want to remove the sheet "${sheet.name}"?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result == true) {
+      calcCubit.removeSheet(sheet);
+    }
   }
 }

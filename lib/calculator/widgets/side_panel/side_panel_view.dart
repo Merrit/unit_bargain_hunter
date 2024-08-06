@@ -1,7 +1,6 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:helpers/helpers.dart';
 
 import '../../../app/app_widget.dart';
 import '../../../app/widgets/widgets.dart';
@@ -24,7 +23,6 @@ class _SidePanelState extends State<SidePanel> {
   @override
   Widget build(BuildContext context) {
     final calcCubit = context.read<CalculatorCubit>();
-    final mediaQuery = MediaQuery.of(context);
 
     final addSheetButton = Opacity(
       opacity: 0.8,
@@ -80,13 +78,7 @@ class _SidePanelState extends State<SidePanel> {
       ],
     );
 
-    if (mediaQuery.isHandset) return panelBody;
-
-    return Container(
-      color: Theme.of(context).cardColor,
-      width: 180,
-      child: panelBody,
-    );
+    return panelBody;
   }
 }
 
