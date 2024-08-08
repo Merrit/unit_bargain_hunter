@@ -110,35 +110,32 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
 void showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
   final calcCubit = context.read<CalculatorCubit>();
 
-  Future.delayed(
-    const Duration(seconds: 0),
-    () => showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text('Remove sheet "${sheet.name}?"'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                calcCubit.removeSheet(sheet);
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  CalculatorPage.id,
-                  (route) => false,
-                );
-              },
-              child: const Text(
-                'REMOVE',
-                style: TextStyle(color: Colors.red),
-              ),
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Text('Remove sheet "${sheet.name}?"'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              calcCubit.removeSheet(sheet);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                CalculatorPage.id,
+                (route) => false,
+              );
+            },
+            child: const Text(
+              'REMOVE',
+              style: TextStyle(color: Colors.red),
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('CLOSE'),
-            ),
-          ],
-        );
-      },
-    ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('CLOSE'),
+          ),
+        ],
+      );
+    },
   );
 }
