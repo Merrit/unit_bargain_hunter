@@ -172,7 +172,7 @@ class _CalculatorViewState extends State<CalculatorView> {
               onTap: () => focusNode.requestFocus(),
               child: Focus(
                 focusNode: focusNode,
-                child: const ScrollingItemsList(),
+                child: const _MainView(),
               ),
             ),
           ],
@@ -182,8 +182,8 @@ class _CalculatorViewState extends State<CalculatorView> {
   }
 }
 
-class ScrollingItemsList extends StatelessWidget {
-  const ScrollingItemsList({super.key});
+class _MainView extends StatelessWidget {
+  const _MainView();
 
   @override
   Widget build(BuildContext context) {
