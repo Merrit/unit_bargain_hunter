@@ -92,7 +92,7 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(30),
                 ),
-                onPressed: () => _showConfirmRemovalDialog(context, sheet),
+                onPressed: () => showConfirmRemovalDialog(context, sheet),
                 child: const Text(
                   'Delete List',
                   style: TextStyle(color: Colors.red),
@@ -104,39 +104,41 @@ class _SheetSettingsViewState extends State<SheetSettingsView> {
       },
     );
   }
+}
 
-  /// Confirm the user really wants to remove the sheet.
-  void _showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
-    Future.delayed(
-      const Duration(seconds: 0),
-      () => showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text('Remove sheet "${sheet.name}?"'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  calcCubit.removeSheet(sheet);
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    CalculatorPage.id,
-                    (route) => false,
-                  );
-                },
-                child: const Text(
-                  'REMOVE',
-                  style: TextStyle(color: Colors.red),
-                ),
+/// Confirm the user really wants to remove the sheet.
+void showConfirmRemovalDialog(BuildContext context, Sheet sheet) {
+  final calcCubit = context.read<CalculatorCubit>();
+
+  Future.delayed(
+    const Duration(seconds: 0),
+    () => showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('Remove sheet "${sheet.name}?"'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                calcCubit.removeSheet(sheet);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  CalculatorPage.id,
+                  (route) => false,
+                );
+              },
+              child: const Text(
+                'REMOVE',
+                style: TextStyle(color: Colors.red),
               ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('CLOSE'),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    ),
+  );
 }

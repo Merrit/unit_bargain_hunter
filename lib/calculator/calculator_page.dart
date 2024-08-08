@@ -65,9 +65,6 @@ class CalculatorPage extends StatelessWidget {
                   appBar: appBar,
                   drawer: drawer,
                   body: const CalculatorView(),
-                  floatingActionButton: const _FloatingActionButton(),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endTop,
                 ),
               ),
             ),
@@ -116,7 +113,55 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: AppBar(
             centerTitle: true,
             title: const _SheetNameWidget(),
+            actions: const [
+              _ExtraActionsDropdown(),
+            ],
           ),
+        );
+      },
+    );
+  }
+}
+
+/// A menu button for extra actions in the app bar related to the active sheet.
+class _ExtraActionsDropdown extends StatelessWidget {
+  const _ExtraActionsDropdown();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalculatorCubit, CalculatorState>(
+      builder: (context, state) {
+        return MenuAnchor(
+          menuChildren: [
+            MenuItemButton(
+              leadingIcon: const Icon(Icons.edit),
+              onPressed: () => showModal(context, const SheetSettingsView()),
+              child: const Text('Rename sheet'),
+            ),
+            MenuItemButton(
+              leadingIcon: const Icon(Icons.refresh),
+              onPressed: () => _confirmResetSheet(context),
+              child: const Text('Reset sheet'),
+            ),
+            MenuItemButton(
+              leadingIcon: const Icon(Icons.delete),
+              onPressed: () {
+                showConfirmRemovalDialog(context, state.activeSheet!);
+              },
+              child: const Text('Delete sheet'),
+            ),
+          ],
+          builder: (context, controller, child) {
+            return IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () {
+                  if (controller.isOpen) {
+                    controller.close();
+                  } else {
+                    controller.open();
+                  }
+                });
+          },
         );
       },
     );
@@ -190,9 +235,22 @@ class _MainView extends StatelessWidget {
     final calcCubit = context.read<CalculatorCubit>();
     final mediaQuery = MediaQuery.of(context);
 
-    final Widget sheetNameWidget = (mediaQuery.isHandset) //
-        ? const SizedBox()
-        : const _SheetNameWidget();
+    const Widget sheetNameWidget = _SheetNameWidget();
+
+    final Widget header;
+    if (mediaQuery.isHandset) {
+      header = const SizedBox();
+    } else {
+      header = const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Ensure name widget is centered
+          SizedBox(width: 8),
+          sheetNameWidget,
+          _ExtraActionsDropdown(),
+        ],
+      );
+    }
 
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
@@ -220,7 +278,7 @@ class _MainView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              sheetNameWidget,
+              header,
               Expanded(
                 child: SingleChildScrollView(
                   controller: ScrollController(),
@@ -262,33 +320,14 @@ class _SheetNameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CalculatorCubit, CalculatorState>(
       builder: (context, state) {
-        final nameTextWidget = Text(
-          state.activeSheet!.name,
-          style: Theme.of(context).textTheme.titleLarge,
-        );
-
-        const smallSpacer = SizedBox(width: 4);
-
-        const editIcon = Opacity(
-          opacity: 0.6,
-          child: Icon(
-            Icons.edit,
-            size: 18,
-          ),
-        );
-
         return InkWell(
           borderRadius: BorderRadius.circular(8),
           onTap: () => showModal(context, const SheetSettingsView()),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                nameTextWidget,
-                smallSpacer,
-                editIcon,
-              ],
+            child: Text(
+              state.activeSheet!.name,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
         );
@@ -297,53 +336,28 @@ class _SheetNameWidget extends StatelessWidget {
   }
 }
 
-class _FloatingActionButton extends StatelessWidget {
-  const _FloatingActionButton();
-
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-
-    return Padding(
-      padding: EdgeInsets.only(
-        // On desktop the FAB is getting placed directly against the top of the
-        // screen, so we need to add some padding to make it look nicer.
-        top: (mediaQuery.isHandset) ? 0 : 16.0,
+/// Show a dialog to confirm the user wants to reset the sheet.
+void _confirmResetSheet(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Reset sheet?'),
+      content: const Text(
+        'This will remove all items from the sheet.',
       ),
-      child: FloatingActionButton.small(
-        onPressed: () {
-          // Show a dialog to confirm the user wants to reset the sheet.
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Reset sheet?'),
-              content: const Text(
-                'This will remove all items from the sheet.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<CalculatorCubit>().resetActiveSheet();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Reset'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: Transform.flip(
-          flipX: true,
-          child: const Icon(
-            Icons.refresh,
-            color: Colors.orange,
-          ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
         ),
-      ),
-    );
-  }
+        TextButton(
+          onPressed: () {
+            context.read<CalculatorCubit>().resetActiveSheet();
+            Navigator.pop(context);
+          },
+          child: const Text('Reset'),
+        ),
+      ],
+    ),
+  );
 }
