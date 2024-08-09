@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/widgets/widgets.dart';
+import '../../l10n/helper.dart';
 import '../../settings/settings.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
@@ -85,7 +85,7 @@ class _ItemContents extends StatelessWidget {
             if (!item.taxIncluded)
               Text(
                 // ignore: prefer_interpolation_to_compose_strings
-                '+' + AppLocalizations.of(context)!.tax.toLowerCase(),
+                '+' + context.translations.tax.toLowerCase(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.greenAccent,
                     ),
