@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:store_checker/store_checker.dart';
 
 import '../../logs/logs.dart';
 import '../../platform/platform.dart';
@@ -83,11 +82,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
   static Future<bool> _installedFromPlayStore() async {
     if (kDebugMode) return true;
 
-    final Source installationSource = await StoreChecker.getSource;
-
-    return (installationSource == Source.IS_INSTALLED_FROM_PLAY_STORE)
-        ? true
-        : false;
+    return await InAppPurchase.instance.isAvailable();
   }
 
   Future<void> _initStoreInfo() async {
