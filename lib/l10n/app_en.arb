@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "cancel": "Cancel",
   "@cancel": {
     "description": "Capitalized string 'Cancel', as in 'Cancel my changes`"
@@ -22,6 +23,10 @@
   "quantity": "Quantity",
   "@quantity": {
     "description": "Label for Quantity text input"
+  },
+  "remove": "Remove",
+  "@Remove": {
+    "description": "Capitalized string 'Remove', as in 'Remove this item`"
   },
   "set": "Set",
   "@set": {
@@ -54,5 +59,21 @@
   "save": "Save",
   "@save": {
     "description": "Capitalized string 'Save', as in 'Save my changes`"
+  },
+  "@_REMOVE_SHEET_DIALOG": {},
+  "removeSheet": "Remove sheet?",
+  "@removeSheet": {
+    "description": "Title for the remove sheet modal dialog"
+  },
+  "removeSheetConfirmation": "Are you sure you want to remove the sheet {sheetName}?",
+  "@removeSheetConfirmation": {
+    "description": "Confirmation message for the remove sheet modal dialog",
+    "placeholders": {
+      "sheetName": {
+        "type": "String",
+        "description": "The name of the sheet to be removed",
+        "example": "Honey"
+      }
+    }
   }
 }
