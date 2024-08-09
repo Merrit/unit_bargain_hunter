@@ -8,6 +8,7 @@ import 'package:multi_split_view/multi_split_view.dart';
 import '../app/app_widget.dart';
 import '../app/widgets/widgets.dart';
 import '../core/constants.dart';
+import '../l10n/helper.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/cubit/settings_cubit.dart';
 import '../settings/settings.dart';
@@ -136,19 +137,19 @@ class _ExtraActionsDropdown extends StatelessWidget {
             MenuItemButton(
               leadingIcon: const Icon(Icons.edit),
               onPressed: () => showModal(context, const SheetSettingsView()),
-              child: const Text('Rename sheet'),
+              child: Text(context.translations.renameSheet),
             ),
             MenuItemButton(
               leadingIcon: const Icon(Icons.refresh),
               onPressed: () => _confirmResetSheet(context),
-              child: const Text('Reset sheet'),
+              child: Text(context.translations.resetSheet),
             ),
             MenuItemButton(
               leadingIcon: const Icon(Icons.delete),
               onPressed: () {
                 showConfirmRemovalDialog(context, state.activeSheet!);
               },
-              child: const Text('Delete sheet'),
+              child: Text(context.translations.deleteSheet),
             ),
           ],
           builder: (context, controller, child) {

@@ -75,5 +75,9 @@
         "example": "Honey"
       }
     }
-  }
+  },
+  "@_SHEET_ACTIONS": {},
+  "deleteSheet": "Delete sheet",
+  "renameSheet": "Rename sheet",
+  "resetSheet": "Reset sheet"
 }
