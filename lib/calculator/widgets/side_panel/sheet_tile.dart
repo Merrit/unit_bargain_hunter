@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:helpers/helpers.dart';
 import 'package:super_context_menu/super_context_menu.dart';
 
+import '../../../l10n/helper.dart';
 import '../../../purchases/cubit/purchases_cubit.dart';
 import '../../../purchases/pages/purchases_page.dart';
 import '../../calculator_cubit/calculator_cubit.dart';
@@ -71,7 +72,7 @@ class _SheetTileState extends State<SheetTile> {
               return Menu(
                 children: [
                   MenuAction(
-                    title: 'Remove',
+                    title: context.translations.remove,
                     callback: () => _showConfirmRemovalDialog(context, sheet),
                   ),
                 ],
@@ -134,17 +135,18 @@ class _SheetTileState extends State<SheetTile> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Remove sheet?'),
+          title: Text(context.translations.removeSheet),
           content: Text(
-              'Are you sure you want to remove the sheet "${sheet.name}"?'),
+            context.translations.removeSheetConfirmation(sheet.name),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(context.translations.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Remove'),
+              child: Text(context.translations.remove),
             ),
           ],
         );
