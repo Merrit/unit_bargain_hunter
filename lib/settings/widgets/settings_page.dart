@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/foundation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpers/helpers.dart';
@@ -10,6 +9,7 @@ import '../../authentication/authentication.dart';
 import '../../calculator/calculator_cubit/calculator_cubit.dart';
 import '../../calculator/models/models.dart';
 import '../../core/constants.dart';
+import '../../l10n/helper.dart';
 import '../../purchases/cubit/purchases_cubit.dart';
 import '../../purchases/pages/purchases_page.dart';
 import '../../theme/theme.dart';
@@ -62,7 +62,7 @@ class SettingsView extends StatelessWidget {
         );
 
         final taxSection = _SectionCard(
-          title: AppLocalizations.of(context)!.tax,
+          title: context.translations.tax,
           children: const [
             _TaxTile(),
           ],
@@ -288,10 +288,10 @@ class _TaxTile extends StatelessWidget {
         return ListTile(
           title: Row(
             children: [
-              Text(AppLocalizations.of(context)!.taxRate),
+              Text(context.translations.taxRate),
               const SizedBox(width: 8),
               Tooltip(
-                message: AppLocalizations.of(context)!.taxRateTooltip,
+                message: context.translations.taxRateTooltip,
                 child: const Icon(Icons.info_outline),
               ),
             ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:helpers/helpers.dart';
 
+import '../../l10n/helper.dart';
 import '../../settings/settings.dart';
 import '../calculator_cubit/calculator_cubit.dart';
 import '../models/models.dart';
@@ -76,11 +76,11 @@ class _EditItemDialogState extends State<EditItemDialog> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () => _saveItemChanges(context),
-              child: Text(AppLocalizations.of(context)!.save),
+              child: Text(context.translations.save),
             ),
           ),
           Text(
-            AppLocalizations.of(context)!.editItem,
+            context.translations.editItem,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 30),
@@ -88,7 +88,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
             title: TextField(
               controller: locationTextFieldController,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.location,
+                labelText: context.translations.location,
                 prefixIcon: const Icon(Icons.location_on),
               ),
               textCapitalization: TextCapitalization.sentences,
@@ -98,7 +98,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
             title: TextField(
               controller: detailsTextFieldController,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.details,
+                labelText: context.translations.details,
                 prefixIcon: const Icon(Icons.notes),
               ),
               keyboardType: TextInputType.multiline,
@@ -110,7 +110,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
             title: TextField(
               controller: priceTextFieldController,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.price,
+                labelText: context.translations.price,
                 prefixIcon: const Icon(Icons.attach_money),
               ),
               focusNode: priceTextFieldFocusNode,
@@ -119,10 +119,10 @@ class _EditItemDialogState extends State<EditItemDialog> {
           SwitchListTile(
             title: Row(
               children: [
-                Text(AppLocalizations.of(context)!.taxIncluded),
+                Text(context.translations.taxIncluded),
                 const SizedBox(width: 10),
                 Tooltip(
-                  message: AppLocalizations.of(context)!.taxIncludedTooltip,
+                  message: context.translations.taxIncludedTooltip,
                   child: const Icon(Icons.info_outline),
                 ),
               ],
@@ -135,18 +135,18 @@ class _EditItemDialogState extends State<EditItemDialog> {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text(AppLocalizations.of(context)!.taxRateNotSet),
+                    title: Text(context.translations.taxRateNotSet),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: Text(AppLocalizations.of(context)!.cancel),
+                        child: Text(context.translations.cancel),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed('/settings');
                         },
-                        child: Text(AppLocalizations.of(context)!.set),
+                        child: Text(context.translations.set),
                       ),
                     ],
                   ),
@@ -160,7 +160,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
             title: TextField(
               controller: quantityTextFieldController,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.quantity,
+                labelText: context.translations.quantity,
                 prefixIcon: const Icon(Icons.numbers),
               ),
               focusNode: quantityTextFieldFocusNode,
