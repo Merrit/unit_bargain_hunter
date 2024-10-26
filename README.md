@@ -23,7 +23,7 @@ Unit Bargain Hunter makes it easy to compare any number of items to find exactly
 <br>
 
 
-[Download](https://merritt.codes/bargain/)
+[Download](https://merritt.codes/bargain)
 
 
 <br>
