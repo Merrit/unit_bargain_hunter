@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -12,6 +11,7 @@ import 'package:unit_bargain_hunter/calculator/widgets/widgets.dart';
 import 'package:unit_bargain_hunter/logs/logging_manager.dart';
 import 'package:unit_bargain_hunter/purchases/cubit/purchases_cubit.dart';
 import 'package:unit_bargain_hunter/settings/settings.dart';
+import 'package:unit_bargain_hunter/src/generated/i18n/app_localizations.dart';
 import 'package:unit_bargain_hunter/storage/storage_service.dart';
 
 @GenerateNiceMocks([
