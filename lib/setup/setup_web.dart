@@ -1,6 +1,4 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'setup.dart';
 
@@ -16,6 +14,8 @@ class WebSetup implements Setup {
   /// This allows us to show a custom right-click
   /// menu in the style of a desktop application.
   void _disableWebRightClick() {
-    document.onContextMenu.listen((event) => event.preventDefault());
+    EventStreamProviders.contextMenuEvent.forTarget(document).listen((event) {
+      event.preventDefault();
+    });
   }
 }
