@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../calculator/calculator_cubit/calculator_cubit.dart';
@@ -10,6 +9,7 @@ import '../purchases/pages/purchase_successful_page.dart';
 import '../purchases/pages/purchases_page.dart';
 import '../settings/settings.dart';
 import '../shortcuts/app_shortcuts.dart';
+import '../src/generated/i18n/app_localizations.dart';
 
 export 'cubit/app_cubit.dart';
 

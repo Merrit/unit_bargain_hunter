@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../src/generated/i18n/app_localizations.dart';
 
 extension Translate on BuildContext {
   /// Easier access to translations, so you can use `context.translations`
