@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update
           # libappindicator required for tray_manager
-          sudo apt-get install appindicator3-0.1 libappindicator3-dev
+          sudo apt-get install libayatana-appindicator3-dev
 
       - name: Set pre-release environment variable
         if: inputs.pre-release == true
