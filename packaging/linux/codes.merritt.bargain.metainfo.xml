@@ -61,6 +61,47 @@
   </screenshots>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="1.17.0" date="2025-09-27">
+      <url type="details">https://github.com/Merrit/unit_bargain_hunter/releases/tag/v1.17.0</url>
+      <description>
+        <p>Bug Fixes</p>
+        <ul>
+          <li>linux: missing icon for wayland</li>
+        </ul>
+        <p>Documentation</p>
+        <ul>
+          <li>fix download link in README</li>
+        </ul>
+        <p>Code Refactoring</p>
+        <ul>
+          <li>use i18n helper everywhere</li>
+        </ul>
+        <p>Continuous Integration</p>
+        <ul>
+          <li>upgrade actions/ actions to v4</li>
+          <li>upgrade flutter action</li>
+          <li>upgrade runners</li>
+          <li>linux: update appindicator dependency name</li>
+        </ul>
+        <p>Chores</p>
+        <ul>
+          <li>update linux metadata for new release</li>
+          <li>add l10n helper</li>
+          <li>upgrade flutterappbuilder</li>
+          <li>migrate from depreciated dart:html</li>
+          <li>fix vs code task</li>
+          <li>migrate to new translations implementation</li>
+          <li>regenerate android project files</li>
+          <li>upgrade to new Flutter version</li>
+          <li>bump version</li>
+        </ul>
+        <p>Commits</p>
+        <ul>
+          <li>move sheettile strings to appen.arb</li>
+          <li>move sheet action strings to arb file</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.16.0" date="2024-08-09">
       <description/>
     </release>
