@@ -39,7 +39,7 @@ jobs:
 
       - name: Build and publish web version to GitHub Pages
         if: github.event_name == 'release' && github.event.action == 'published'
-        uses: bluefireteam/flutter-gh-pages@v7
+        uses: bluefireteam/flutter-gh-pages@v9
         # baseHref must be included if the site is not going to be running
         # at a subdomain, for example: myapp.example.com
         #
