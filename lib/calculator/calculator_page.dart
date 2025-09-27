@@ -189,9 +189,20 @@ class _CalculatorViewState extends State<CalculatorView> {
   void initState() {
     super.initState();
     settingsCubit = context.read<SettingsCubit>();
-    multiSplitViewController = MultiSplitViewController(
-      areas: Area.weights([settingsCubit.state.navigationAreaRatio]),
-    );
+    multiSplitViewController = MultiSplitViewController();
+
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      // Two areas: side panel and main view
+      multiSplitViewController.areas = [
+        Area(flex: settingsCubit.state.navigationAreaRatio),
+        Area(flex: 1 - settingsCubit.state.navigationAreaRatio),
+      ];
+    } else {
+      // Only main view on Android
+      multiSplitViewController.areas = [
+        Area(flex: 1),
+      ];
+    }
   }
 
   @override
@@ -200,28 +211,33 @@ class _CalculatorViewState extends State<CalculatorView> {
       builder: (context, state) {
         return MultiSplitView(
           controller: multiSplitViewController,
-          onWeightChange: () {
-            final navigationAreaRatio = multiSplitViewController //
-                .getArea(0)
-                .weight;
+          onDividerDragUpdate: (int dividerIndex) {
+            if (defaultTargetPlatform != TargetPlatform.android) {
+              final navigationAreaRatio = multiSplitViewController //
+                  .getArea(0)
+                  .flex;
 
-            if (navigationAreaRatio == null) return;
+              if (navigationAreaRatio == null) return;
 
-            settingsCubit.updateNavigationAreaRatio(navigationAreaRatio);
+              settingsCubit.updateNavigationAreaRatio(navigationAreaRatio);
+            }
           },
-          children: [
-            if (defaultTargetPlatform != TargetPlatform.android)
-              const ExcludeFocusTraversal(
+          builder: (context, area) {
+            if (defaultTargetPlatform != TargetPlatform.android &&
+                area.index == 0) {
+              return const ExcludeFocusTraversal(
                 child: SidePanel(),
-              ),
-            GestureDetector(
-              onTap: () => focusNode.requestFocus(),
-              child: Focus(
-                focusNode: focusNode,
-                child: const _MainView(),
-              ),
-            ),
-          ],
+              );
+            } else {
+              return GestureDetector(
+                onTap: () => focusNode.requestFocus(),
+                child: Focus(
+                  focusNode: focusNode,
+                  child: const _MainView(),
+                ),
+              );
+            }
+          },
         );
       },
     );

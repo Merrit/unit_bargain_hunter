@@ -1,7 +1,3 @@
 template-arb-file: app_en.arb
 output-dir: lib/src/generated/i18n
 output-localization-file: app_localizations.dart
-
-# Don't generate fake package for e.g. flutter_localizations
-# See: https://docs.flutter.dev/release/breaking-changes/flutter-generate-i10n-source
-synthetic-package: false
