@@ -1,7 +1,7 @@
 part of 'calculator_cubit.dart';
 
 @freezed
-class CalculatorState with _$CalculatorState {
+abstract class CalculatorState with _$CalculatorState {
   const factory CalculatorState({
     /// A list of sheets.
     ///

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../logs/logging_manager.dart';
 import '../validators/validators.dart';
 import 'models.dart';
 
@@ -158,7 +159,15 @@ class Item extends Equatable {
   /// Returns the cost per base unit, eg: gram, millilitre, etc.
   double costPerBaseUnit() {
     final baseUnit = unit.baseUnit;
-    final cost = costPerUnit.firstWhere((cost) => cost.unit == baseUnit);
+    final cost = costPerUnit.firstWhere(
+      (cost) => cost.unit == baseUnit,
+      orElse: () => Cost(unit: baseUnit, value: 0.0),
+    );
+
+    if (cost.value == 0.0) {
+      log.e('No cost found for base unit: $baseUnit in item: $this');
+    }
+    
     return cost.value;
   }
 }

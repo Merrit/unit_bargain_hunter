@@ -8,11 +8,17 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+fun isRunningOnCI(): Boolean {
+    return System.getenv("CI") != null || 
+           System.getenv("GITHUB_ACTIONS") != null ||
+           System.getenv("GITLAB_CI") != null
+}
+
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-} else {
+} else if (isRunningOnCI()) {
     keystoreProperties["keyAlias"] = System.getenv("ALIAS")
     keystoreProperties["storePassword"] = System.getenv("KEY_STORE_PASSWORD")
     keystoreProperties["storeFile"] = System.getenv("KEY_PATH")
@@ -39,8 +45,7 @@ android {
         applicationId = "codes.merritt.bargain"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        // minSdk = flutter.minSdkVersion
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

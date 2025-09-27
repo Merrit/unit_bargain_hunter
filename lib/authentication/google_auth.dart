@@ -84,40 +84,61 @@ class GoogleAuth {
   ///
   /// Supports Android, iOS & Web.
   Future<AccessCredentials?> _googleSignInAuth() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+    
+    await googleSignIn.initialize();
 
+    GoogleSignInAccount account;
     try {
-      await googleSignIn.signIn();
+      account = await googleSignIn.authenticate();
     } on PlatformException catch (e) {
       log.w('Failed to sign in with google_sign_in', error: e);
       return null;
     }
 
-    final AuthClient? client;
+    final GoogleSignInClientAuthorization? authorization;
     try {
-      client = await googleSignIn.authenticatedClient();
+      authorization =
+          await account.authorizationClient.authorizationForScopes(scopes);
+    } catch (e) {
+      log.w('Unable to get authorization: $e');
+      return null;
+    }
+
+    if (authorization == null) return null;
+
+    final AuthClient client;
+    try {
+      client = authorization.authClient(scopes: scopes);
     } catch (e) {
       log.w('Unable to get AuthClient: $e');
       return null;
     }
 
-    final googleAuth = await googleSignIn.currentUser?.authentication;
-    if (googleAuth == null) return null;
-    if (googleAuth.accessToken == null) return null;
-
-    return client?.credentials;
+    return client.credentials;
   }
 
   /// google_sign_in doesn't provide us with a refresh token, so this is a
   /// workaround to refresh authentication for platforms that use google_sign_in
   static Future<AuthClient?> refreshAuthClient() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+    await googleSignIn.initialize();
+    
     final GoogleSignInAccount? googleSignInAccount =
-        await googleSignIn.signInSilently();
+        await googleSignIn.attemptLightweightAuthentication();
 
-    if (googleSignInAccount == null) await GoogleAuth().signin();
+    if (googleSignInAccount == null) {
+      await GoogleAuth().signin();
+      return null;
+    }
 
-    final AuthClient? client = await googleSignIn.authenticatedClient();
+    final GoogleSignInClientAuthorization? authorization =
+        await googleSignInAccount.authorizationClient
+            .authorizationForScopes(scopes);
+    
+    if (authorization == null) return null;
+
+    final AuthClient client = authorization.authClient(scopes: scopes);
 
     return client;
   }
@@ -170,9 +191,9 @@ class GoogleAuth {
     // Specific signout only seems needed for the google_sign_in package.
     if (defaultTargetPlatform != TargetPlatform.android) return;
 
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: scopes);
+    final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
-    await googleSignIn.signOut();
+    await googleSignIn.disconnect();
   }
 }
 
